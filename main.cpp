@@ -62,22 +62,7 @@ struct Node
         swap(newState[index1], newState[index2]);
         return newState;
     }
-    bool operator<( const Node& b) {
-        cout << "hi\n";
-        return true;
-    }
-    bool operator<=( const Node& b) {
-        cout << "hi\n";
-        return true;
-    }
-    bool operator>( const Node& b) {
-        cout << "hello\n";
-        return true;
-    }
-     bool operator>=( const Node& b) {
-        cout << "hello\n";
-        return true;
-    }
+
     void Manhattan_distance(vector<int> &goal)
     {
         int score_tmp = 0;
@@ -87,11 +72,26 @@ struct Node
             {
                 if (goal[i] == state[j])
                 {
-                    score_tmp += abs(i-j) + depth;
+                    score_tmp += abs(i-j);
                 }
             }
         }
-        score = score_tmp ;
+        score = score_tmp;
+        score *= -1;
+    }
+    void Linear_conflicts(vector<int> &goal)
+    {
+
+    }
+    void Hamming_distance(vector<int> &goal)
+    {
+         int score_tmp = 0;
+        for (int i=0;i<goal.size(); i++)
+        {
+            if (goal[i] != state[i])
+                score_tmp++;
+        }
+        score_tmp += depth;
         score *= -1;
     }
 };
@@ -158,7 +158,7 @@ Node *a_star(vector<int> &initial, vector<int> &goal)
     set<vector<int>> visited;
     set<vector<int>> inQueue;
     Node *root = new Node(initial);
-    root->Manhattan_distance(goal);
+    root->Hamming_distance(goal);
     
     states.push(root);
     inQueue.insert(root->state);
@@ -180,7 +180,7 @@ Node *a_star(vector<int> &initial, vector<int> &goal)
             if (visited.find(state->state) == visited.end() && inQueue.find(state->state) == inQueue.end())
             {
                 state->parent = current;
-                state->Manhattan_distance(goal);
+                state->Hamming_distance(goal);
                 states.push(state);
                 inQueue.insert(state->state);
             }
