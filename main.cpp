@@ -145,7 +145,7 @@ bool compare(Node *a, Node *b)
 {
     return a->score < b->score;
 }
-struct DereferenceCompareNode : public std::binary_function<Node*, Node*, bool>
+struct DereferenceCompareNode
 {
     bool operator()(const Node* lhs, const Node* rhs) const
     {
