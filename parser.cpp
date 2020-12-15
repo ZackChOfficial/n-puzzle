@@ -51,17 +51,11 @@ int get_size(string s)
         if (line[i][0] != '#' && !done)
             done = true;
         else if ((line[i][0] != '#' && done) || (line[i][0] == '#' && !done))
-        {
-            cerr << "Invalid Input 23\n";
-            exit(EXIT_SUCCESS);
-        }
+        throwError();
     }
     n = stoi(s);
     if (n < 1)
-    {
-        cerr << "Invalid Input 2\n";
-        exit(EXIT_SUCCESS);
-    }
+        throwError();
     return n;
 }
 
@@ -81,17 +75,11 @@ void get_line(vector<int> &data, string s, int n)
         {
             nbr = stoi(line[i]);
             if (nbr < 0 || nbr >= n*n)
-            {
-                cerr << "Invalid Input 3\n";
-                exit(EXIT_SUCCESS);
-            }
+                throwError();
             data.push_back(nbr);
         }
         else
-        {
-            cerr << "Invalid Input 4:  " << line[i] << "|" << endl;
-            exit(EXIT_SUCCESS);
-        }
+            throwError();
     }
 }
 
@@ -119,17 +107,11 @@ vector<int> parse()
     for (int i = 0; i < data.size(); i++)
     {
         if (occu.find(data[i]) != occu.end())
-        {
-            cerr << "Invalid Input 5\n";
-            exit(EXIT_SUCCESS);
-        }
+            throwError();
         else occu.insert(data[i]);
     }
     if (occu.size() != n*n)
-    {
-        cerr << "Invalid Input 6\n";
-        exit(EXIT_SUCCESS);
-    }
+        throwError();
     return data;
 }
 
