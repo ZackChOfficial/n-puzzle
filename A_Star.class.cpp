@@ -1,14 +1,13 @@
 #include "A_Star.class.hpp"
 
-
 /**
  * Basic Node Functions
 */
-
 Node::Node(std::vector<int> const &data)
 {
     parent = nullptr;
     gscore = INT32_MAX;
+    hscore = 0;
     state.reserve(data.size());
     copy(data.begin(), data.end(), back_inserter(state));
 }
@@ -22,7 +21,7 @@ std::vector<Node *> Node::next_states()
 
 
     size = sqrt(state.size());
-    index = state.begin() - find(state.begin(), state.end(), 0);
+    index = find(state.begin(), state.end(), 0) - state.begin();
     if (index - size >= 0)
     {
         tmp = new Node(create_new(index, index - size));
@@ -79,23 +78,20 @@ void        Node::hamming_distance(std::vector<int> &goal)
     // need to be implemented
 }
 
-bool        Node::operator==(const Node &rhs)
+
+bool Node::compare(std::vector<int> &rhs)
 {
-    if (state.size() != rhs.state.size())
+    if (state.size() != rhs.size())
         return false;
-    for (int i=0;i < state.size(); i++)
-    {
-        if (state[i] != rhs.state[i])
+    for (int i = 0; i < state.size(); i++)
+        if (state[i] != rhs[i])
             return false;
-    }
     return true;
 }
 
 /**
  * A Star Functions
 */
-
-
 A_Star::A_Star(std::vector<int> &initial, std::vector<int> &sol)
 {
     Node                *current;
@@ -103,31 +99,62 @@ A_Star::A_Star(std::vector<int> &initial, std::vector<int> &sol)
     std::vector<Node *> neighbor;
 
     root = new Node(initial);
-    solved = false;
+    root->gscore = 0;
     goal = new Node(sol);
+}
+
+
+void    A_Star::run()
+{
+    Node                *current;
+    bool                solved;
+    std::vector<Node *> neighbor;
+    
+    solved = false;
     states.push(root);
     in_queue.insert(root->state);
-    while (!states.empty())
+    int i=0;
+    while (!states.empty() && !solved)
     {
+        i++;
         current = states.top();
-        states.pop();
-        visited.insert(current->state);
-        in_queue.erase(current->state);
-        if (goal == current)
-        {
+        if (current->compare(goal->state))
             solved = true;
-            break;
-        }
-        neighbor = current->next_states();
-        for (Node *state : neighbor)
-        {
-            if (visited.find(state->state) == visited.end() && in_queue.find(state->state) == in_queue.end())
+        else {
+            states.pop();
+            visited.insert(current->state);
+            in_queue.erase(current->state);
+            neighbor = current->next_states();
+            for (Node *state : neighbor)
             {
-                state->parent = current;
-                state->hamming_distance(sol);
-                states.push(state);
-                in_queue.insert(state->state);
+                if (visited.find(state->state) == visited.end() && in_queue.find(state->state) == in_queue.end())
+                {
+                    state->parent = current;
+                    state->gscore = current->gscore - 1;
+                    states.push(state);
+                    in_queue.insert(state->state);
+                }
+                else {
+                    state->manhattan_distance(goal->state);
+                    if (state->gscore - state->hscore < current->gscore - state->hscore - 1)
+                    {
+                        state->gscore = current->gscore - 1;
+                        state->parent = current;
+                        if (visited.find(state->state) == visited.end())
+                            visited.erase(state->state);
+                        states.push(state);
+                        in_queue.insert(state->state);
+                    }
+                }
             }
         }
+    }
+    std::cout << i << std::endl; 
+    if (solved)
+    {
+        std::cout << "Solved\n";
+    }
+    else {
+        std::cout << "Solution not found\n";
     }
 }

@@ -1,8 +1,6 @@
-#include "parser.h"
+#include "parser.hpp"
 
-using namespace std;
-
-string ft_trim(string s)
+std::string ft_trim(std::string s)
 {
     int l;
     int r;
@@ -20,9 +18,10 @@ string ft_trim(string s)
         return "";
     return s.substr(l, r+1 - l);
 }
-vector<string> str_split(string s)
+
+std::vector<std::string> str_split(std::string s)
 {
-    vector<string> result;
+    std::vector<std::string> result;
     int     j;
 
     for (int i =0; i < s.length(); i++)
@@ -38,19 +37,20 @@ vector<string> str_split(string s)
     }
     return result;
 }
-int get_size(string s)
+
+int get_size(std::string s)
 {
     int             n;
-    vector<string>  line;
+    std::vector<std::string>  line;
     bool            done;
 
     line = str_split(s);
     done = false;
     for (int i = 0; i < line.size();i++)
     {
-        if (line[i][0] != '#' && !done)
+        if (line[i][0] != '#' && !done && isdigit(line[i][0]))
             done = true;
-        else if ((line[i][0] != '#' && done) || (line[i][0] == '#' && !done))
+        else if ((line[i][0] != '#' && done) || (line[i][0] == '#' && !done) || (line[i][0] != '#' && !isdigit(line[i][0])) )
         throwError();
     }
     n = stoi(s);
@@ -59,11 +59,9 @@ int get_size(string s)
     return n;
 }
 
-
-
-void get_line(vector<int> &data, string s, int n)
+void get_line(std::vector<int> &data, std::string s, int n)
 {
-    vector<string> line;
+    std::vector<std::string> line;
     int         nbr;
 
     line = str_split(s);
@@ -83,15 +81,15 @@ void get_line(vector<int> &data, string s, int n)
     }
 }
 
-vector<int> parse()
+std::vector<int> parse()
 {
-    vector<int> data;
-    string      s;
+    std::vector<int> data;
+    std::string      s;
     int         n;
-    set<int>    occu;
+    std::set<int>    occu;
 
     n = -1;
-    while (getline(cin, s))
+    while (std::getline(std::cin, s))
     {
         s = ft_trim(s);
         if (s.length() > 0 && s[0] != '#')
@@ -113,10 +111,4 @@ vector<int> parse()
     if (occu.size() != n*n)
         throwError();
     return data;
-}
-
-int main()
-{
-    parse();
-    return 0;
 }

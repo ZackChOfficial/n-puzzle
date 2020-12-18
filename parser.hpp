@@ -6,7 +6,8 @@
 #include <set>
 #include <vector>
 #include <sstream>
-#include "utils.h"
+#include "utils.hpp"
 
+std::vector<int>    parse();
 
 #endif
