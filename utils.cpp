@@ -1,4 +1,4 @@
-#include "utils.h"
+#include "utils.hpp"
 
 void    throwError(std::string text)
 {

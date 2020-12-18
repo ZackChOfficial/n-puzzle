@@ -20,7 +20,7 @@ public:
     void                manhattan_distance(std::vector<int> &goal);
     void                linear_conflicts(std::vector<int> &goal);
     void                hamming_distance(std::vector<int> &goal);
-    bool                operator==(const Node &rhs);
+    bool                compare(std::vector<int> &rhs);
     
 private:
     std::vector<int>    create_new(int index1, int index2);
