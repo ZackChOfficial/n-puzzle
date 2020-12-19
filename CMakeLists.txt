@@ -1,0 +1,10 @@
+cmake_minimum_required(VERSION 3.16)
+
+# uncomment this if you wand debug binary
+SET( CMAKE_BUILD_TYPE Debug)
+
+project(n-puzzle)
+
+add_executable(${PROJECT_NAME} src/main.cpp src/Board.class.cpp)
+
+target_include_directories(${PROJECT_NAME} PUBLIC include)

@@ -14,5 +14,7 @@ public:
 
 public:
     bool is_solvable();
-    static Board get_solution();
+    static Board gen_solution(int size);
+    void print();
+
 };
