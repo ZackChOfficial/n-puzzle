@@ -1,3 +1,3 @@
 #! /bin/sh
 
-cmake -B out/build
+cmake -B ./build

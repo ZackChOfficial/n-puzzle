@@ -3,6 +3,8 @@
 #include "A_Star.class.hpp"
 #include "Board.class.hpp"
 #include <iostream>
+#include <cstring>
+#include <cassert>
 
 using namespace std;
 
