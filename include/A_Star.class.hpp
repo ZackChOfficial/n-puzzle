@@ -1,25 +1,22 @@
-#ifndef __A_STAR
-# define __A_STAR
+#pragma once
 #include <vector>
 #include <queue>
 #include <set>
 #include <algorithm>
 #include <cmath>
 #include <iostream>
-
+#include "Board.class.hpp"
 
 struct Node {
+public:
     std::vector<int>    state;
     Node                *parent;
-    int                 hscore;
     int                 gscore;
+    int                 hscore;
 
 public:
     Node(std::vector<int> const &data);
     std::vector<Node *> next_states();
-    void                manhattan_distance(std::vector<int> &goal);
-    void                linear_conflicts(std::vector<int> &goal);
-    void                hamming_distance(std::vector<int> &goal);
     bool                compare(std::vector<int> &rhs);
     
 private:
@@ -41,11 +38,10 @@ private:
     std::set<std::vector<int>>                                  in_queue;
     Node                                                        *root;
     Node                                                        *goal;
+    int                                                        (*heuristic)(std::vector<int> &state, std::vector<int> &goal);
 
 public:
-    A_Star(std::vector<int> &initial, std::vector<int> &sol);
+    A_Star(std::vector<int> &initial,  Board sol, int (*func)(std::vector<int> &state, std::vector<int> &goal));
     ~A_Star();
     void                                                        run();
 };
-
-#endif

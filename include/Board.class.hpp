@@ -4,10 +4,10 @@
 
 class Board
 {
-private:
+public:
     std::vector<int>    body;
-    int                 size;
     std::pair<int,int>  get_position_of_zero();
+    int                     size;
 public:
     Board(std::vector<int> body): body(body)
     {

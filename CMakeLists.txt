@@ -7,7 +7,7 @@ set (CMAKE_CXX_STANDARD 14)
 project(n-puzzle)
 
 add_executable(${PROJECT_NAME}
-    src/main.cpp src/Board.class.cpp src/A_Star.class.cpp src/parser.cpp src/utils.cpp
+    src/main.cpp src/Board.class.cpp src/A_Star.class.cpp src/parser.cpp src/utils.cpp src/heuristic_functions.cpp
 )
 
 target_include_directories(${PROJECT_NAME} PUBLIC include)

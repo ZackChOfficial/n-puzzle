@@ -52,33 +52,6 @@ std::vector<int> Node::create_new(int index1, int index2)
     return newState;
 }
 
-void        Node::manhattan_distance(std::vector<int> &goal)
-{
-    hscore = 0;
-    for (int i=0;i<goal.size(); i++)
-    {
-        for (int j=0;j < state.size(); j++)
-        {
-            if (goal[i] == state[j])
-            {
-                hscore += abs(i-j);
-            }
-        }
-    }
-    hscore *= -1;
-}
-
-void        Node::linear_conflicts(std::vector<int> &goal)
-{
-    // need to be implemented
-}
-
-void        Node::hamming_distance(std::vector<int> &goal)
-{
-    // need to be implemented
-}
-
-
 bool Node::compare(std::vector<int> &rhs)
 {
     if (state.size() != rhs.size())
@@ -92,15 +65,16 @@ bool Node::compare(std::vector<int> &rhs)
 /**
  * A Star Functions
 */
-A_Star::A_Star(std::vector<int> &initial, std::vector<int> &sol)
+A_Star::A_Star(std::vector<int> &initial, Board sol, int (*func)(std::vector<int> &state, std::vector<int> &goal))
 {
     Node                *current;
     bool                solved;
     std::vector<Node *> neighbor;
 
+    heuristic = func;
     root = new Node(initial);
     root->gscore = 0;
-    goal = new Node(sol);
+    goal = new Node(sol.body);
 }
 
 
@@ -135,7 +109,7 @@ void    A_Star::run()
                     in_queue.insert(state->state);
                 }
                 else {
-                    state->manhattan_distance(goal->state);
+                    state->hscore = heuristic(state->state, goal->state);
                     if (state->gscore - state->hscore < current->gscore - state->hscore - 1)
                     {
                         state->gscore = current->gscore - 1;
@@ -149,12 +123,5 @@ void    A_Star::run()
             }
         }
     }
-    std::cout << i << std::endl; 
-    if (solved)
-    {
-        std::cout << "Solved\n";
-    }
-    else {
-        std::cout << "Solution not found\n";
-    }
+    std::cout << "Solved: " << i << std::endl;
 }
