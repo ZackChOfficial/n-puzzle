@@ -1,6 +1,6 @@
 #include "Board.class.hpp"
 #include <iostream>
-
+#include <cmath>
 /*
 ** a printer helper function
 */
@@ -67,5 +67,61 @@ Board Board::gen_solution(int size)
         dir++;
     }
 
-    return Board(body);
+    return Board(body, size);
+}
+
+/**
+ * This function check if the current board solvable or not
+ * and return the boolean result
+ * */
+bool    Board::is_solvable()
+{
+    int                 index;
+    int                 time;
+    int                 diff;
+    std::pair<int,int>  zero_in_sol;
+    std::pair<int,int>  zero_in_board;
+    Board               solution = gen_solution(size);
+
+    zero_in_sol = solution.get_position_of_zero();
+    zero_in_board = get_position_of_zero();
+    time = 0;
+    diff = abs(zero_in_sol.first - zero_in_board.first) + abs(zero_in_sol.second - zero_in_board.second);                                                                                    
+    for (int i = 0; i< solution.body.size(); i++)
+    {
+        for (int j = i; j < body.size(); j++)
+        {
+            if (body[j] == solution.body[i])
+            {
+                if (j != i)
+                {
+                    std::swap(body[j], body[i]);
+                    time++;
+                }
+            }
+        }
+    }
+    return diff % 2 == time % 2;
+}
+
+/**
+ * this function return the position of the empty cell(number zero)
+ * x:(pair.first) fo the column position
+ * y:(pair.second) fo the row position
+ * */
+std::pair<int, int> Board::get_position_of_zero()
+{
+    int                 index;
+    std::pair<int, int> ans;
+
+    index = 0;
+    for (int i=0; i < body.size(); i++)
+        if (body[i] == 0)
+        {
+            index = i+1;
+            break;
+        }
+    ans.first = (index % size == 0) ? size : index % size;
+    ans.second = (index - ans.first) / size;
+    return ans;
 }
