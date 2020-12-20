@@ -72,6 +72,7 @@ Board Board::gen_solution(int size)
  * This function check if the current board solvable or not
  * and return the boolean result
  * */
+
 bool    Board::is_solvable()
 {
     int                 index;
@@ -84,7 +85,7 @@ bool    Board::is_solvable()
     zero_in_sol = solution.get_position_of_zero();
     zero_in_board = get_position_of_zero();
     time = 0;
-    diff = abs(zero_in_sol.first - zero_in_board.first) + abs(zero_in_sol.second - zero_in_board.second);                                                                                    
+    diff = abs(zero_in_sol.first - zero_in_board.first) + abs(zero_in_sol.second - zero_in_board.second);
     for (int i = 0; i< solution.body.size(); i++)
     {
         for (int j = i; j < body.size(); j++)
@@ -107,6 +108,7 @@ bool    Board::is_solvable()
  * x:(pair.first) fo the column position
  * y:(pair.second) fo the row position
  * */
+
 std::pair<int, int> Board::get_position_of_zero()
 {
     int                 index;
