@@ -24,8 +24,6 @@ void Board::print()
 Board Board::gen_solution(int size)
 {
     std::vector<int> body(size * size);
-    // index in 'body'
-    int bi;
     int inc = 1;
     int li = 0, ri = size - 1, ui = 0, di = size - 1;
     /*
