@@ -1,8 +1,8 @@
 #! /bin/sh
 
-$DIRECTORY=./build
+DIRECTORY="build"
 
-if [ ! -d "$DIRECTORY" ]; then
-  cmake -B ./build
+if [ ! -d $DIRECTORY ]; then
+  cmake -B $DIRECTORY
 fi
 cd ./build && make
