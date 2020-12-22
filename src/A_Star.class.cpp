@@ -140,7 +140,7 @@ void    A_Star::run()
             visited.insert(current->state);
             in_queue.erase(current->state);
             neighbor = current->next_states();
-            for (auto child : neighbor)
+            for (auto& child : neighbor)
             {
                 if (visited.find(child->state) != visited.end())
                     continue;
