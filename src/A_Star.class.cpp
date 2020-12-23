@@ -143,7 +143,10 @@ void    A_Star::run()
             for (auto& child : neighbor)
             {
                 if (visited.find(child->state) != visited.end())
+                {
+                    free(child);
                     continue;
+                }
                 child->gscore = current->gscore + 1;
                 child->hscore = heuristic(child->state, goal->state);
                 child->parent = current;
@@ -154,6 +157,7 @@ void    A_Star::run()
                     {
                         exist->gscore = child->gscore;
                         exist->parent = current;
+                        free(child);
                     }
                     continue;
                 }
@@ -161,12 +165,13 @@ void    A_Star::run()
                 in_queue[child->state] = child;
             }
         }
-        std::cout << i << std::endl;
+        // std::cout << i << std::endl;
     }
     if (solved)
     {
         std::cout << "Solved\nNumber of Iteration: " << i << std::endl;
         std::cout << "Path:  " << current->get_path() << std::endl;
+        // current->print();
     }
     else std::cout << "Empty Stack\n";
 }
