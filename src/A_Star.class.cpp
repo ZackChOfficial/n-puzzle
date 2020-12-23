@@ -44,26 +44,26 @@ std::vector<Node *> Node::next_states()
     if (index - size >= 0)
     {
         tmp = new Node(create_new(index, index - size));
-        tmp->move = "UP";
+        tmp->move = "U";
         new_states.push_back(tmp);
         
     }
     if (index - 1 >= 0 && ((index + 1)%size == 0?size:(index + 1)%size)  - 1 > 0)
     {
         tmp = new Node(create_new(index, index - 1));
-        tmp->move = "LEFT";
+        tmp->move = "L";
         new_states.push_back(tmp);
     }
     if (index + 1 < state.size() && ((index + 1)%size == 0?size:(index + 1)%size) + 1 <= size)
     {
         tmp = new Node(create_new(index, index + 1));
-        tmp->move = "RIGHT";
+        tmp->move = "R";
         new_states.push_back(tmp);
     }
     if (index + size < state.size())
     {
         tmp = new Node(create_new(index, index + size));
-        tmp->move = "DOWN";
+        tmp->move = "D";
         new_states.push_back(tmp);
     }
     return new_states;
@@ -93,7 +93,7 @@ std::string         Node::get_path()
     {
         path = parent->get_path();
         if (path != "")
-            return path +", " + move;
+            return path +" " + move;
     }
     return move;
 }
@@ -150,13 +150,18 @@ void    A_Star::run()
                 if (in_queue.find(child->state) != in_queue.end())
                 {
                     Node *exist = in_queue[child->state];
-                    if (child->gscore > exist->gscore)
-                        continue;
+                    if (child->gscore < exist->gscore)
+                    {
+                        exist->gscore = child->gscore;
+                        exist->parent = current;
+                    }
+                    continue;
                 }
                 states.push(child);
                 in_queue[child->state] = child;
             }
         }
+        std::cout << i << std::endl;
     }
     if (solved)
     {
