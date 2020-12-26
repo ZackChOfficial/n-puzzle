@@ -31,38 +31,38 @@ int    Node::print()
     std::cout << "\n\n";
     return x;
 }
-std::vector<Node *> Node::next_states()
+std::vector<std::shared_ptr<Node>> Node::next_states()
 {
-    int             index;
-    int             size;
-    Node            *tmp;
-    std::vector<Node *>  new_states;
+    int                     index;
+    int                     size;
+    std::shared_ptr<Node>   tmp;
+    std::vector<std::shared_ptr<Node>>  new_states;
 
 
     size = sqrt(state.size());
     index = find(state.begin(), state.end(), 0) - state.begin();
     if (index - size >= 0)
     {
-        tmp = new Node(create_new(index, index - size));
+        tmp = std::make_shared<Node>(create_new(index, index - size));
         tmp->move = "U";
         new_states.push_back(tmp);
         
     }
     if (index - 1 >= 0 && ((index + 1)%size == 0?size:(index + 1)%size)  - 1 > 0)
     {
-        tmp = new Node(create_new(index, index - 1));
+        tmp = std::make_shared<Node>(create_new(index, index - 1));
         tmp->move = "L";
         new_states.push_back(tmp);
     }
     if (index + 1 < state.size() && ((index + 1)%size == 0?size:(index + 1)%size) + 1 <= size)
     {
-        tmp = new Node(create_new(index, index + 1));
+        tmp = std::make_shared<Node>(create_new(index, index + 1));
         tmp->move = "R";
         new_states.push_back(tmp);
     }
     if (index + size < state.size())
     {
-        tmp = new Node(create_new(index, index + size));
+        tmp = std::make_shared<Node>(create_new(index, index + size));
         tmp->move = "D";
         new_states.push_back(tmp);
     }
@@ -102,22 +102,22 @@ std::string         Node::get_path()
 */
 A_Star::A_Star(std::vector<int> &initial, Board sol, int (*func)(std::vector<int> &state, std::vector<int> &goal))
 {
-    Node                *current;
-    bool                solved;
-    std::vector<Node *> neighbor;
+    std::shared_ptr<Node>                   current;
+    bool                                    solved;
+    std::vector<std::shared_ptr<Node>>     neighbor;
 
     heuristic = func;
-    root = new Node(initial);
+    root = std::make_shared<Node>(initial);
     root->gscore = 0;
     root->move = "";
-    goal = new Node(sol.body);
+    goal = std::make_shared<Node>(sol.body);
 }
 
 void    A_Star::run()
 {
-    Node                *current;
-    bool                solved;
-    std::vector<Node *> neighbor;
+    std::shared_ptr<Node>               current;
+    bool                                solved;
+    std::vector<std::shared_ptr<Node>>  neighbor;
     int                 tentative_gScore;
     std::string         path;
     
@@ -144,7 +144,6 @@ void    A_Star::run()
             {
                 if (visited.find(child->state) != visited.end())
                 {
-                    free(child);
                     continue;
                 }
                 child->gscore = current->gscore + 1;
@@ -152,13 +151,12 @@ void    A_Star::run()
                 child->parent = current;
                 if (in_queue.find(child->state) != in_queue.end())
                 {
-                    Node *exist = in_queue[child->state];
+                    std::shared_ptr<Node> exist = in_queue[child->state];
                     if (child->gscore < exist->gscore)
                     {
                         exist->gscore = child->gscore;
                         exist->parent = current;
                     }
-                    delete (child);
                     continue;
                 }
                 states.push(child);
