@@ -31,5 +31,6 @@ int        linear_conflict(std::vector<int> &state, std::vector<int> &goal)
     int hscore;
 
     hscore = manhattan_distance(state, goal);
+    
     return hscore;
 }

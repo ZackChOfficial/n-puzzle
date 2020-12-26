@@ -157,8 +157,8 @@ void    A_Star::run()
                     {
                         exist->gscore = child->gscore;
                         exist->parent = current;
-                        free(child);
                     }
+                    delete (child);
                     continue;
                 }
                 states.push(child);
