@@ -5,27 +5,22 @@
 #include <algorithm>
 #include <cmath>
 #include <iostream>
-#include "Board.class.hpp"
 #include <map>
 #include <memory>
 
-struct Node {
+#include "Board.class.hpp"
+
+struct Node : public Board {
 public:
-    std::vector<int>        state;
     std::shared_ptr<Node>   parent;
     int                     gscore;
     int                     hscore;
-    std::string             move;
 
 public:
     Node(std::vector<int> const &data);
-    std::vector<std::shared_ptr<Node>> next_states();
     bool                compare(std::vector<int> &rhs);
     std::string         get_path();
     int                 print();
-    
-private:
-    std::vector<int>    create_new(int index1, int index2);
 };
 
 struct CompareNode
