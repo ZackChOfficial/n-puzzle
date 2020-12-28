@@ -4,22 +4,29 @@
 #include "Board.class.hpp"
 #include "heuristic_functions.hpp"
 #include <iostream>
+#include <cstring>
+#include <cassert>
 
 using namespace std;
 
-int main()
+int main(int argc, char **argv)
 {
     vector<int> board = parse();
     // algo->run();
 
     Board b(board,(int)sqrt(board.size()));
-    if (b.is_solvable())
-    {   
-        cout << "Solvable\n";
-        A_Star *algo = new A_Star(board, b.gen_solution(b.size), manhattan_distance);
-        algo->run();
+    if (argc > 1)
+    {
+        if (!strcmp("-s" ,argv[1]))
+            assert(b.is_solvable() == true);
+        else if (!strcmp("-u" ,argv[1]))
+            assert(b.is_solvable() == false);
     }
-    else
-        cout << "Unsolvable\n";
+    else {
+        if (b.is_solvable())
+            cout << "Solvable\n";
+        else
+            cout << "Unsolvable\n";
+    }
     return 0;
 }

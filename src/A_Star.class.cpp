@@ -1,4 +1,5 @@
 #include "A_Star.class.hpp"
+#include "utils.hpp"
 
 /**
  * Basic Node Functions
@@ -11,69 +12,29 @@ Node::Node(std::vector<int> const &data)
     state = data;
 }
 
-int    Node::print()
+int Node::print()
 {
     int x = 0;
     if (parent)
     {
-       x =  parent->print();
+        x = parent->print();
     }
     x++;
     for (int i = 0; i < (int)sqrt(state.size()); i++)
     {
         for (int j = 0; j < (int)sqrt(state.size()); j++)
         {
-            std::cout << state[i*(int)sqrt(state.size()) + j] << "  ";
+            std::cout << state[i * (int)sqrt(state.size()) + j] << "  ";
         }
         std::cout << std::endl;
     }
     std::cout << "\n\n";
     return x;
 }
-std::vector<Node *> Node::next_states()
-{
-    int             index;
-    int             size;
-    Node            *tmp;
-    std::vector<Node *>  new_states;
-
-
-    size = sqrt(state.size());
-    index = find(state.begin(), state.end(), 0) - state.begin();
-    if (index - size >= 0)
-    {
-        tmp = new Node(create_new(index, index - size));
-        tmp->move = "U";
-        new_states.push_back(tmp);
-        
-    }
-    if (index - 1 >= 0 && ((index + 1)%size == 0?size:(index + 1)%size)  - 1 > 0)
-    {
-        tmp = new Node(create_new(index, index - 1));
-        tmp->move = "L";
-        new_states.push_back(tmp);
-    }
-    if (index + 1 < state.size() && ((index + 1)%size == 0?size:(index + 1)%size) + 1 <= size)
-    {
-        tmp = new Node(create_new(index, index + 1));
-        tmp->move = "R";
-        new_states.push_back(tmp);
-    }
-    if (index + size < state.size())
-    {
-        tmp = new Node(create_new(index, index + size));
-        tmp->move = "D";
-        new_states.push_back(tmp);
-    }
-    return new_states;
-}
-
-std::vector<int> Node::create_new(int index1, int index2)
-{
-    std::vector<int> newState(state);
-    std::swap(newState[index1], newState[index2]);
-    return newState;
-}
+// std::vector<std::shared_ptr<Node>> Node::gen_next_states()
+// {
+//     return next_states<Node>();
+// }
 
 bool Node::compare(std::vector<int> &rhs)
 {
@@ -85,14 +46,14 @@ bool Node::compare(std::vector<int> &rhs)
     return true;
 }
 
-std::string         Node::get_path()
+std::string Node::get_path()
 {
     std::string path;
     if (parent)
     {
         path = parent->get_path();
         if (path != "")
-            return path +" " + move;
+            return path + " " + move;
     }
     return move;
 }
@@ -101,25 +62,25 @@ std::string         Node::get_path()
 */
 A_Star::A_Star(std::vector<int> &initial, Board sol, int (*func)(std::vector<int> &state, std::vector<int> &goal))
 {
-    Node                *current;
-    bool                solved;
-    std::vector<Node *> neighbor;
+    std::shared_ptr<Node> current;
+    bool solved;
+    std::vector<std::shared_ptr<Node>> neighbor;
 
     heuristic = func;
-    root = new Node(initial);
+    root = std::make_shared<Node>(initial);
     root->gscore = 0;
     root->move = "";
-    goal = new Node(sol.body);
+    goal = std::make_shared<Node>(sol.state);
 }
 
-void    A_Star::run()
+void A_Star::run()
 {
-    Node                *current;
-    bool                solved;
-    std::vector<Node *> neighbor;
-    int                 tentative_gScore;
-    std::string         path;
-    
+    std::shared_ptr<Node> current;
+    bool solved;
+    std::vector<std::shared_ptr<Node>> neighbor;
+    int tentative_gScore;
+    std::string path;
+
     root->hscore = heuristic(root->state, goal->state);
     in_queue[root->state] = root;
     states.push(root);
@@ -134,16 +95,16 @@ void    A_Star::run()
         {
             solved = true;
         }
-        else {
+        else
+        {
             states.pop();
             visited.insert(current->state);
             in_queue.erase(current->state);
-            neighbor = current->next_states();
-            for (auto& child : neighbor)
+            neighbor = gen_next_states(current);
+            for (auto &child : neighbor)
             {
                 if (visited.find(child->state) != visited.end())
                 {
-                    delete (child);
                     continue;
                 }
                 child->gscore = current->gscore + 1;
@@ -151,12 +112,11 @@ void    A_Star::run()
                 child->parent = current;
                 if (in_queue.find(child->state) != in_queue.end())
                 {
-                    Node *exist = in_queue[child->state];
+                    std::shared_ptr<Node> exist = in_queue[child->state];
                     if (child->gscore < exist->gscore)
                     {
                         exist->gscore = child->gscore;
                         exist->parent = current;
-                        delete (child);
                     }
                     continue;
                 }
@@ -164,7 +124,6 @@ void    A_Star::run()
                 in_queue[child->state] = child;
             }
         }
-        // std::cout << i << std::endl;
     }
     if (solved)
     {
@@ -172,5 +131,6 @@ void    A_Star::run()
         std::cout << "Path:  " << current->get_path() << std::endl;
         // current->print();
     }
-    else std::cout << "Empty Stack\n";
+    else
+        std::cout << "Empty Stack\n";
 }

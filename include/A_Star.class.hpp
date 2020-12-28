@@ -5,32 +5,27 @@
 #include <algorithm>
 #include <cmath>
 #include <iostream>
-#include "Board.class.hpp"
 #include <map>
+#include <memory>
 
-struct Node {
+#include "Board.class.hpp"
+
+struct Node : public Board {
 public:
-    std::vector<int>    state;
-    Node                *parent;
-    int                 gscore;
-    int                 hscore;
-    int                 score;
-    std::string         move;
+    std::shared_ptr<Node>   parent;
+    int                     gscore;
+    int                     hscore;
 
 public:
     Node(std::vector<int> const &data);
-    std::vector<Node *> next_states();
     bool                compare(std::vector<int> &rhs);
     std::string         get_path();
     int                 print();
-    
-private:
-    std::vector<int>    create_new(int index1, int index2);
 };
 
 struct CompareNode
 {
-    inline bool    operator()(const Node* lhs, const Node* rhs) const
+    inline bool    operator()(const std::shared_ptr<Node> lhs, const std::shared_ptr<Node> rhs) const
     {
         // std::cout << "      " << lhs->hscore + lhs->gscore << " > " << rhs->hscore + rhs->gscore << std::endl;
         return lhs->hscore + lhs->gscore > rhs->hscore + rhs->gscore;
@@ -39,11 +34,11 @@ struct CompareNode
 
 class A_Star {
 private:
-    std::priority_queue<Node *,std::vector<Node*>, CompareNode> states;
+    std::priority_queue<std::shared_ptr<Node>,std::vector<std::shared_ptr<Node>>, CompareNode> states;
     std::set<std::vector<int>>                                  visited;
-    std::map<std::vector<int>, Node *>                                  in_queue;
-    Node                                                        *root;
-    Node                                                        *goal;
+    std::map<std::vector<int>, std::shared_ptr<Node>>                                  in_queue;
+    std::shared_ptr<Node>                                       root;
+    std::shared_ptr<Node>                                       goal;
     int                                                        (*heuristic)(std::vector<int> &state, std::vector<int> &goal);
 
 public:
