@@ -14,6 +14,7 @@ public:
     Node                *parent;
     int                 gscore;
     int                 hscore;
+    int                 score;
     std::string         move;
 
 public:

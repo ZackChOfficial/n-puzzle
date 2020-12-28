@@ -8,8 +8,7 @@ Node::Node(std::vector<int> const &data)
     parent = nullptr;
     gscore = 999999;
     hscore = 999999;
-    state.reserve(data.size());
-    copy(data.begin(), data.end(), back_inserter(state));
+    state = data;
 }
 
 int    Node::print()
@@ -144,7 +143,7 @@ void    A_Star::run()
             {
                 if (visited.find(child->state) != visited.end())
                 {
-                    free(child);
+                    delete (child);
                     continue;
                 }
                 child->gscore = current->gscore + 1;
@@ -157,7 +156,7 @@ void    A_Star::run()
                     {
                         exist->gscore = child->gscore;
                         exist->parent = current;
-                        free(child);
+                        delete (child);
                     }
                     continue;
                 }
