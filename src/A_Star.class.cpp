@@ -31,10 +31,6 @@ int Node::print()
     std::cout << "\n\n";
     return x;
 }
-// std::vector<std::shared_ptr<Node>> Node::gen_next_states()
-// {
-//     return next_states<Node>();
-// }
 
 bool Node::compare(std::vector<int> &rhs)
 {

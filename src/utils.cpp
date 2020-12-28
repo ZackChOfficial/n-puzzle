@@ -1,5 +1,7 @@
-#include "utils.hpp"
 #include "A_Star.class.hpp"
+#include "utils.hpp"
+
+#include "Disjoint_database.hpp"
 
 void throwError(std::string text)
 {
@@ -45,3 +47,4 @@ std::vector<std::shared_ptr<T>> gen_next_states(std::shared_ptr<T> b)
 }
 
 template std::vector<std::shared_ptr<Node>> gen_next_states(std::shared_ptr<Node> b);
+template std::vector<std::shared_ptr<DFS_Node>> gen_next_states(std::shared_ptr<DFS_Node> b);
