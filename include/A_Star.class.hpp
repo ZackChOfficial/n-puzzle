@@ -43,6 +43,5 @@ private:
 
 public:
     A_Star(std::vector<int> &initial,  Board sol, int (*func)(std::vector<int> &state, std::vector<int> &goal));
-    ~A_Star();
     void                                                        run();
 };

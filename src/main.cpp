@@ -12,9 +12,8 @@ using namespace std;
 int main(int argc, char **argv)
 {
     vector<int> board = parse();
-    // algo->run();
-
     Board b(board,(int)sqrt(board.size()));
+    A_Star algo(board, Board::gen_solution(b.size), manhattan_distance);
     if (argc > 1)
     {
         if (!strcmp("-s" ,argv[1]))
@@ -24,7 +23,10 @@ int main(int argc, char **argv)
     }
     else {
         if (b.is_solvable())
+        {
             cout << "Solvable\n";
+            algo.run();
+        }
         else
             cout << "Unsolvable\n";
     }
