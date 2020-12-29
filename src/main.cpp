@@ -13,7 +13,7 @@ int main(int argc, char **argv)
 {
     vector<int> board = parse();
     Board b(board,(int)sqrt(board.size()));
-    A_Star algo(board, Board::gen_solution(b.size), manhattan_distance);
+    A_Star algo(board, Board::gen_solution(b.size), linear_conflict);
     if (argc > 1)
     {
         if (!strcmp("-s" ,argv[1]))
