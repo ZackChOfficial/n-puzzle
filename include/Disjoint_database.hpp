@@ -12,7 +12,9 @@ class DFS_Node : public Board
 public:
     int dist;
     // its true id 0 swapped with acell actually in pattern (cell != -1)
-    bool coutable;
+    bool countable = false;
+public:
+    std::vector<std::shared_ptr<DFS_Node>>  gen_next_states(std::shared_ptr<DFS_Node> b)
 };
 
 class Disjoint_Pattern_Database
