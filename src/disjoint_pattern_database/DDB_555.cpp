@@ -3,7 +3,6 @@
 #include <unordered_set>
 
 #include "Disjoint_database.hpp"
-#include "Board.class.hpp"
 #include "A_Star.class.hpp"
 #include "utils.hpp"
 
@@ -22,11 +21,13 @@ auto sb_555_p3 = std::make_shared<DFS_Node>(std::vector<int>{-1, -1, -1, -1,
                                                              11, 0, 15, -1,
                                                              10, 9, 8, -1});
 
+
+
 std::vector<std::pair<int, int>> DDB_555::make_entries(std::shared_ptr<DFS_Node> source)
 {
     std::vector<std::pair<std::shared_ptr<DFS_Node>, int> > result;
     std::queue<std::shared_ptr<DFS_Node> > q;
-    std::unordered_set<std::vector<int> > visited;
+    std::set<std::vector<int>> visited;
     source->dist = 0;
     q.push(source);
     while (!q.empty())
@@ -37,6 +38,11 @@ std::vector<std::pair<int, int>> DDB_555::make_entries(std::shared_ptr<DFS_Node>
         auto children = gen_next_states(current);
         for (auto &child : children)
         {
+            if (visited.find(child->state) == visited.end()){
+                if (child->countable)
+                    child->dist = current->dist + 1;
+                q.push(child);
+            }
         }
     }
 };
