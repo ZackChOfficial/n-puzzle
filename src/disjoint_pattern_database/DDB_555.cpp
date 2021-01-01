@@ -21,31 +21,42 @@ auto sb_555_p3 = std::make_shared<DFS_Node>(std::vector<int>{-1, -1, -1, -1,
                                                              11, 0, 15, -1,
                                                              10, 9, 8, -1});
 
-
-
-std::vector<std::pair<int, int>> DDB_555::make_entries(std::shared_ptr<DFS_Node> source)
+bool operator<(const std::shared_ptr<DFS_Node> &n1, const std::shared_ptr<DFS_Node> &n2)
 {
-    std::vector<std::pair<std::shared_ptr<DFS_Node>, int> > result;
-    std::queue<std::shared_ptr<DFS_Node> > q;
-    std::set<std::vector<int>> visited;
+    if (n1->dist == n2->dist)
+        return n1->state < n2->state;
+    return n1->dist < n2->dist;
+}
+
+std::set<std::shared_ptr<DFS_Node>> DDB_555::make_entries(std::shared_ptr<DFS_Node> source)
+{
+    std::queue<std::shared_ptr<DFS_Node>> q;
+    std::set<std::shared_ptr<DFS_Node>> visited;
     source->dist = 0;
     q.push(source);
     while (!q.empty())
     {
         auto current = q.front();
         q.pop();
-        visited.insert(current->state);
+        visited.insert(current);
         auto children = gen_next_states(current);
         for (auto &child : children)
         {
-            if (visited.find(child->state) == visited.end()){
+            if (visited.find(child) == visited.end())
+            {
                 if (child->countable)
                     child->dist = current->dist + 1;
                 q.push(child);
             }
         }
     }
+    return visited;
 };
+
+void DDB_555::save_entries(std::string file_name){
+    
+}
+
 
 void DDB_555::create()
 {

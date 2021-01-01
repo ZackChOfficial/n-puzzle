@@ -41,10 +41,13 @@ class DDB_555
 {
     static void create();
 
-private:
-    std::vector<std::pair<int, int>> make_entries(std::shared_ptr<DFS_Node> source);
-    void save_entries(std::string file_name);
-
 public:
     std::map<int, int> load(std::string file_name);
+    unsigned long hash(const DFS_Node &n , const std::vector<int> &target){
+        
+    }
+
+private:
+    std::set<std::shared_ptr<DFS_Node>> DDB_555::make_entries(std::shared_ptr<DFS_Node> source);
+    void save_entries(std::string file_name);
 };
