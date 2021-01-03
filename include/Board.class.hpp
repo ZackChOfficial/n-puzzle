@@ -15,10 +15,10 @@ public:
     Board()
     {
     }
-    Board(std::vector<int> state) : state(state)
+    Board(const std::vector<int> &state) : state(state), size(state.size())
     {
     }
-    Board(std::vector<int> state, int size) : state(state), size(size)
+    Board(const std::vector<int> &state,const int &size) : state(state), size(size)
     {
     }
 
