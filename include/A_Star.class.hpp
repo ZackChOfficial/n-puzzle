@@ -17,7 +17,7 @@ public:
     int                     hscore;
 
 public:
-    Node(std::vector<int> const &data);
+    Node(const std::vector<int> &data);
     bool                compare(std::vector<int> &rhs);
     std::string         get_path();
     int                 print();

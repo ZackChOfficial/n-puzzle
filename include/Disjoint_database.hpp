@@ -13,10 +13,10 @@ public:
     bool countable = false;
 
 public:
-    std::vector<std::shared_ptr<DFS_Node>> gen_next_states(std::shared_ptr<DFS_Node> b);
+    std::vector<DFS_Node> gen_next_states() const;
 
 protected:
-    DFS_Node cell_swap(int index1, int index2);
+    DFS_Node cell_swap(int index1, int index2) const;
 };
 
 class Disjoint_Pattern_Database
@@ -39,15 +39,13 @@ public:
 
 class DDB_555
 {
-    static void create();
 
 public:
+    void create();
     std::map<int, int> load(std::string file_name);
-    unsigned long hash(const DFS_Node &n , const std::vector<int> &target){
-        
-    }
+    unsigned long hash(const DFS_Node &n, const std::vector<int> &target_pattern);
 
 private:
-    std::set<std::shared_ptr<DFS_Node>> DDB_555::make_entries(std::shared_ptr<DFS_Node> source);
+    std::shared_ptr<std::set<DFS_Node>> DDB_555::make_entries(DFS_Node source);
     void save_entries(std::string file_name);
 };

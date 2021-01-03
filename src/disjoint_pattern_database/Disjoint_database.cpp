@@ -6,7 +6,7 @@
 ** returns a new node with cells at index 'i1' and index 'i2' swapped
 */
 
-DFS_Node DFS_Node::cell_swap(int i1, int i2)
+DFS_Node DFS_Node::cell_swap(int i1, int i2) const
 {
     DFS_Node res = *this;
     std::swap(res.state[i1], res.state[i2]);
@@ -15,37 +15,37 @@ DFS_Node DFS_Node::cell_swap(int i1, int i2)
     return res;
 }
 
-std::vector<std::shared_ptr<DFS_Node>> DFS_Node::gen_next_states(std::shared_ptr<DFS_Node> b)
+std::vector<DFS_Node> DFS_Node::gen_next_states() const
 {
     int index;
     int size;
-    std::shared_ptr<DFS_Node> tmp;
-    std::vector<std::shared_ptr<DFS_Node>> new_states;
+    DFS_Node tmp;
+    std::vector<DFS_Node> new_states;
 
-    size = std::sqrt(b->state.size());
-    index = std::find(b->state.begin(), b->state.end(), 0) - b->state.begin();
+    size = std::sqrt(this->state.size());
+    index = std::find(this->state.begin(), this->state.end(), 0) - this->state.begin();
     if (index - size >= 0)
     {
-        tmp = std::make_shared<DFS_Node>(b->cell_swap(index, index - size));
-        tmp->move = "U";
+        tmp = this->cell_swap(index, index - size);
+        tmp.move = "U";
         new_states.push_back(tmp);
     }
     if (index - 1 >= 0 && ((index + 1) % size == 0 ? size : (index + 1) % size) - 1 > 0)
     {
-        tmp = std::make_shared<DFS_Node>(b->cell_swap(index, index - 1));
-        tmp->move = "L";
+        tmp = this->cell_swap(index, index - 1);
+        tmp.move = "L";
         new_states.push_back(tmp);
     }
-    if (index + 1 < b->state.size() && ((index + 1) % size == 0 ? size : (index + 1) % size) + 1 <= size)
+    if (index + 1 < this->state.size() && ((index + 1) % size == 0 ? size : (index + 1) % size) + 1 <= size)
     {
-        tmp = std::make_shared<DFS_Node>(b->cell_swap(index, index + 1));
-        tmp->move = "R";
+        tmp = this->cell_swap(index, index + 1);
+        tmp.move = "R";
         new_states.push_back(tmp);
     }
-    if (index + size < b->state.size())
+    if (index + size < this->state.size())
     {
-        tmp = std::make_shared<DFS_Node>(b->cell_swap(index, index + size));
-        tmp->move = "D";
+        tmp = this->cell_swap(index, index + size);
+        tmp.move = "D";
         new_states.push_back(tmp);
     }
     return new_states;
