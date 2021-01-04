@@ -2,11 +2,6 @@
 #include <cmath>
 #include <algorithm> // std::find
 
-DDB_555& DDB_555::get(){
-    static DDB_555 instance;
-    return instance;
-}
-
 /*
 ** returns a new node with cells at index 'i1' and index 'i2' swapped
 */
