@@ -3,6 +3,7 @@
 #include <unordered_set>
 #include <algorithm>
 #include <cmath>
+#include <fstream>
 
 #include "Disjoint_database.hpp"
 #include "A_Star.class.hpp"
@@ -55,6 +56,9 @@ std::set<DFS_Node> DDB_555::make_entries(DFS_Node source)
         {
             maxdepth = current.depth;
             std::cout << "jump to depth : " << maxdepth << "\n";
+            if (maxdepth == 3){
+                break;
+            }
         }
         q.pop();
         visited.insert(current);
@@ -76,10 +80,13 @@ std::set<DFS_Node> DDB_555::make_entries(DFS_Node source)
     return visited;
 };
 
-void DDB_555::save_entries(std::string file_name, const std::set<DFS_Node> &data)
+void DDB_555::save_entries(std::string file_name, const std::set<DFS_Node> &data, const std::vector<int> &target_pattern)
 {
+    std::ofstream file;
     auto cmp = [](const DFS_Node &n1, const DFS_Node &n2) { return n1.state < n2.state; };
     std::set<DFS_Node, decltype(cmp)> clean_data(cmp);
+
+    std::cout << "preaparing data...\n";
 
     for (auto &e : data)
     {
@@ -97,14 +104,36 @@ void DDB_555::save_entries(std::string file_name, const std::set<DFS_Node> &data
             clean_data.insert(e);
         }
     }
-    
+
+    file.open(file_name, std::ios::binary | std::ios::trunc);
+
+    if (file.is_open())
+    {
+        unsigned long *raw_data = new unsigned long[clean_data.size()];
+        int i = 0;
+        for (auto &e : clean_data)
+            raw_data[i++] = hash(e, target_pattern);
+
+        std::cout << "writing to file " << file_name << "...\n";
+        file.write((char *)raw_data, i * sizeof(unsigned long));
+        std::cout << "done" << file_name << "\n";
+    }
+    else
+    {
+        std::cerr << "unable to write to file : " << file_name << "\n";
+    }
 }
 
 void DDB_555::create()
 {
-    std::set<DFS_Node> s = make_entries(s_p1);
+    std::set<DFS_Node> data = make_entries(s_p1);
+    save_entries("DPDB_555_1.bin", data, s_p1_ord);
 }
 
+
+void DDB_555::load(){
+
+}
 /*
 ** a function to hash a DFS_node in order to efficiently sore it to a binary file
 */
@@ -115,9 +144,10 @@ unsigned long DDB_555::hash(const DFS_Node &n, const std::vector<int> &target_pa
     int width = 4;
     for (int i = 0; i < n.state.size(); i++)
     {
-        if (n.state[i] > 0)
+        auto it = std::find(target_pattern.begin(), target_pattern.end(), n.state[i]);
+        if (it != target_pattern.end())
         {
-            int index = std::find(target_pattern.begin(), target_pattern.end(), n.state[i]) - target_pattern.begin();
+            int index = it - target_pattern.begin();
             hash += (i / width) * std::pow(10, 2 * index) + (i % width) * std::pow(10, 2 * index + 1);
         }
     }

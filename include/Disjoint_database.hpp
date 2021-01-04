@@ -51,7 +51,8 @@ public:
 
     std::map<int, int> load(std::string file_name);
 
-private:
+public:
+
     static DFS_Node s_p1;
     static DFS_Node s_p2;
     static DFS_Node s_p3;
@@ -60,6 +61,5 @@ private:
     static std::vector<int> s_p3_ord;
 
     static std::set<DFS_Node> make_entries(DFS_Node source);
-    void save_entries(std::string file_name, const std::set<DFS_Node> &data);
-    void save_entries(std::string file_name);
+    static void save_entries(std::string file_name, const std::set<DFS_Node> &data, const std::vector<int> &target_pattern);
 };

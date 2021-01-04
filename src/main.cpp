@@ -17,10 +17,10 @@ int main(int argc, char **argv)
                              12, 13, 14, -1,
                              -1, 0, -1, -1,
                              -1, -1, -1, -1});
-    
+
     p1.dist = 44;
-    
-    unsigned long z = DDB_555::hash(p1, {1, 2, 12, 13, 14});
+
+    unsigned long z = DDB_555::hash(p1, DDB_555::s_p1_ord);
     printf("%0.20lu\n", z);
     cout << std::numeric_limits<unsigned long>::max() << "\n";
 
