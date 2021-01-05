@@ -50,3 +50,19 @@ std::vector<DFS_Node> DFS_Node::gen_next_states() const
     }
     return new_states;
 }
+
+void DFS_Node::print()
+{
+    for (size_t i = 0; i < 4; i++)
+    {
+        for (int j = 0; j < 4; j++)
+        {
+            if (state[4 * i + j] >= 0)
+                printf("%3d", state[4 * i + j]);
+            else
+                printf("  *");
+        }
+
+        printf("\n");
+    }
+}

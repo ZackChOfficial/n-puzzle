@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <cmath>
 #include <fstream>
+#include <unordered_map>
 
 #include "Disjoint_database.hpp"
 #include "A_Star.class.hpp"
@@ -36,8 +37,8 @@ DDB_555 &DDB_555::get()
 
 bool operator<(const DFS_Node &n1, const DFS_Node &n2)
 {
-    if (n1.state == n2.state)
-        return n1.dist < n2.dist;
+    // if (n1.state == n2.state)
+    //     return n1.dist < n2.dist;
     return n1.state < n2.state;
 }
 
@@ -49,25 +50,32 @@ std::set<DFS_Node> DDB_555::make_entries(DFS_Node source)
     source.dist = 0;
     source.depth = 0;
     q.push(source);
+    std::cout << "creating entries...\n";
     while (!q.empty())
     {
         auto current = q.front();
+        std::cout << "current  :\n";
+        current.print();
+        std::cout << "\n";
         if (current.depth > maxdepth)
         {
             maxdepth = current.depth;
             std::cout << "jump to depth : " << maxdepth << "\n";
-            if (maxdepth == 3){
+            if (maxdepth == 2)
                 break;
-            }
         }
         q.pop();
         visited.insert(current);
 
         auto children = current.gen_next_states();
+        std::cout << "children : \n";
         for (auto &child : children)
         {
             if (visited.find(child) == visited.end())
             {
+                current.print();
+                std::cout << "\n";
+
                 if (child.countable)
                     child.dist = current.dist + 1;
                 child.depth = current.depth + 1;
@@ -77,33 +85,34 @@ std::set<DFS_Node> DDB_555::make_entries(DFS_Node source)
     }
     std::cout << "max depth : " << maxdepth << "\n";
     // last max depth was 47
+    std::cout << visited.size() << " entries created\n";
     return visited;
 };
 
 void DDB_555::save_entries(std::string file_name, const std::set<DFS_Node> &data, const std::vector<int> &target_pattern)
 {
     std::ofstream file;
-    auto cmp = [](const DFS_Node &n1, const DFS_Node &n2) { return n1.state < n2.state; };
-    std::set<DFS_Node, decltype(cmp)> clean_data(cmp);
+    std::unordered_map<unsigned long, int> clean_data;
 
-    std::cout << "preaparing data...\n";
+    std::cout << "cleaning data...\n";
 
     for (auto &e : data)
     {
-        auto it = clean_data.find(e);
+        auto h = hash_state(e.state, target_pattern);
+        auto it = clean_data.find(h);
         if (it != clean_data.end())
         {
-            if (it->dist > e.dist)
-            {
-                clean_data.erase(it);
-                clean_data.insert(e);
-            }
+            if (it->second > e.dist)
+                clean_data[h] = e.dist;
         }
         else
         {
-            clean_data.insert(e);
+            clean_data[h] = e.dist;
         }
     }
+    std::cout << clean_data.size() << " elements resulted\n";
+
+    std::cout << "preaparing data...\n";
 
     file.open(file_name, std::ios::binary | std::ios::trunc);
 
@@ -111,12 +120,13 @@ void DDB_555::save_entries(std::string file_name, const std::set<DFS_Node> &data
     {
         unsigned long *raw_data = new unsigned long[clean_data.size()];
         int i = 0;
-        for (auto &e : clean_data)
-            raw_data[i++] = hash(e, target_pattern);
+        for (auto const &[key, val] : clean_data)
+            raw_data[i++] = key + hash_dist(val);
 
         std::cout << "writing to file " << file_name << "...\n";
         file.write((char *)raw_data, i * sizeof(unsigned long));
-        std::cout << "done" << file_name << "\n";
+        std::cout << "done"
+                  << "\n";
     }
     else
     {
@@ -130,27 +140,32 @@ void DDB_555::create()
     save_entries("DPDB_555_1.bin", data, s_p1_ord);
 }
 
-
-void DDB_555::load(){
-
+void DDB_555::load()
+{
 }
 /*
 ** a function to hash a DFS_node in order to efficiently sore it to a binary file
 */
 
-unsigned long DDB_555::hash(const DFS_Node &n, const std::vector<int> &target_pattern)
+unsigned long DDB_555::hash_state(const std::vector<int> &state, const std::vector<int> &target_pattern)
 {
     unsigned long hash = 0;
     int width = 4;
-    for (int i = 0; i < n.state.size(); i++)
+    for (int i = 0; i < state.size(); i++)
     {
-        auto it = std::find(target_pattern.begin(), target_pattern.end(), n.state[i]);
+        auto it = std::find(target_pattern.begin(), target_pattern.end(), state[i]);
         if (it != target_pattern.end())
         {
             int index = it - target_pattern.begin();
             hash += (i / width) * std::pow(10, 2 * index) + (i % width) * std::pow(10, 2 * index + 1);
         }
     }
-    hash += n.dist * std::pow(10, 2 * 6);
+    return hash;
+}
+
+unsigned long DDB_555::hash_dist(int dist)
+{
+    unsigned long hash = 0;
+    hash += dist * std::pow(10, 2 * 8);
     return hash;
 }

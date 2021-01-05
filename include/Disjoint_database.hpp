@@ -17,8 +17,8 @@ public:
 public:
     DFS_Node() = default;
     DFS_Node(const std::vector<int> &state) : Board(state), dist(0), countable(false), depth(0) {}
-
     std::vector<DFS_Node> gen_next_states() const;
+    void print();
 
 protected:
     DFS_Node cell_swap(int index1, int index2) const;
@@ -47,12 +47,11 @@ public:
     static void create();
     static void load();
     static int heuristic(const std::vector<int> &state);
-    static unsigned long hash(const DFS_Node &n, const std::vector<int> &target_pattern);
-
+    static unsigned long hash_state(const std::vector<int> &state, const std::vector<int> &target_pattern);
+    static unsigned long hash_dist(int dist);
     std::map<int, int> load(std::string file_name);
 
 public:
-
     static DFS_Node s_p1;
     static DFS_Node s_p2;
     static DFS_Node s_p3;
