@@ -1,11 +1,11 @@
 import React from 'react';
 import './App.css';
-import Cell from './components/cells'
+import Board from './components/board'
 function App() {
 
   return (
     <div className="App">
-      <Cell />
+      <Board />
     </div>
   );
 }
