@@ -12,6 +12,8 @@ DFS_Node DFS_Node::cell_swap(int i1, int i2) const
     std::swap(res.state[i1], res.state[i2]);
     if (res.state[i1] < 0 || res.state[i2] < 0)
         res.countable = false;
+    else
+        res.countable = true;
     return res;
 }
 
@@ -53,6 +55,11 @@ std::vector<DFS_Node> DFS_Node::gen_next_states() const
 
 void DFS_Node::print()
 {
+    if (countable)
+        printf("C, ");
+    else
+        printf("NC, ");
+    printf("d=%d\n", dist);
     for (size_t i = 0; i < 4; i++)
     {
         for (int j = 0; j < 4; j++)

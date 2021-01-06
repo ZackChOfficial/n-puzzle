@@ -37,8 +37,6 @@ DDB_555 &DDB_555::get()
 
 bool operator<(const DFS_Node &n1, const DFS_Node &n2)
 {
-    // if (n1.state == n2.state)
-    //     return n1.dist < n2.dist;
     return n1.state < n2.state;
 }
 
@@ -49,36 +47,41 @@ std::set<DFS_Node> DDB_555::make_entries(DFS_Node source)
     int maxdepth = -1;
     source.dist = 0;
     source.depth = 0;
+    source.countable = true;
     q.push(source);
     std::cout << "creating entries...\n";
     while (!q.empty())
     {
         auto current = q.front();
-        std::cout << "current  :\n";
-        current.print();
-        std::cout << "\n";
         if (current.depth > maxdepth)
         {
             maxdepth = current.depth;
             std::cout << "jump to depth : " << maxdepth << "\n";
-            if (maxdepth == 2)
-                break;
+            // if (maxdepth == 3)
+            //     break;
         }
         q.pop();
+
+        
+        //  std::cout << "\ncurrent  :\n";
+        // current.print();
+        // if (visited.find(current) != visited.end())
+        //     std::cout << "exsists\n";
         visited.insert(current);
+        // std::cout << "S = " << visited.size() << "\n";
+
 
         auto children = current.gen_next_states();
-        std::cout << "children : \n";
+        // std::cout << "children : \n";
         for (auto &child : children)
         {
             if (visited.find(child) == visited.end())
             {
-                current.print();
-                std::cout << "\n";
-
                 if (child.countable)
                     child.dist = current.dist + 1;
                 child.depth = current.depth + 1;
+                // child.print();
+                // std::cout << "\n";
                 q.push(child);
             }
         }
@@ -142,6 +145,7 @@ void DDB_555::create()
 
 void DDB_555::load()
 {
+    
 }
 /*
 ** a function to hash a DFS_node in order to efficiently sore it to a binary file

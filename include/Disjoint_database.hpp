@@ -16,7 +16,7 @@ public:
 
 public:
     DFS_Node() = default;
-    DFS_Node(const std::vector<int> &state) : Board(state), dist(0), countable(false), depth(0) {}
+    DFS_Node(const std::vector<int> &state) : Board(state), dist(0), countable(true), depth(0) {}
     std::vector<DFS_Node> gen_next_states() const;
     void print();
 
