@@ -1,19 +1,13 @@
-function swap(node1, node2) {
-    const afterNode2 = node2.nextElementSibling;
-    const parent = node2.parentNode;
-    if (node1 === afterNode2) {
-        parent.insertBefore(node1, node2);
-    } else {
-        node1.replaceWith(node2);
-        parent.insertBefore(node1, afterNode2);
-    }
+function swap(state,i,j) {
+    const tmp = state[i];
+    state[i] = state[j];
+    state[j] = tmp; 
 }
 
-export default function move(direction) {
-    let children = document.getElementById("board").children;
+export default function move(state, direction) {
     let zero;
-    for (let i = 0; i < children.length; i++) {
-        if (children[i].id == 'zero') {
+    for (let i = 0; i < state.length; i++) {
+        if (state[i] == 0) {
             zero = i;
             break;
         }
@@ -21,20 +15,21 @@ export default function move(direction) {
     switch (direction) {
         case "U":
             if (zero - 4 >= 0)
-                swap(children[zero], children[zero - 4]);
+                swap(state, zero, zero - 4);
             break;
         case "R":
             if ((zero + 1)%4 != 0)
-                swap(children[zero], children[zero + 1]);
+                swap(state, zero, zero + 1);
             break;
         case "D":
-            if (zero + 4 < children.length)
-                swap(children[zero], children[zero + 4]);
+            if (zero + 4 < state.length)
+                swap(state, zero, zero + 4);
             break;
         case "L":
             if ((zero)%4  != 0)
-                swap(children[zero], children[zero - 1]);
+                swap(state, zero, zero - 1);
             break;
 
     }
+    return state;
 }
