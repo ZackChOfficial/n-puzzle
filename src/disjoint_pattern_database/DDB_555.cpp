@@ -6,9 +6,14 @@
 #include <fstream>
 #include <unordered_map>
 
+
 #include "Disjoint_database.hpp"
 #include "A_Star.class.hpp"
 #include "utils.hpp"
+
+const std::string DDB_555::P1_DB_FILE_NAME = "DPDB_555_1.bin";
+const std::string DDB_555::P2_DB_FILE_NAME = "DPDB_555_2.bin";
+const std::string DDB_555::P3_DB_FILE_NAME = "DPDB_555_3.bin";
 
 DFS_Node DDB_555::s_p1 = DFS_Node({1, 2, -1, -1,
                                    12, 13, 14, -1,
@@ -62,14 +67,12 @@ std::set<DFS_Node> DDB_555::make_entries(DFS_Node source)
         }
         q.pop();
 
-        
         //  std::cout << "\ncurrent  :\n";
         // current.print();
         // if (visited.find(current) != visited.end())
         //     std::cout << "exsists\n";
         visited.insert(current);
         // std::cout << "S = " << visited.size() << "\n";
-
 
         auto children = current.gen_next_states();
         // std::cout << "children : \n";
@@ -130,6 +133,7 @@ void DDB_555::save_entries(std::string file_name, const std::set<DFS_Node> &data
         file.write((char *)raw_data, i * sizeof(unsigned long));
         std::cout << "done"
                   << "\n";
+        delete[] raw_data;
     }
     else
     {
@@ -139,14 +143,53 @@ void DDB_555::save_entries(std::string file_name, const std::set<DFS_Node> &data
 
 void DDB_555::create()
 {
-    std::set<DFS_Node> data = make_entries(s_p1);
-    save_entries("DPDB_555_1.bin", data, s_p1_ord);
+    std::set<DFS_Node> p1_data = make_entries(s_p1);
+    std::set<DFS_Node> p2_data = make_entries(s_p2);
+    std::set<DFS_Node> p3_data = make_entries(s_p3);
+
+    save_entries(P1_DB_FILE_NAME, p1_data, s_p1_ord);
+    save_entries(P2_DB_FILE_NAME, p2_data, s_p2_ord);
+    save_entries(P3_DB_FILE_NAME, p3_data, s_p3_ord);
+}
+
+void DDB_555::load_db(const std::string &file_name, std::unordered_map<unsigned long, int> &pattern_db)
+{
+    std::ifstream file(file_name, std::ios::binary | std::ios::ate);
+    std::streampos size;
+    unsigned long *raw_data;
+
+    if (file.is_open())
+    {
+        std::cout << "loading " << file_name << "\n";
+        size = file.tellg();
+        raw_data = new unsigned long[size];
+        file.seekg(0, std::ios::beg);
+        file.read((char *)raw_data, size);
+        file.close();
+        std::cout << "done !\n";
+
+        for (int i = 0; i < size / sizeof(unsigned long); i++)
+        {
+            int dist = raw_data[i] / (unsigned long)std::pow(10, 2 * 8);
+            unsigned long state_hash = raw_data[i] - dist * (unsigned long)std::pow(10, 2 * 8);
+
+            pattern_db[state_hash] = dist;
+        }
+        delete[] raw_data;
+    }
+    else
+        std::cout << "Unable to open file " << file_name << "\n";
 }
 
 void DDB_555::load()
 {
-    
+    auto instance = get();
+    load_db(P1_DB_FILE_NAME, instance.m_p1_db);
+    load_db(P2_DB_FILE_NAME, instance.m_p2_db);
+    load_db(P3_DB_FILE_NAME, instance.m_p3_db);
+
 }
+
 /*
 ** a function to hash a DFS_node in order to efficiently sore it to a binary file
 */
@@ -161,7 +204,7 @@ unsigned long DDB_555::hash_state(const std::vector<int> &state, const std::vect
         if (it != target_pattern.end())
         {
             int index = it - target_pattern.begin();
-            hash += (i / width) * std::pow(10, 2 * index) + (i % width) * std::pow(10, 2 * index + 1);
+            hash += (i / width) * (unsigned long)std::pow(10, 2 * index) + (i % width) * (unsigned long)std::pow(10, 2 * index + 1);
         }
     }
     return hash;
@@ -170,6 +213,15 @@ unsigned long DDB_555::hash_state(const std::vector<int> &state, const std::vect
 unsigned long DDB_555::hash_dist(int dist)
 {
     unsigned long hash = 0;
-    hash += dist * std::pow(10, 2 * 8);
+    hash += dist * (unsigned long)std::pow(10, 2 * 8);
     return hash;
+}
+
+int DDB_555::heuristic(std::vector<int> &state, const std::vector<int>& goal)
+{
+    DDB_555 &instance = get();
+    unsigned long h1 = hash_state(state, s_p1_ord);
+    unsigned long h2 = hash_state(state, s_p2_ord);
+    unsigned long h3 = hash_state(state, s_p3_ord);
+    return instance.m_p1_db[h1] + instance.m_p2_db[h2] + instance.m_p3_db[h3];
 }

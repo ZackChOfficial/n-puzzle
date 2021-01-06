@@ -1,6 +1,6 @@
 #include "heuristic_functions.hpp"
 
-std::map<int, int>   get_indexs(std::vector<int> &goal)
+std::map<int, int>   get_indexs(const std::vector<int> &goal)
 {
     std::map<int, int> indexs;
 
@@ -9,7 +9,7 @@ std::map<int, int>   get_indexs(std::vector<int> &goal)
     
     return indexs;
 }
-int        manhattan_distance(std::vector<int> &state, std::vector<int> &goal)
+int        manhattan_distance(std::vector<int> &state, const std::vector<int> &goal)
 {
     int hscore = 0;
     std::pair<int, int> index;
@@ -28,7 +28,7 @@ int        manhattan_distance(std::vector<int> &state, std::vector<int> &goal)
     return hscore;
 }
 
-int        linear_conflict(std::vector<int> &state, std::vector<int> &goal)
+int        linear_conflict(std::vector<int> &state, const std::vector<int> &goal)
 {
     int hscore;
     int correct_x;

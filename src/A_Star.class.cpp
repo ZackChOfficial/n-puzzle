@@ -56,7 +56,7 @@ std::string Node::get_path()
 /**
  * A Star Functions
 */
-A_Star::A_Star(std::vector<int> &initial, Board sol, int (*func)(std::vector<int> &state, std::vector<int> &goal))
+A_Star::A_Star(std::vector<int> &initial, Board sol, int (*func)(std::vector<int> &state, const std::vector<int> &goal))
 {
     std::shared_ptr<Node> current;
     bool solved;

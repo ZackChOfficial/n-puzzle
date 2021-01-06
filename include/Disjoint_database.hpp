@@ -4,6 +4,7 @@
 #include <string>
 #include <map>
 #include <set>
+#include <unordered_map>
 
 #include "Board.class.hpp"
 class DFS_Node : public Board
@@ -46,12 +47,16 @@ public:
     static DDB_555 &get();
     static void create();
     static void load();
-    static int heuristic(const std::vector<int> &state);
+    static int heuristic(std::vector<int> &state, const std::vector<int> &goal);
     static unsigned long hash_state(const std::vector<int> &state, const std::vector<int> &target_pattern);
     static unsigned long hash_dist(int dist);
     std::map<int, int> load(std::string file_name);
 
 public:
+    std::unordered_map<unsigned long, int> m_p1_db;
+    std::unordered_map<unsigned long, int> m_p2_db;
+    std::unordered_map<unsigned long, int> m_p3_db;
+
     static DFS_Node s_p1;
     static DFS_Node s_p2;
     static DFS_Node s_p3;
@@ -59,6 +64,11 @@ public:
     static std::vector<int> s_p2_ord;
     static std::vector<int> s_p3_ord;
 
+    static const std::string P1_DB_FILE_NAME;
+    static const std::string P2_DB_FILE_NAME;
+    static const std::string P3_DB_FILE_NAME;
+
     static std::set<DFS_Node> make_entries(DFS_Node source);
     static void save_entries(std::string file_name, const std::set<DFS_Node> &data, const std::vector<int> &target_pattern);
+    static void load_db(const std::string &file_name, std::unordered_map<unsigned long, int> &pattern_db);
 };
