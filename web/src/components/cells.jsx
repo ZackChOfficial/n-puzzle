@@ -45,5 +45,5 @@ const Number = styled.h1`
     transform:translateY(-10px)
 `
 export default function Cell(props) {
-    return <Container><Number>{props.number}</Number></Container>
+    return <Container id="node"><Number>{props.number}</Number></Container>
 }

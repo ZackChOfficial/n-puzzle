@@ -19,10 +19,10 @@ height:90px;
 `
 export default function(props)
 {
-    return <Container>
+    return <Container id="board">
         <Cell number="1"/><Cell number="1"/><Cell number="1"/><Cell number="1"/>
         <Cell number="1"/><Cell number="1"/><Cell number="1"/><Cell number="1"/>
-        <Cell number="1"/><Cell number="1"/><Space/><Cell number="1"/>
+        <Cell number="1"/><Cell number="1"/><Space id="zero"/><Cell number="1"/>
         <Cell number="1"/><Cell number="1"/><Cell number="1"/><Cell number="1"/>
     </Container>
 }
