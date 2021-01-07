@@ -2,6 +2,8 @@
 #include <cmath>
 #include <algorithm> // std::find
 
+int DFS_Node::size = 4;
+
 /*
 ** returns a new node with cells at index 'i1' and index 'i2' swapped
 */
@@ -29,25 +31,21 @@ std::vector<DFS_Node> DFS_Node::gen_next_states() const
     if (zero_index - size >= 0)
     {
         tmp = this->cell_swap(zero_index, zero_index - size);
-        tmp.move = "U";
         new_states.push_back(tmp);
     }
     if (zero_index % size - 1 >= 0)
     {
         tmp = this->cell_swap(zero_index, zero_index - 1);
-        tmp.move = "L";
         new_states.push_back(tmp);
     }
     if (zero_index % size + 1 < size)
     {
         tmp = this->cell_swap(zero_index, zero_index + 1);
-        tmp.move = "R";
         new_states.push_back(tmp);
     }
     if (zero_index + size < this->state.size())
     {
         tmp = this->cell_swap(zero_index, zero_index + size);
-        tmp.move = "D";
         new_states.push_back(tmp);
     }
     return new_states;

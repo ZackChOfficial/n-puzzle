@@ -10,6 +10,8 @@
 class DFS_Node : public Board
 {
 public:
+    static int size;
+
     int dist;
     // its true id 0 swapped with acell actually in pattern (cell != -1)
     bool countable;

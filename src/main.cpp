@@ -37,27 +37,38 @@ int main(int argc, char **argv)
     // cout << "dist : " << dist << "\n";
     //  printf("%0.20lu\n", (z1 - dist * (unsigned long)std::pow(10, 2 * 8)));
 
+    Node n({1, 2, 3, 4,
+            12, 13, 14, 5,
+            0, 11, 15, 6,
+            10, 9, 8, 7});
+
     DDB_555::load();
-    vector<int> board = parse();
-    Board b(board, (int)sqrt(board.size()));
-    // A_Star algo(board, Board::gen_solution(b.size), DDB_555::heuristic);
-    A_Star algo(board, Board::gen_solution(b.size), linear_conflict);
-    // if (argc > 1)
+    // vector<int> board = parse();
+    // Board b(board, (int)sqrt(board.size()));
+
+    cout <<  DDB_555::hash_state(DDB_555::s_p1.state, DDB_555::s_p1_ord) << " ";
+    cout <<  DDB_555::hash_state(DDB_555::s_p2.state, DDB_555::s_p2_ord) << " ";
+    cout <<  DDB_555::hash_state(DDB_555::s_p3.state, DDB_555::s_p3_ord) << "\n";
+
+    cout << "miyaw\n" << DDB_555::heuristic(n.state, {}) << "\n";
+    // // A_Star algo(board, Board::gen_solution(b.size), DDB_555::heuristic);
+    // // A_Star algo(board, Board::gen_solution(b.size), linear_conflict);
+    // // if (argc > 1)
+    // // {
+    // //     if (!strcmp("-s" ,argv[1]))
+    // //         assert(b.is_solvable() == true);
+    // //     else if (!strcmp("-u" ,argv[1]))
+    // //         assert(b.is_solvable() == false);
+    // // }
+    // // else {
+    // if (b.is_solvable())
     // {
-    //     if (!strcmp("-s" ,argv[1]))
-    //         assert(b.is_solvable() == true);
-    //     else if (!strcmp("-u" ,argv[1]))
-    //         assert(b.is_solvable() == false);
+    //     cout << "Solvable\n";
+    //     algo.run();
     // }
-    // else {
-    if (b.is_solvable())
-    {
-        cout << "Solvable\n";
-        algo.run();
-    }
-    else
-        cout << "Unsolvable\n";
-    // }
+    // else
+    //     cout << "Unsolvable\n";
+    // // }
 
     return 0;
 }
