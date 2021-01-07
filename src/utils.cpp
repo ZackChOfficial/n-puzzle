@@ -25,13 +25,13 @@ std::vector<std::shared_ptr<T>> gen_next_states(std::shared_ptr<T> b)
         tmp->move = "U";
         new_states.push_back(tmp);
     }
-    if (index - 1 >= 0 && ((index + 1) % size == 0 ? size : (index + 1) % size) - 1 > 0)
+    if (index % size - 1 >= 0)
     {
         tmp = std::make_shared<T>(b->create_new(index, index - 1));
         tmp->move = "L";
         new_states.push_back(tmp);
     }
-    if (index + 1 < b->state.size() && ((index + 1) % size == 0 ? size : (index + 1) % size) + 1 <= size)
+    if (index % size + 1 < size)
     {
         tmp = std::make_shared<T>(b->create_new(index, index + 1));
         tmp->move = "R";

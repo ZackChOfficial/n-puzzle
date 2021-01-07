@@ -43,25 +43,11 @@ int main(int argc, char **argv)
             10, 9, 8, 7});
 
     DDB_555::load();
-    // vector<int> board = parse();
-    // Board b(board, (int)sqrt(board.size()));
-
-    cout <<  DDB_555::hash_state(DDB_555::s_p1.state, DDB_555::s_p1_ord) << " ";
-    cout <<  DDB_555::hash_state(DDB_555::s_p2.state, DDB_555::s_p2_ord) << " ";
-    cout <<  DDB_555::hash_state(DDB_555::s_p3.state, DDB_555::s_p3_ord) << "\n";
-
-    cout << "miyaw\n" << DDB_555::heuristic(n.state, {}) << "\n";
-    // // A_Star algo(board, Board::gen_solution(b.size), DDB_555::heuristic);
-    // // A_Star algo(board, Board::gen_solution(b.size), linear_conflict);
-    // // if (argc > 1)
-    // // {
-    // //     if (!strcmp("-s" ,argv[1]))
-    // //         assert(b.is_solvable() == true);
-    // //     else if (!strcmp("-u" ,argv[1]))
-    // //         assert(b.is_solvable() == false);
-    // // }
-    // // else {
-    // if (b.is_solvable())
+    vector<int> board = parse();
+    Board b(board, (int)sqrt(board.size()));
+    A_Star algo(board, Board::gen_solution(b.size), DDB_555::heuristic);
+    // A_Star algo(board, Board::gen_solution(b.size), linear_conflict);
+    // if (argc > 1)
     // {
     //     cout << "Solvable\n";
     //     algo.run();

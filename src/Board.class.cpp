@@ -131,7 +131,7 @@ std::pair<int, int> Board::get_position_of_zero()
 
 std::vector<int> Board::create_new(int index1, int index2)
 {
-    std::vector<int> newState(state);
-    std::swap(newState[index1], newState[index2]);
-    return newState;
+    std::vector<int> *newState = new std::vector(state);
+    std::swap((*newState)[index1], (*newState)[index2]);
+    return (*newState);
 }

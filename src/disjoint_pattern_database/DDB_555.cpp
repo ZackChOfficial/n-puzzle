@@ -183,7 +183,7 @@ void DDB_555::load_db(const std::string &file_name, std::unordered_map<unsigned 
 
 void DDB_555::load()
 {
-    DDB_555& instance = get();
+    auto& instance = get();
     load_db(P1_DB_FILE_NAME, instance.m_p1_db);
     load_db(P2_DB_FILE_NAME, instance.m_p2_db);
     load_db(P3_DB_FILE_NAME, instance.m_p3_db);

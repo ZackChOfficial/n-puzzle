@@ -20,11 +20,12 @@ int Node::print()
         x = parent->print();
     }
     x++;
+    std::cout << "Move:  " << move << "  " << &move << "\n";
     for (int i = 0; i < (int)sqrt(state.size()); i++)
     {
         for (int j = 0; j < (int)sqrt(state.size()); j++)
         {
-            std::cout << state[i * (int)sqrt(state.size()) + j] << "  ";
+            printf("%2d  ", state[i * (int)sqrt(state.size()) + j] );
         }
         std::cout << std::endl;
     }
@@ -125,7 +126,7 @@ void A_Star::run()
     {
         std::cout << "Solved\nNumber of Iteration: " << i << std::endl;
         std::cout << "Path:  " << current->get_path() << std::endl;
-        // current->print();
+        current->print();
     }
     else
         std::cout << "Empty Stack\n";
