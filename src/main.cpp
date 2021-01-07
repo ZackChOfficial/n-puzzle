@@ -40,8 +40,8 @@ int main(int argc, char **argv)
     DDB_555::load();
     vector<int> board = parse();
     Board b(board, (int)sqrt(board.size()));
-    // A_Star algo(board, Board::gen_solution(b.size), DDB_555::heuristic);
-    A_Star algo(board, Board::gen_solution(b.size), linear_conflict);
+    A_Star algo(board, Board::gen_solution(b.size), DDB_555::heuristic);
+    // A_Star algo(board, Board::gen_solution(b.size), linear_conflict);
     // if (argc > 1)
     // {
     //     if (!strcmp("-s" ,argv[1]))

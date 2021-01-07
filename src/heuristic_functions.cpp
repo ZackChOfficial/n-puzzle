@@ -51,7 +51,7 @@ std::map<int,int>::iterator find_element(int key)
         throwError("Something went wrong");
     return elem;
 }
-int        linear_conflict(std::vector<int> &state, std::vector<int> &goal)
+int        linear_conflict(std::vector<int> &state, const std::vector<int> &goal)
 {
     int hscore;
     int correct_x;
