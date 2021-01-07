@@ -19,34 +19,34 @@ DFS_Node DFS_Node::cell_swap(int i1, int i2) const
 
 std::vector<DFS_Node> DFS_Node::gen_next_states() const
 {
-    int index;
+    int zero_index;
     int size;
     DFS_Node tmp;
     std::vector<DFS_Node> new_states;
 
     size = std::sqrt(this->state.size());
-    index = std::find(this->state.begin(), this->state.end(), 0) - this->state.begin();
-    if (index - size >= 0)
+    zero_index = std::find(this->state.begin(), this->state.end(), 0) - this->state.begin();
+    if (zero_index - size >= 0)
     {
-        tmp = this->cell_swap(index, index - size);
+        tmp = this->cell_swap(zero_index, zero_index - size);
         tmp.move = "U";
         new_states.push_back(tmp);
     }
-    if (index - 1 >= 0 && ((index + 1) % size == 0 ? size : (index + 1) % size) - 1 > 0)
+    if (zero_index % size - 1 >= 0)
     {
-        tmp = this->cell_swap(index, index - 1);
+        tmp = this->cell_swap(zero_index, zero_index - 1);
         tmp.move = "L";
         new_states.push_back(tmp);
     }
-    if (index + 1 < this->state.size() && ((index + 1) % size == 0 ? size : (index + 1) % size) + 1 <= size)
+    if (zero_index % size + 1 < size)
     {
-        tmp = this->cell_swap(index, index + 1);
+        tmp = this->cell_swap(zero_index, zero_index + 1);
         tmp.move = "R";
         new_states.push_back(tmp);
     }
-    if (index + size < this->state.size())
+    if (zero_index + size < this->state.size())
     {
-        tmp = this->cell_swap(index, index + size);
+        tmp = this->cell_swap(zero_index, zero_index + size);
         tmp.move = "D";
         new_states.push_back(tmp);
     }
