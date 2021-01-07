@@ -32,13 +32,13 @@ std::vector<DFS_Node> DFS_Node::gen_next_states() const
         tmp.move = "U";
         new_states.push_back(tmp);
     }
-    if (index - 1 >= 0 && ((index + 1) % size == 0 ? size : (index + 1) % size) - 1 > 0)
+    if (index % size - 1 >= 0)
     {
         tmp = this->cell_swap(index, index - 1);
         tmp.move = "L";
         new_states.push_back(tmp);
     }
-    if (index + 1 < this->state.size() && ((index + 1) % size == 0 ? size : (index + 1) % size) + 1 <= size)
+    if (index % size + 1 < size)
     {
         tmp = this->cell_swap(index, index + 1);
         tmp.move = "R";
