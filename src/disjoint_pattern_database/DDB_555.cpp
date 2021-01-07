@@ -187,7 +187,6 @@ void DDB_555::load()
     load_db(P1_DB_FILE_NAME, instance.m_p1_db);
     load_db(P2_DB_FILE_NAME, instance.m_p2_db);
     load_db(P3_DB_FILE_NAME, instance.m_p3_db);
-
 }
 
 /*
@@ -223,5 +222,6 @@ int DDB_555::heuristic(std::vector<int> &state, const std::vector<int>& goal)
     unsigned long h1 = hash_state(state, s_p1_ord);
     unsigned long h2 = hash_state(state, s_p2_ord);
     unsigned long h3 = hash_state(state, s_p3_ord);
+
     return instance.m_p1_db[h1] + instance.m_p2_db[h2] + instance.m_p3_db[h3];
 }
