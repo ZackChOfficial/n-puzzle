@@ -39,9 +39,9 @@ private:
     std::map<std::vector<int>, std::shared_ptr<Node>>                                  in_queue;
     std::shared_ptr<Node>                                       root;
     std::shared_ptr<Node>                                       goal;
-    int                                                        (*heuristic)(std::vector<int> &state, std::vector<int> &goal);
+    int                                                        (*heuristic)(std::vector<int> &state, const std::vector<int> &goal);
 
 public:
-    A_Star(std::vector<int> &initial,  Board sol, int (*func)(std::vector<int> &state, std::vector<int> &goal));
+    A_Star(std::vector<int> &initial,  Board sol, int (*func)(std::vector<int> &state, const std::vector<int> &goal));
     void                                                        run();
 };

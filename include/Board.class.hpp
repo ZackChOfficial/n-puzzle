@@ -29,7 +29,6 @@ public:
     bool is_solvable();
     void print();
 
-
 protected:
     std::vector<int> create_new(int index1, int index2);
 
