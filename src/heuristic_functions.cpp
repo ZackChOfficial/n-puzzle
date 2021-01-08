@@ -9,6 +9,7 @@ std::map<int, int>   get_indexs(const std::vector<int> &goal)
     
     return indexs;
 }
+
 int        manhattan_distance(std::vector<int> &state, const std::vector<int> &goal)
 {
     int hscore = 0;
@@ -51,6 +52,7 @@ std::map<int,int>::iterator find_element(int key)
         throwError("Something went wrong");
     return elem;
 }
+
 int        linear_conflict(std::vector<int> &state, const std::vector<int> &goal)
 {
     int hscore;

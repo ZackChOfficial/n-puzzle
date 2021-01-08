@@ -3,7 +3,6 @@
 #include <cassert>
 #include <limits>
 #include <chrono>
-
 #include "parser.hpp"
 #include "A_Star.class.hpp"
 #include "Board.class.hpp"
@@ -42,19 +41,19 @@ int main(int argc, char **argv)
             0, 11, 15, 6,
             10, 9, 8, 7});
 
-    DDB_555::load();
+    // DDB_555::load();
     vector<int> board = parse();
     Board b(board, (int)sqrt(board.size()));
-    A_Star algo(board, Board::gen_solution(b.size), DDB_555::heuristic);
-    // A_Star algo(board, Board::gen_solution(b.size), linear_conflict);
-    // if (argc > 1)
-    // {
-    //     cout << "Solvable\n";
-    //     algo.run();
-    // }
-    // else
-    //     cout << "Unsolvable\n";
-    // // }
+    // A_Star algo(board, Board::gen_solution(b.size), DDB_555::heuristic);
+    A_Star algo(board, Board::gen_solution(b.size), linear_conflict);
+    if (b.is_solvable())
+    {
+        cout << "Solvable\n";
+        algo.run();
+    }
+    else
+        cout << "Unsolvable\n";
+    
 
     return 0;
 }

@@ -13,7 +13,7 @@ Node::Node(std::vector<int> const &data)
     move = "";
 }
 
-int Node::print()
+int Node::print() const
 {
     int x = 0;
     if (parent)
@@ -33,7 +33,7 @@ int Node::print()
     return x;
 }
 
-bool Node::compare(std::vector<int> &rhs)
+bool Node::compare(std::vector<int> &rhs) const
 {
     if (state.size() != rhs.size())
         return false;
@@ -43,7 +43,7 @@ bool Node::compare(std::vector<int> &rhs)
     return true;
 }
 
-std::string Node::get_path()
+std::string Node::get_path() const
 {
     std::string path;
     if (parent)
