@@ -4,19 +4,18 @@
 /**
  * Basic Node Functions
 */
+
+int Node::size = 0;
+
 Node::Node(std::vector<int> const &data)
+    : parent(nullptr), gscore(99999), hscore(99999)
 {
-    parent = nullptr;
-    gscore = 999999;
-    hscore = 999999;
     state = data;
 }
 
 Node::Node()
+    : parent(nullptr), gscore(99999), hscore(99999)
 {
-    parent = nullptr;
-    gscore = 999999;
-    hscore = 999999;
 }
 
 int Node::print() const
@@ -62,46 +61,72 @@ std::string Node::get_path() const
     return move;
 }
 
+Node Node::create_new(E_Move move) const
+{
+    Node newElem = *this;
+
+    switch (move)
+    {
+    case UP:
+        std::swap(newElem.state[zero_position], newElem.state[zero_position - size]);
+        newElem.zero_position = zero_position - size;
+        newElem.move = UP;
+        break;
+    case RIGHT:
+        std::swap(newElem.state[zero_position], newElem.state[zero_position + 1]);
+        newElem.zero_position = zero_position + 1;
+        newElem.move = RIGHT;
+        break;
+    case DOWN:
+        std::swap(newElem.state[zero_position], newElem.state[zero_position + size]);
+        newElem.zero_position = zero_position + size;
+        newElem.move = DOWN;
+        break;
+    case LEFT:
+        std::swap(newElem.state[zero_position], newElem.state[zero_position - 1]);
+        newElem.zero_position = zero_position - 1;
+        newElem.move = LEFT;
+        break;
+    }
+    newElem.parent = std::make_shared<Node>(*this);
+    return newElem;
+}
 std::vector<Node> Node::gen_next_states() const
 {
     int index;
-    int size;
     std::vector<Node> new_states;
 
-    size = sqrt(state.size());
     index = find(state.begin(), state.end(), 0) - state.begin();
     if (index - size >= 0)
     {
-        Node tmp((create_new(index, index - size)));
-        tmp.move = "U";
-        new_states.push_back(tmp);
+
+        new_states.push_back(create_new(UP));
     }
     if (index % size - 1 >= 0)
     {
-        Node tmp((create_new(index, index - 1)));
-        tmp.move = "L";
-        new_states.push_back(tmp);
+        new_states.push_back(create_new(LEFT));
     }
     if (index % size + 1 < size)
     {
-        Node tmp((create_new(index, index + 1)));
-        tmp.move = "R";
-        new_states.push_back(tmp);
+
+        new_states.push_back(create_new(RIGHT));
     }
     if (index + size < state.size())
     {
-        Node tmp((create_new(index, index + size)));
-        tmp.move = "D";
-        new_states.push_back(tmp);
+
+        new_states.push_back(create_new(DOWN));
     }
     return new_states;
 }
+
 /**
  * A Star Functions
 */
 A_Star::A_Star(const std::vector<int> &initial, Board sol, int (*func)(std::vector<int> &state, const std::vector<int> &goal))
 {
     bool solved;
+
+    Node::size = sqrt(initial.size());
     heuristic = func;
     root = Node(initial);
     root.gscore = 0;
@@ -117,6 +142,7 @@ void A_Star::run()
     std::vector<Node> neighbor;
     int tentative_gScore;
     std::string path;
+    Node *exist;
 
     initial.hscore = heuristic(initial.state, goal.state);
     in_queue[initial.state] = initial;
@@ -129,8 +155,6 @@ void A_Star::run()
     {
         i++;
         current = states.top();
-        // std::cout << "Current " << current->state.size() << "\n";
-        // log("HELLO 1\n");
         if (current.compare(goal.state))
         {
             solved = true;
@@ -143,19 +167,16 @@ void A_Star::run()
             for (auto &child : neighbor)
             {
                 if (visited.find(child.state) != visited.end())
-                {
                     continue;
-                }
                 child.gscore = current.gscore + 1;
                 child.hscore = heuristic(child.state, goal.state);
-                child.parent = std::make_shared<Node>(current);
                 if (in_queue.find(child.state) != in_queue.end())
                 {
-                    Node *exist = &in_queue[child.state];
+                    exist = &in_queue[child.state];
                     if (child.gscore < exist->gscore)
                     {
                         exist->gscore = child.gscore;
-                        exist->parent =  child.parent;
+                        exist->parent = child.parent;
                     }
                     continue;
                 }
@@ -169,7 +190,6 @@ void A_Star::run()
     {
         std::cout << "Solved\nNumber of Iteration: " << i << std::endl;
         std::cout << "Path:  " << current.get_path() << std::endl;
-        // current->print();
     }
     else
         std::cout << "Empty Stack\n";

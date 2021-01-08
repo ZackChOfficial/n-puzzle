@@ -3,7 +3,6 @@
 #include <cassert>
 #include <limits>
 #include <chrono>
-
 #include "parser.hpp"
 #include "A_Star.class.hpp"
 #include "Board.class.hpp"

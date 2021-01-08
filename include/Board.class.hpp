@@ -7,9 +7,16 @@
 class Board
 {
 public:
+    enum E_Move{
+        UP,
+        RIGHT,
+        DOWN,
+        LEFT
+    };
     std::vector<int> state;
-    int size;
-    std::string move;
+    int              size;
+    E_Move           move;
+    int              zero_position;
 
 public:
     Board()
@@ -29,8 +36,6 @@ public:
     bool is_solvable();
     void print();
 
-protected:
-    std::vector<int> create_new(int index1, int index2) const;
 
 public:
     std::vector<Board> gen_next_states();

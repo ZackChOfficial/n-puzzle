@@ -13,6 +13,7 @@
 struct Node : public Board
 {
 public:
+    static  int size;
     std::shared_ptr<Node> parent;
     int         gscore;
     int         hscore;
@@ -24,6 +25,7 @@ public:
     std::string get_path() const;
     int print() const;
     std::vector<Node>       gen_next_states() const;
+    Node                create_new(E_Move    move) const;
 };
 
 struct CompareNode
