@@ -52,13 +52,15 @@ bool Node::compare(std::vector<int> &rhs) const
 std::string Node::get_path() const
 {
     std::string path;
+    std::string moves[4] = {"UP","RIGHT","DOWN","LEFT"};
+
     if (parent)
     {
         path = parent->get_path();
         if (path != "")
-            return path + " " + move;
+            return path + " " + moves[move];
     }
-    return move;
+    return moves[move];
 }
 
 Node Node::create_new(E_Move move) const
@@ -130,7 +132,6 @@ A_Star::A_Star(const std::vector<int> &initial, Board sol, int (*func)(std::vect
     heuristic = func;
     root = Node(initial);
     root.gscore = 0;
-    root.move = "";
     goal = Node(sol.state);
 }
 
