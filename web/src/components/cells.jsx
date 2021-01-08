@@ -28,5 +28,5 @@ const Number = styled.h1`
     z-index:0;
 `
 export default function Cell(props) {
-    return <Container top={props.top} left={props.left} size={props.size} id="node"><Number>{props.number}</Number></Container>
+    return <Container top={props.top} left={props.left} size={props.size} id={props.id}><Number>{props.number}</Number></Container>
 }
