@@ -11,9 +11,9 @@
 #include "A_Star.class.hpp"
 #include "utils.hpp"
 
-const std::string DDB_555::P1_DB_FILE_NAME = "DPDB_555_1.bin";
-const std::string DDB_555::P2_DB_FILE_NAME = "DPDB_555_2.bin";
-const std::string DDB_555::P3_DB_FILE_NAME = "DPDB_555_3.bin";
+const std::string DDB_555::P1_DB_FILE_NAME = "./disjoint_pattern_databases/DPDB_555_1.bin";
+const std::string DDB_555::P2_DB_FILE_NAME = "./disjoint_pattern_databases/DPDB_555_2.bin";
+const std::string DDB_555::P3_DB_FILE_NAME = "./disjoint_pattern_databases/DPDB_555_3.bin";
 
 DFS_Node DDB_555::s_p1 = DFS_Node({1, 2, -1, -1,
                                    12, 13, 14, -1,

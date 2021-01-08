@@ -9,6 +9,6 @@ void    throwError(std::string text = "Invalid Input");
 
 
 template <typename T>
-std::vector<std::shared_ptr<T>> gen_next_states(std::shared_ptr<T> b);
+std::vector<T> gen_next_states(T b);
 
 #endif

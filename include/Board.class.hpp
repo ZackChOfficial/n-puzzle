@@ -30,9 +30,8 @@ public:
     void print();
 
 protected:
-    std::vector<int> create_new(int index1, int index2);
+    std::vector<int> create_new(int index1, int index2) const;
 
 public:
-    template <typename T>
-    friend std::vector<std::shared_ptr<T>> gen_next_states(std::shared_ptr<T> b);
+    std::vector<Board> gen_next_states();
 };
