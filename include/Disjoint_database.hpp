@@ -21,6 +21,7 @@ public:
     DFS_Node() = default;
     DFS_Node(const std::vector<int> &state) : Board(state), dist(0), countable(true), depth(0) {}
     std::vector<DFS_Node> gen_next_states() const;
+    DFS_Node change_state();
     void print();
 
 protected:
@@ -66,6 +67,8 @@ public:
     static std::vector<int> s_p2_ord;
     static std::vector<int> s_p3_ord;
 
+
+    static const std::string DB_DIR;
     static const std::string P1_DB_FILE_NAME;
     static const std::string P2_DB_FILE_NAME;
     static const std::string P3_DB_FILE_NAME;

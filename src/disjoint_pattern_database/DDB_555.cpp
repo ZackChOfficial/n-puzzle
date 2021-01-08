@@ -6,14 +6,14 @@
 #include <fstream>
 #include <unordered_map>
 
-
 #include "Disjoint_database.hpp"
 #include "A_Star.class.hpp"
 #include "utils.hpp"
 
-const std::string DDB_555::P1_DB_FILE_NAME = "DPDB_555_1.bin";
-const std::string DDB_555::P2_DB_FILE_NAME = "DPDB_555_2.bin";
-const std::string DDB_555::P3_DB_FILE_NAME = "DPDB_555_3.bin";
+const std::string DDB_555::DB_DIR = "disjoint_pattern_databases";
+const std::string P1_DB_FILE_NAME = "DPDB_555_1.bin";
+const std::string P2_DB_FILE_NAME = "DPDB_555_2.bin";
+const std::string P3_DB_FILE_NAME = "DPDB_555_3.bin";
 
 DFS_Node DDB_555::s_p1 = DFS_Node({1, 2, -1, -1,
                                    12, 13, 14, -1,
@@ -147,9 +147,11 @@ void DDB_555::create()
     std::set<DFS_Node> p2_data = make_entries(s_p2);
     std::set<DFS_Node> p3_data = make_entries(s_p3);
 
-    save_entries(P1_DB_FILE_NAME, p1_data, s_p1_ord);
-    save_entries(P2_DB_FILE_NAME, p2_data, s_p2_ord);
-    save_entries(P3_DB_FILE_NAME, p3_data, s_p3_ord);
+    // fs::create_directory(DB_DIR);
+
+    save_entries(DB_DIR + "/" + P1_DB_FILE_NAME, p1_data, s_p1_ord);
+    save_entries(DB_DIR + "/" + P2_DB_FILE_NAME, p2_data, s_p2_ord);
+    save_entries(DB_DIR + "/" + P3_DB_FILE_NAME, p3_data, s_p3_ord);
 }
 
 void DDB_555::load_db(const std::string &file_name, std::unordered_map<unsigned long, int> &pattern_db)
@@ -183,10 +185,11 @@ void DDB_555::load_db(const std::string &file_name, std::unordered_map<unsigned 
 
 void DDB_555::load()
 {
-    auto& instance = get();
-    load_db(P1_DB_FILE_NAME, instance.m_p1_db);
-    load_db(P2_DB_FILE_NAME, instance.m_p2_db);
-    load_db(P3_DB_FILE_NAME, instance.m_p3_db);
+    auto &instance = get();
+
+    load_db(DB_DIR + "/" + P1_DB_FILE_NAME, instance.m_p1_db);
+    load_db(DB_DIR + "/" + P2_DB_FILE_NAME, instance.m_p2_db);
+    load_db(DB_DIR + "/" + P3_DB_FILE_NAME, instance.m_p3_db);
 }
 
 /*
@@ -216,7 +219,7 @@ unsigned long DDB_555::hash_dist(int dist)
     return hash;
 }
 
-int DDB_555::heuristic(std::vector<int> &state, const std::vector<int>& goal)
+int DDB_555::heuristic(std::vector<int> &state, const std::vector<int> &goal)
 {
     DDB_555 &instance = get();
     unsigned long h1 = hash_state(state, s_p1_ord);
