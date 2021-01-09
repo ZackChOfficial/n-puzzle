@@ -11,7 +11,7 @@ Node::Node(std::vector<int> const &data)
     : parent(nullptr), gscore(99999), hscore(99999)
 {
     state = data;
-   
+
 }
 
 Node::Node()
@@ -98,7 +98,6 @@ Node Node::create_new(E_Move move) const
 
 std::vector<Node> Node::gen_next_states() const
 {
-    int index;
     std::vector<Node> new_states;
 
     if (zero_position - size >= 0)

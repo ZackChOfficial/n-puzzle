@@ -1,62 +1,65 @@
 #include "Disjoint_database.hpp"
 #include <cmath>
-#include <algorithm> // std::find
 
-int DFS_Node::size = 4;
+int DFS_Node::s_size = 4;
 
 /*
 ** returns a new node with cells at index 'i1' and index 'i2' swapped
 */
 
-DFS_Node DFS_Node::cell_swap(int i1, int i2) const
+DFS_Node DFS_Node::zero_swap(int zero_index, int new_zero_index) const
 {
-    DFS_Node res = *this;
-    std::swap(res.state[i1], res.state[i2]);
-    if (res.state[i1] < 0 || res.state[i2] < 0)
-        res.countable = false;
+    DFS_Node newElem = DFS_Node(this->state);
+
+    std::swap(newElem.state[zero_index], newElem.state[new_zero_index]);
+    if (newElem.state[zero_index] >= 0 && state[new_zero_index] >= 0)
+        newElem.dist = dist + 1;
     else
-        res.countable = true;
+        newElem.dist = dist;
+    newElem.zero_position = new_zero_index;
+
+    newElem.depth = depth + 1;
+    return newElem;
+}
+
+DFS_Node DFS_Node::change_state(E_Move move) const
+{
+    DFS_Node res;
+    switch (move)
+    {
+    case UP:
+        res = zero_swap(zero_position, zero_position - s_size);
+        break;
+    case RIGHT:
+        res = zero_swap(zero_position, zero_position + 1);
+        break;
+    case DOWN:
+        res = zero_swap(zero_position, zero_position + s_size);
+        break;
+    case LEFT:
+        res = zero_swap(zero_position, zero_position - 1);
+        break;
+    }
     return res;
 }
 
 std::vector<DFS_Node> DFS_Node::gen_next_states() const
 {
-    int zero_index;
-    int size;
-    DFS_Node tmp;
     std::vector<DFS_Node> new_states;
 
-    size = std::sqrt(this->state.size());
-    zero_index = std::find(this->state.begin(), this->state.end(), 0) - this->state.begin();
-    if (zero_index - size >= 0)
-    {
-        tmp = this->cell_swap(zero_index, zero_index - size);
-        new_states.push_back(tmp);
-    }
-    if (zero_index % size - 1 >= 0)
-    {
-        tmp = this->cell_swap(zero_index, zero_index - 1);
-        new_states.push_back(tmp);
-    }
-    if (zero_index % size + 1 < size)
-    {
-        tmp = this->cell_swap(zero_index, zero_index + 1);
-        new_states.push_back(tmp);
-    }
-    if (zero_index + size < this->state.size())
-    {
-        tmp = this->cell_swap(zero_index, zero_index + size);
-        new_states.push_back(tmp);
-    }
+    if (zero_position - s_size >= 0)
+        new_states.push_back(change_state(UP));
+    if (zero_position % s_size - 1 >= 0)
+        new_states.push_back(change_state(LEFT));
+    if (zero_position % s_size + 1 < s_size)
+        new_states.push_back(change_state(RIGHT));
+    if (zero_position + s_size < state.size())
+        new_states.push_back(change_state(DOWN));
     return new_states;
 }
 
 void DFS_Node::print()
 {
-    if (countable)
-        printf("C, ");
-    else
-        printf("NC, ");
     printf("d=%d\n", dist);
     for (size_t i = 0; i < 4; i++)
     {

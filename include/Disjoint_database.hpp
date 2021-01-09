@@ -5,27 +5,35 @@
 #include <map>
 #include <set>
 #include <unordered_map>
+#include <algorithm> // std::find
+
 
 #include "Board.class.hpp"
 class DFS_Node : public Board
 {
 public:
-    static int size;
+    static int s_size;
 
     int dist;
     // its true id 0 swapped with acell actually in pattern (cell != -1)
-    bool countable;
     int depth;
 
 public:
     DFS_Node() = default;
-    DFS_Node(const std::vector<int> &state) : Board(state), dist(0), countable(true), depth(0) {}
+    DFS_Node(const std::vector<int> &state, bool root = false) : Board(state), dist(0), depth(0) {
+        if (root){
+            zero_position = std::find(state.begin(), state.end(), 0) - state.begin();
+            dist = 0;
+            depth = 0;
+        }
+    }
     std::vector<DFS_Node> gen_next_states() const;
     DFS_Node change_state();
     void print();
 
 protected:
-    DFS_Node cell_swap(int index1, int index2) const;
+    DFS_Node zero_swap(int zero_index, int new_ero_index) const;
+    DFS_Node change_state(E_Move move) const;
 };
 
 class Disjoint_Pattern_Database

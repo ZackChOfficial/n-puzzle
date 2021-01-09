@@ -18,20 +18,23 @@ const std::string DDB_555::P3_DB_FILE_NAME = "DPDB_555_3.bin";
 DFS_Node DDB_555::s_p1 = DFS_Node({1, 2, -1, -1,
                                    12, 13, 14, -1,
                                    -1, 0, -1, -1,
-                                   -1, -1, -1, -1});
+                                   -1, -1, -1, -1},
+                                  true);
 
 std::vector<int> DDB_555::s_p1_ord{1, 2, 12, 13, 14};
 
 DFS_Node DDB_555::s_p2 = DFS_Node({-1, -1, 3, 4,
                                    -1, -1, -1, 5,
                                    -1, 0, -1, 6,
-                                   -1, -1, -1, 7});
+                                   -1, -1, -1, 7},
+                                  true);
 std::vector<int> DDB_555::s_p2_ord{3, 4, 5, 6, 7};
 
 DFS_Node DDB_555::s_p3 = DFS_Node({-1, -1, -1, -1,
                                    -1, -1, -1, -1,
                                    11, 0, 15, -1,
-                                   10, 9, 8, -1});
+                                   10, 9, 8, -1},
+                                  true);
 std::vector<int> DDB_555::s_p3_ord{11, 15, 10, 9, 8};
 
 DDB_555 &DDB_555::get()
@@ -50,9 +53,6 @@ std::set<DFS_Node> DDB_555::make_entries(DFS_Node source)
     std::queue<DFS_Node> q;
     std::set<DFS_Node> visited;
     int maxdepth = -1;
-    source.dist = 0;
-    source.depth = 0;
-    source.countable = true;
     q.push(source);
     std::cout << "creating entries...\n";
     while (!q.empty())
@@ -77,20 +77,11 @@ std::set<DFS_Node> DDB_555::make_entries(DFS_Node source)
         auto children = current.gen_next_states();
         // std::cout << "children : \n";
         for (auto &child : children)
-        {
             if (visited.find(child) == visited.end())
-            {
-                if (child.countable)
-                    child.dist = current.dist + 1;
-                child.depth = current.depth + 1;
-                // child.print();
-                // std::cout << "\n";
                 q.push(child);
-            }
-        }
     }
     std::cout << "max depth : " << maxdepth << "\n";
-    // last max depth was 47
+    // 555 max depth was 47
     std::cout << visited.size() << " entries created\n";
     return visited;
 };
@@ -143,15 +134,15 @@ void DDB_555::save_entries(std::string file_name, const std::set<DFS_Node> &data
 
 void DDB_555::create()
 {
-    std::set<DFS_Node> p1_data = make_entries(s_p1);
-    std::set<DFS_Node> p2_data = make_entries(s_p2);
+    // std::set<DFS_Node> p1_data = make_entries(s_p1);
+    // std::set<DFS_Node> p2_data = make_entries(s_p2);
     std::set<DFS_Node> p3_data = make_entries(s_p3);
 
     // fs::create_directory(DB_DIR);
 
-    save_entries(DB_DIR + "/" + P1_DB_FILE_NAME, p1_data, s_p1_ord);
-    save_entries(DB_DIR + "/" + P2_DB_FILE_NAME, p2_data, s_p2_ord);
-    save_entries(DB_DIR + "/" + P3_DB_FILE_NAME, p3_data, s_p3_ord);
+    // save_entries(P1_DB_FILE_NAME, p1_data, s_p1_ord);
+    // save_entries(P2_DB_FILE_NAME, p2_data, s_p2_ord);
+    save_entries(P3_DB_FILE_NAME, p3_data, s_p3_ord);
 }
 
 void DDB_555::load_db(const std::string &file_name, std::unordered_map<unsigned long, int> &pattern_db)
@@ -199,7 +190,7 @@ void DDB_555::load()
 unsigned long DDB_555::hash_state(const std::vector<int> &state, const std::vector<int> &target_pattern)
 {
     unsigned long hash = 0;
-    int width = 4;
+    int width = DFS_Node::s_size;
     for (int i = 0; i < state.size(); i++)
     {
         auto it = std::find(target_pattern.begin(), target_pattern.end(), state[i]);
@@ -225,6 +216,5 @@ int DDB_555::heuristic(std::vector<int> &state, const std::vector<int> &goal, co
     unsigned long h1 = hash_state(state, s_p1_ord);
     unsigned long h2 = hash_state(state, s_p2_ord);
     unsigned long h3 = hash_state(state, s_p3_ord);
-    std::cout << instance.m_p1_db[h1] << "  " << instance.m_p2_db[h2] << "  " << instance.m_p3_db[h3] << "\n";
     return instance.m_p1_db[h1] + instance.m_p2_db[h2] + instance.m_p3_db[h3];
 }
