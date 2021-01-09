@@ -134,14 +134,14 @@ void DDB_555::save_entries(std::string file_name, const std::set<DFS_Node> &data
 
 void DDB_555::create()
 {
-    // std::set<DFS_Node> p1_data = make_entries(s_p1);
-    // std::set<DFS_Node> p2_data = make_entries(s_p2);
+    std::set<DFS_Node> p1_data = make_entries(s_p1);
+    std::set<DFS_Node> p2_data = make_entries(s_p2);
     std::set<DFS_Node> p3_data = make_entries(s_p3);
 
     // fs::create_directory(DB_DIR);
 
-    // save_entries(P1_DB_FILE_NAME, p1_data, s_p1_ord);
-    // save_entries(P2_DB_FILE_NAME, p2_data, s_p2_ord);
+    save_entries(P1_DB_FILE_NAME, p1_data, s_p1_ord);
+    save_entries(P2_DB_FILE_NAME, p2_data, s_p2_ord);
     save_entries(P3_DB_FILE_NAME, p3_data, s_p3_ord);
 }
 
