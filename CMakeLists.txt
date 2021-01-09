@@ -9,6 +9,7 @@ add_executable(${PROJECT_NAME}
     src/main.cpp src/Board.class.cpp src/A_Star.class.cpp src/parser.cpp src/utils.cpp src/heuristic_functions.cpp
     src/disjoint_pattern_database/DDB_555.cpp
     src/disjoint_pattern_database/Disjoint_database.cpp
+    src/Node.class.cpp
 )
 
 target_include_directories(${PROJECT_NAME} PUBLIC include)

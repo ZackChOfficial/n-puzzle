@@ -11,9 +11,9 @@
 #include "utils.hpp"
 
 const std::string DDB_555::DB_DIR = "disjoint_pattern_databases";
-const std::string P1_DB_FILE_NAME = "DPDB_555_1.bin";
-const std::string P2_DB_FILE_NAME = "DPDB_555_2.bin";
-const std::string P3_DB_FILE_NAME = "DPDB_555_3.bin";
+const std::string DDB_555::P1_DB_FILE_NAME = "DPDB_555_1.bin";
+const std::string DDB_555::P2_DB_FILE_NAME = "DPDB_555_2.bin";
+const std::string DDB_555::P3_DB_FILE_NAME = "DPDB_555_3.bin";
 
 DFS_Node DDB_555::s_p1 = DFS_Node({1, 2, -1, -1,
                                    12, 13, 14, -1,
@@ -219,12 +219,12 @@ unsigned long DDB_555::hash_dist(int dist)
     return hash;
 }
 
-int DDB_555::heuristic(std::vector<int> &state, const std::vector<int> &goal)
+int DDB_555::heuristic(std::vector<int> &state, const std::vector<int> &goal, const int size)
 {
     DDB_555 &instance = get();
     unsigned long h1 = hash_state(state, s_p1_ord);
     unsigned long h2 = hash_state(state, s_p2_ord);
     unsigned long h3 = hash_state(state, s_p3_ord);
-
+    std::cout << instance.m_p1_db[h1] << "  " << instance.m_p2_db[h2] << "  " << instance.m_p3_db[h3] << "\n";
     return instance.m_p1_db[h1] + instance.m_p2_db[h2] + instance.m_p3_db[h3];
 }

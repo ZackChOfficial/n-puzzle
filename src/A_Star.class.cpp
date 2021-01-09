@@ -2,129 +2,9 @@
 #include "utils.hpp"
 
 /**
- * Basic Node Functions
-*/
-
-int Node::size = 0;
-
-Node::Node(std::vector<int> const &data)
-    : parent(nullptr), gscore(99999), hscore(99999)
-{
-    state = data;
-}
-
-Node::Node()
-    : parent(nullptr), gscore(99999), hscore(99999)
-{
-}
-
-int Node::print() const
-{
-    int x = 0;
-    if (parent)
-    {
-        x = parent->print();
-    }
-    x++;
-    std::cout << "Move:  " << move << "  " << &move << "\n";
-    for (int i = 0; i < (int)sqrt(state.size()); i++)
-    {
-        for (int j = 0; j < (int)sqrt(state.size()); j++)
-        {
-            printf("%2d  ", state[i * (int)sqrt(state.size()) + j]);
-        }
-        std::cout << std::endl;
-    }
-    std::cout << "\n\n";
-    return x;
-}
-
-bool Node::compare(std::vector<int> &rhs) const
-{
-    if (state.size() != rhs.size())
-        return false;
-    for (int i = 0; i < state.size(); i++)
-        if (state[i] != rhs[i])
-            return false;
-    return true;
-}
-
-std::string Node::get_path() const
-{
-    std::string path;
-    std::string moves[4] = {"UP","RIGHT","DOWN","LEFT"};
-
-    if (parent)
-    {
-        path = parent->get_path();
-        if (path != "")
-            return path + " " + moves[move];
-    }
-    return moves[move];
-}
-
-Node Node::create_new(E_Move move) const
-{
-    Node newElem = *this;
-
-    switch (move)
-    {
-    case UP:
-        std::swap(newElem.state[zero_position], newElem.state[zero_position - size]);
-        newElem.zero_position = zero_position - size;
-        newElem.move = UP;
-        break;
-    case RIGHT:
-        std::swap(newElem.state[zero_position], newElem.state[zero_position + 1]);
-        newElem.zero_position = zero_position + 1;
-        newElem.move = RIGHT;
-        break;
-    case DOWN:
-        std::swap(newElem.state[zero_position], newElem.state[zero_position + size]);
-        newElem.zero_position = zero_position + size;
-        newElem.move = DOWN;
-        break;
-    case LEFT:
-        std::swap(newElem.state[zero_position], newElem.state[zero_position - 1]);
-        newElem.zero_position = zero_position - 1;
-        newElem.move = LEFT;
-        break;
-    }
-    newElem.parent = std::make_shared<Node>(*this);
-    return newElem;
-}
-std::vector<Node> Node::gen_next_states() const
-{
-    int index;
-    std::vector<Node> new_states;
-
-    index = find(state.begin(), state.end(), 0) - state.begin();
-    if (index - size >= 0)
-    {
-
-        new_states.push_back(create_new(UP));
-    }
-    if (index % size - 1 >= 0)
-    {
-        new_states.push_back(create_new(LEFT));
-    }
-    if (index % size + 1 < size)
-    {
-
-        new_states.push_back(create_new(RIGHT));
-    }
-    if (index + size < state.size())
-    {
-
-        new_states.push_back(create_new(DOWN));
-    }
-    return new_states;
-}
-
-/**
  * A Star Functions
 */
-A_Star::A_Star(const std::vector<int> &initial, Board sol, int (*func)(std::vector<int> &state, const std::vector<int> &goal))
+A_Star::A_Star(const std::vector<int> &initial, Board sol, int (*func)(std::vector<int> &state, const std::vector<int> &goal, const int size))
 {
     bool solved;
 
@@ -132,59 +12,65 @@ A_Star::A_Star(const std::vector<int> &initial, Board sol, int (*func)(std::vect
     heuristic = func;
     root = Node(initial);
     root.gscore = 0;
+    root.zero_position =   find(initial.begin(), initial.end(), 0) - initial.begin();
     goal = Node(sol.state);
+}
+
+std::string hash_vector(const std::vector<int>& data)
+{
+    std::string hash = "";
+    for (auto x:data)
+        hash += std::to_string(x);
+    return hash;
 }
 
 void A_Star::run()
 {
-    Node current;
-    Node initial(root.state);
-    bool solved;
-    std::vector<Node> neighbor;
-    int tentative_gScore;
-    std::string path;
-    Node *exist;
+    Node                                            current;
+    Node                                            initial(root.state);
+    bool                                            solved;
+    std::vector<Node>                               neighbor;
+    int                                             tentative_gScore;
+    std::unordered_map<std::string, Node>::iterator exist;
 
-    initial.hscore = heuristic(initial.state, goal.state);
-    in_queue[initial.state] = initial;
-    states.push(Node(root.state));
-    std::cout << root.state.size() << "\n";
+    in_queue[hash_vector(initial.state)] = initial;
+    states.push(root);
     solved = false;
-    path = "";
     int i = 0;
+    int gscore;
     while (!in_queue.empty() && !solved)
     {
         i++;
         current = states.top();
+        // std::cout <<  "gscore: " << current.gscore  << "   hscore:  " << current.hscore << " fscore: " << current.gscore + current.hscore << "\n";
+        gscore = current.gscore;
         if (current.compare(goal.state))
-        {
             solved = true;
-        }
         else
         {
             visited.insert(current.state);
-            in_queue.erase(current.state);
+            in_queue.erase(hash_vector(current.state));
             neighbor = current.gen_next_states();
+            states.pop();
             for (auto &child : neighbor)
             {
                 if (visited.find(child.state) != visited.end())
                     continue;
-                child.gscore = current.gscore + 1;
-                child.hscore = heuristic(child.state, goal.state);
-                if (in_queue.find(child.state) != in_queue.end())
+                child.gscore = gscore + 1;
+                child.hscore = heuristic(child.state, goal.state, child.size);
+                exist = in_queue.find(hash_vector(child.state));
+                if ( exist != in_queue.end())
                 {
-                    exist = &in_queue[child.state];
-                    if (child.gscore < exist->gscore)
+                    if (child.gscore < exist->second.gscore)
                     {
-                        exist->gscore = child.gscore;
-                        exist->parent = child.parent;
+                        exist->second.gscore = child.gscore;
+                        exist->second.parent = child.parent;
                     }
                     continue;
                 }
                 states.push(child);
-                in_queue[child.state] = child;
+                in_queue.insert(std::make_pair(hash_vector(child.state), child));
             }
-            states.pop();
         }
     }
     if (solved)

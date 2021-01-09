@@ -50,7 +50,7 @@ public:
     static DDB_555 &get();
     static void create();
     static void load();
-    static int heuristic(std::vector<int> &state, const std::vector<int> &goal);
+    static int heuristic(std::vector<int> &state, const std::vector<int> &goal, const int size);
     static unsigned long hash_state(const std::vector<int> &state, const std::vector<int> &target_pattern);
     static unsigned long hash_dist(int dist);
     std::map<int, int> load(std::string file_name);
