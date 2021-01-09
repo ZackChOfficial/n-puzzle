@@ -16,11 +16,14 @@ function App() {
   return (
     <div className="App">
       <br />
+      <div className="sidePanel">
       <button onClick={() => handleClick("U")}>up</button>
       <button onClick={() => handleClick("R")}>right</button>
       <button onClick={() => handleClick("L")}>left</button>
       <button onClick={() => handleClick("D")}>down</button>
       <br />
+      </div>
+      
       <Board numbers={numbers} size={size} />
     </div>
   );

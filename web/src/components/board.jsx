@@ -4,14 +4,16 @@ import Cell from './cells'
 import Move from '../controller/move'
 
 const Container = styled.div`
-    border: 1px solid #000;
-    width: 400px;
-    height:400px;
-    display: flex;
+    border: 2px solid #000;
+    width: 600px;
+    height: 600px;;
+    float:left;
     flex-wrap:wrap;
     position:relative;
     justify-content:space-between;
     align-content:space-between;
+    margin: 0 auto;
+    border-radius: 5px
 `
 
 export default function (props) {

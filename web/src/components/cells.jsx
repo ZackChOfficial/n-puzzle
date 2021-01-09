@@ -3,14 +3,14 @@ import styled from 'styled-components'
 
 
 const Container = styled.div`
-    background: #52b4ff;
+    background: #8C77E9;
     text-align: center;
     width:calc(${props => props.size}% - 10px);
     height:calc(${props => props.size}% - 10px);
     display: flex;
     align-items: center;
     justify-content:center;
-    border-radius:8px;
+    border-radius:4px;
     font-size:36px;
     font-family: 'Pacifico', cursive;
     position: absolute;
@@ -20,8 +20,8 @@ const Container = styled.div`
 `
 
 const Number = styled.h1`
-    color:white;
-    text-shadow: 2px 2px 0 #000;
+    color:#fff;
+    text-shadow: 2px 2px 0 #4128B1;
     z-index:99;
     transform:translateY(-10px);
     position:relative;

@@ -1,3 +1,39 @@
 body {
-    background: #56407c
+    background: #f1f2f5
+}
+
+.App {
+    width:95%;
+    margin: 0 auto;
+}
+button {
+    min-width:100px;
+    height: 35px;
+    border: none;
+    font-size: 16px;
+    background-color: #1c7ed6;
+    color: #fff;
+    margin:5px;
+    transition:  all .3s ease-in-out;
+    font-family: 'Lato', sans-serif;
+    padding-bottom: 2px;
+}
+
+button:hover {
+    transition: all .2s ease-in-out;
+    background-color: #165896;
+    cursor: pointer;
+    box-shadow: 0 0 10 rgba(0,0,0,.1);
+}
+button:focus{
+    outline: none;
+}
+
+button:active{
+    transform: translateY(2px);
+}
+
+.sidePanel {
+    float:right;
+    width: 400px;
 }
