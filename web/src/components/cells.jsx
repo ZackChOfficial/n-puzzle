@@ -17,6 +17,7 @@ const Container = styled.div`
     margin:4px;
     top: ${props => props.top}%;
     left: ${props => props.left}%;
+    transition: all .2s ease-in-out;
 `
 
 const Number = styled.h1`

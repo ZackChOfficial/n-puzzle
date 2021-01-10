@@ -1,19 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import Cell from './cells'
-import Move from '../controller/move'
 
 const Container = styled.div`
     border: 2px solid #000;
     width: 600px;
-    height: 600px;;
-    float:left;
-    flex-wrap:wrap;
+    height: 600px;
     position:relative;
-    justify-content:space-between;
-    align-content:space-between;
-    margin: 0 auto;
-    border-radius: 5px
+    margin: 20px auto;
+    border-radius: 5px;
 `
 
 export default function (props) {
@@ -32,7 +27,7 @@ export default function (props) {
                 });
             }
         }
-        setContent(newContent);
+        setContent([newContent]);
     }, [props.size])
     useEffect(() => {
         const newContent = []
@@ -50,13 +45,9 @@ export default function (props) {
         }
         setContent(newContent);
     }, [props.numbers])
-    return <>
-        
-        <br /><br />
-        <Container id="board">
-            {
-                content.map(cell => <Cell id={cell.id} key={cell.key} left={cell.left} top={cell.top} size={cell.size} number={cell.key} />)
-            }
-        </Container>
-    </>
+    return <Container id="board">
+        {
+            content.map(cell => <Cell id={cell.id} key={cell.key} left={cell.left} top={cell.top} size={cell.size} number={cell.key} />)
+        }
+    </Container>
 }

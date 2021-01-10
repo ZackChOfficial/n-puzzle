@@ -2,29 +2,43 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 import Board from './components/board'
 import Move from './controller/move'
+import useKeyPress from './hooks/useKeyPress'
+
 
 function App() {
-  const [numbers, setNumbers] = useState([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]);
-  const [size, setSize] = useState(0);
+  const [numbers, setNumbers] = useState([]);
+  const [ArrowUp, keyW] = [useKeyPress("ArrowUp"),useKeyPress("w")];
+  const [ArrowRight,keyD] = [useKeyPress("ArrowRight"),useKeyPress("d")]
+  const [ArrowDown,keyS] = [useKeyPress("ArrowDown"),useKeyPress("s")]
+  const [ArrowLeft,keyA] = [useKeyPress("ArrowLeft"),useKeyPress("a")]
   const handleClick = (direction) => {
-    const newState = Move(numbers, direction, size);
+    const newState = Move(numbers, direction);
     setNumbers([...newState]);
   }
+
   useEffect(() => {
-    setSize(parseInt(Math.sqrt(numbers.length)));
-  }, [numbers])
+    setNumbers([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15])
+  }, [])
+  useEffect(() => {
+    if (ArrowUp || keyW)
+      handleClick("D");
+    else if (ArrowDown || keyS)
+      handleClick("U");
+    else if (ArrowRight || keyD)
+      handleClick("L");
+    else if (ArrowLeft || keyA)
+      handleClick("R");
+  }, [ArrowUp, ArrowDown,ArrowLeft,ArrowRight,keyW, keyD, keyS,keyA])
+
   return (
     <div className="App">
       <br />
-      <div className="sidePanel">
-      <button onClick={() => handleClick("U")}>up</button>
-      <button onClick={() => handleClick("R")}>right</button>
-      <button onClick={() => handleClick("L")}>left</button>
-      <button onClick={() => handleClick("D")}>down</button>
       <br />
-      </div>
-      
-      <Board numbers={numbers} size={size} />
+      {
+        numbers.length > 0 ?
+          <Board numbers={numbers} size={parseInt(Math.sqrt(numbers.length))} />
+          : "Loading"
+      }
     </div>
   );
 }

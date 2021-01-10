@@ -4,10 +4,13 @@ function swap(state,i,j) {
     state[j] = tmp; 
 }
 
-export default function move(state, direction, size) {
+export default function move(state, direction) {
     let zero;
-    for (let i = 0; i < state.length; i++) {
-        if (state[i] == 0) {
+    const size = parseInt(Math.sqrt(state.length));
+    const newState = [...state];
+    
+    for (let i = 0; i < newState.length; i++) {
+        if (newState[i] == 0) {
             zero = i;
             break;
         }
@@ -15,21 +18,21 @@ export default function move(state, direction, size) {
     switch (direction) {
         case "U":
             if (zero - size >= 0)
-                swap(state, zero, zero - size);
+                swap(newState, zero, zero - size);
             break;
         case "R":
             if ((zero + 1)%size != 0)
-                swap(state, zero, zero + 1);
+                swap(newState, zero, zero + 1);
             break;
         case "D":
-            if (zero + size < state.length)
-                swap(state, zero, zero + size);
+            if (zero + size < newState.length)
+                swap(newState, zero, zero + size);
             break;
         case "L":
             if ((zero)%size  != 0)
-                swap(state, zero, zero - 1);
+                swap(newState, zero, zero - 1);
             break;
 
     }
-    return state;
+    return newState;
 }
