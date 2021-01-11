@@ -14,48 +14,12 @@ using namespace std::chrono;
 
 int main(int argc, char **argv)
 {
-    // vector<DFS_Node> nn = DDB_555::s_p1.gen_next_states();
-    // for (auto& n : nn)
-    //     n.print(), cout << "\n";
-    // DDB_555::create();
-
-    // auto t1 = high_resolution_clock::now();
-
-    //  DDB_555::load();
-
-    // auto t2 = high_resolution_clock::now();
-
-    // auto dur = duration_cast<milliseconds>(t2 - t1);
-    // cout << dur.count() << "ms\n";
-
-    // unsigned long z1 = DDB_555::hash_state(DDB_555::s_p1.state, DDB_555::s_p1_ord);
-    // // unsigned long z2 = DDB_555::hash_state(DDB_555::s_p2.state, DDB_555::s_p2_ord);
-
-    // DFS_Node n3 = DFS_Node({-1, -1, -1, -1,
-    //                         -1, -1, -1, -1,
-    //                         10, 11, 15, -1,
-    //                         0, 9, 8, -1},
-    //                        true);
-
-    // unsigned long z3 = DDB_555::hash_state(n3.state, DDB_555::s_p3_ord);
-
-    // // // printf("%0.20lu\n", z1);
-    // // // printf("%0.20lu\n", z2);
-    // printf("%0.20lu\n", z3);
-    // int dist = z1 / (unsigned long)std::pow(10, 2 * 8);
-    // cout << "dist : " << dist << "\n";
-    //  printf("%0.20lu\n", (z1 - dist * (unsigned long)std::pow(10, 2 * 8)));
-
-    // Node n({1, 2, 3, 4,
-    //         12, 0, 14, 5,
-    //         11, 13, 15, 6,
-    //         10, 9, 8, 7});
 
     DDB_555::load();
     vector<int> board = parse();
     Board b(board, (int)sqrt(board.size()));
+    A_Star algo(board, Board::gen_solution(b.size), linear_conflict);
     // A_Star algo(board, Board::gen_solution(b.size), DDB_555::heuristic);
-    A_Star algo(board, Board::gen_solution(b.size), DDB_555::heuristic);
     // A_Star algo(board, Board::gen_solution(b.size), manhattan_distance);
     if (b.is_solvable())
     {
@@ -68,7 +32,3 @@ int main(int argc, char **argv)
 
     return 0;
 }
-
-// 00000000002111011000
-// 00000000003332313020
-// 00000000002313032202
