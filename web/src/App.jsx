@@ -8,13 +8,12 @@ import styled from 'styled-components'
 import { algorithms, heuristics, solutionSize4, solutionSize3, speed } from './config'
 import PlayMoves from './controller/playMoves'
 import scrambleArray from './controller/scramble'
+import sleep from './utils/sleep'
 
 const SelectComponent = styled.div`
   margin: 15px 0;
 `
-const sleep = async (ms) => {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
+
 const Actions = styled.div`
   display: flex;
   justify-content: space-between;
