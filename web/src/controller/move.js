@@ -1,14 +1,9 @@
-function swap(state,i,j) {
-    const tmp = state[i];
-    state[i] = state[j];
-    state[j] = tmp; 
-}
+import swap from '../utils/swap'
 
-export default function move(state, direction) {
+export default  function move(state, direction) {
     let zero;
     const size = parseInt(Math.sqrt(state.length));
     const newState = [...state];
-    
     for (let i = 0; i < newState.length; i++) {
         if (newState[i] == 0) {
             zero = i;
@@ -16,19 +11,19 @@ export default function move(state, direction) {
         }
     }
     switch (direction) {
-        case "U":
+        case "D":
             if (zero - size >= 0)
                 swap(newState, zero, zero - size);
             break;
-        case "R":
+        case "L":
             if ((zero + 1)%size != 0)
                 swap(newState, zero, zero + 1);
             break;
-        case "D":
+        case "U":
             if (zero + size < newState.length)
                 swap(newState, zero, zero + size);
             break;
-        case "L":
+        case "R":
             if ((zero)%size  != 0)
                 swap(newState, zero, zero - 1);
             break;

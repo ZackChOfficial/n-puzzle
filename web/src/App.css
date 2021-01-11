@@ -9,14 +9,16 @@ body {
 }
 button {
     min-width:100px;
+    width:30%;
+    display: block;
     height: 35px;
     border: none;
-    font-size: 14px;
+    font-size: 16px;
     background-color: #1c7ed6;
     color: #fff;
     transition:  all .3s ease-in-out;
     font-family: 'Lato', sans-serif;
-    /* padding-bottom: 2px; */
+    font-weight: 600;
 }
 
 button:hover {
@@ -34,16 +36,3 @@ button:active{
 }
 
 
-
-#moves {
-    outline: none;
-    border: none;
-    box-shadow: 1px 1px 4px 0 rgba(0,0,0,.1), 0 0 4px 0 rgba(0,0,0,.08);
-    height: 32px;
-    transition: box-shadow .2s,-webkit-box-shadow .2s;
-    padding-left: 10px;
-}
-
-#apply_moves {
-    margin-left: 20px;
-}

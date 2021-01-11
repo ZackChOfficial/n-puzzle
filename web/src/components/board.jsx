@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import Cell from './cells'
-
+import {solutionSize4, solutionSize3} from '../config'
 const Container = styled.div`
-    border: 2px solid #000;
+    border: 2px solid #808caf;
     width: 600px;
     height: 600px;
     position:relative;
@@ -23,7 +23,8 @@ export default function (props) {
                     key: props.numbers[i * props.size + j],
                     top: i * (100 / props.size),
                     left: j * (100 / props.size),
-                    size: 100 / props.size
+                    size: 100 / props.size,
+                    rightPlace: props.size == 3 ? props.numbers[i * props.size + j] == solutionSize3[i * props.size + j] : props.numbers[i * props.size + j] == solutionSize4[i * props.size + j] 
                 });
             }
         }
@@ -39,7 +40,8 @@ export default function (props) {
                     key: props.numbers[i * props.size + j],
                     top: i * (100 / props.size),
                     left: j * (100 / props.size),
-                    size: 100 / props.size
+                    size: 100 / props.size,
+                    rightPlace: props.size == 3 ? props.numbers[i * props.size + j] == solutionSize3[i * props.size + j] : props.numbers[i * props.size + j] == solutionSize4[i * props.size + j] 
                 });
             }
         }
@@ -47,7 +49,7 @@ export default function (props) {
     }, [props.numbers])
     return <Container id="board">
         {
-            content.map(cell => <Cell id={cell.id} key={cell.key} left={cell.left} top={cell.top} size={cell.size} number={cell.key} />)
+            content.map(cell => <Cell id={cell.key} key={cell.key} left={cell.left} top={cell.top} size={cell.size} number={cell.key}  rightPlace={cell.rightPlace}/>)
         }
     </Container>
 }
