@@ -7,7 +7,6 @@
 #include <unordered_map>
 #include <algorithm> // std::find
 
-
 #include "Board.class.hpp"
 class DFS_Node : public Board
 {
@@ -20,8 +19,10 @@ public:
 
 public:
     DFS_Node() = default;
-    DFS_Node(const std::vector<int> &state, bool root = false) : Board(state), dist(0), depth(0) {
-        if (root){
+    DFS_Node(const std::vector<int> &state, bool root = false) : Board(state), dist(0), depth(0)
+    {
+        if (root)
+        {
             zero_position = std::find(state.begin(), state.end(), 0) - state.begin();
             dist = 0;
             depth = 0;
@@ -36,51 +37,46 @@ protected:
     DFS_Node change_state(E_Move move) const;
 };
 
-class Disjoint_Pattern_Database
-{
-};
-
-class DDB_663 : public Disjoint_Pattern_Database
-{
-    static void create();
-
-private:
-    std::vector<std::pair<int, int>> make_entries();
-    void save_entries(std::string file_name);
-
-public:
-    std::map<int, int> load(std::string file_name);
-};
-
-class DDB_555
+class DDB_3P
 {
 public:
-    static DDB_555 &get();
-    static void create();
-    static void load();
-    static int heuristic(std::vector<int> &state, const std::vector<int> &goal, const int size);
-    static unsigned long hash_state(const std::vector<int> &state, const std::vector<int> &target_pattern);
-    static unsigned long hash_dist(int dist);
+    static const std::string DB_DIR;
+
+    void create();
+    void load();
+    int heuristic(std::vector<int> &state, const std::vector<int> &goal, const int size);
+    unsigned long hash_state(const std::vector<int> &state, const std::vector<int> &target_pattern);
+    unsigned long hash_dist(int dist);
 
 public:
     std::unordered_map<unsigned long, int> m_p1_db;
     std::unordered_map<unsigned long, int> m_p2_db;
     std::unordered_map<unsigned long, int> m_p3_db;
 
-    static DFS_Node s_p1;
-    static DFS_Node s_p2;
-    static DFS_Node s_p3;
-    static std::vector<int> s_p1_ord;
-    static std::vector<int> s_p2_ord;
-    static std::vector<int> s_p3_ord;
+    DFS_Node m_p1;
+    DFS_Node m_p2;
+    DFS_Node m_p3;
+    std::vector<int> m_p1_ord;
+    std::vector<int> m_p2_ord;
+    std::vector<int> m_p3_ord;
 
+    std::string P1_DB_FILE_NAME;
+    std::string P2_DB_FILE_NAME;
+    std::string P3_DB_FILE_NAME;
 
-    static const std::string DB_DIR;
-    static const std::string P1_DB_FILE_NAME;
-    static const std::string P2_DB_FILE_NAME;
-    static const std::string P3_DB_FILE_NAME;
+    std::set<DFS_Node> make_entries(DFS_Node source);
+    void save_entries(std::string file_name, const std::set<DFS_Node> &data, const std::vector<int> &target_pattern);
+    void load_db(const std::string &file_name, std::unordered_map<unsigned long, int> &pattern_db);
+};
 
-    static std::set<DFS_Node> make_entries(DFS_Node source);
-    static void save_entries(std::string file_name, const std::set<DFS_Node> &data, const std::vector<int> &target_pattern);
-    static void load_db(const std::string &file_name, std::unordered_map<unsigned long, int> &pattern_db);
+class DDB_663 : public DDB_3P
+{
+public:
+    DDB_663();
+};
+
+class DDB_555 : public DDB_3P
+{
+public:
+    DDB_555();
 };
