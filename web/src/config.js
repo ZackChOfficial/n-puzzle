@@ -12,5 +12,4 @@ export const heuristics = [
 
 
 export const solutionSize4 = [1,2,3,4,12,13,14,5,11,0,15,6,10,9,8,7]
-export const solutionSize3 = [1,2,3,8,0,4,7,6,5]
 export const speed = 0.5

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import Cell from './cells'
-import {solutionSize4, solutionSize3} from '../config'
+import {solutionSize4} from '../config'
 const Container = styled.div`
     border: 2px solid #808caf;
     width: 600px;
@@ -24,7 +24,7 @@ export default function (props) {
                     top: i * (100 / props.size),
                     left: j * (100 / props.size),
                     size: 100 / props.size,
-                    rightPlace: props.size == 3 ? props.numbers[i * props.size + j] == solutionSize3[i * props.size + j] : props.numbers[i * props.size + j] == solutionSize4[i * props.size + j] 
+                    rightPlace: props.numbers[i * props.size + j] == solutionSize4[i * props.size + j] 
                 });
             }
         }
@@ -41,7 +41,7 @@ export default function (props) {
                     top: i * (100 / props.size),
                     left: j * (100 / props.size),
                     size: 100 / props.size,
-                    rightPlace: props.size == 3 ? props.numbers[i * props.size + j] == solutionSize3[i * props.size + j] : props.numbers[i * props.size + j] == solutionSize4[i * props.size + j] 
+                    rightPlace: props.numbers[i * props.size + j] == solutionSize4[i * props.size + j] 
                 });
             }
         }

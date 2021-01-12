@@ -5,13 +5,16 @@ import Move from './controller/move'
 import useKeyPress from './hooks/useKeyPress'
 import Select from "react-select";
 import styled from 'styled-components'
-import { algorithms, heuristics, solutionSize4, solutionSize3, speed } from './config'
+import { algorithms, heuristics, solutionSize4, speed } from './config'
 import PlayMoves from './controller/playMoves'
 import scrambleArray from './controller/scramble'
 import sleep from './utils/sleep'
+import Header from './components/header'
+import Footer from './components/footer'
 
 const SelectComponent = styled.div`
   margin: 15px 0;
+  text-align:left;
 `
 
 const Actions = styled.div`
@@ -21,20 +24,23 @@ const Actions = styled.div`
 `
 const Input = styled.input`
   width: 370px;
-  border-color: hsl(0,0%,80%);
+  border-color: ${props => props.error ? "#ff1d44" : "#ccc"};
   border-radius: 4px;
   border-style: solid;
   border-width: 1px;
   padding:0 10px;
   font-size:16px;
-  color: hsl(0,0%,50%);
+  color: "#808080";
   &:hover {
-    border-color: hsl(0,0%,70%);
+    border-color: #b3b3b3;
   }
   &:focus, &:active {
     border-color: rgb(75, 148, 244);
     border-width: 2px;
     outline:none;
+  }
+  &::placeholder { 
+    color:  ${props => props.error ? "#ff1d44" : "#808080"};;
   }
 `
 function App() {
@@ -46,6 +52,8 @@ function App() {
   const [ArrowDown, keyS] = [useKeyPress("ArrowDown"), useKeyPress("s")]
   const [ArrowLeft, keyA] = [useKeyPress("ArrowLeft"), useKeyPress("a")]
   const [execution, setExcution] = useState(false);
+  const [moves, setMoves] = useState("");
+  const [invalidMoves, setInvalidMoves] = useState(false);
 
   const handleClick = useCallback((direction) => {
     const newState = Move(numbers, direction);
@@ -55,11 +63,16 @@ function App() {
   const handleMoves = useCallback(async (moves) => {
     setExcution(true);
     const allStates = PlayMoves(numbers, moves);
-    await sleep(speed * 1000);
-    for (let i = 0; i < allStates.length; i++) {
-      setNumbers([...allStates[i]])
+    if (typeof(allStates[0]) == "string")
+      setInvalidMoves(true);
+    else {
       await sleep(speed * 1000);
+      for (let i = 0; i < allStates.length; i++) {
+        setNumbers([...allStates[i]])
+          await sleep(speed * 1000);
+      }
     }
+    setMoves("")
     setExcution(false);
   }, [numbers])
 
@@ -84,12 +97,22 @@ function App() {
 
   const onKeyDown = () => {
     setExcution(true);
+    if (invalidMoves)
+    setInvalidMoves(false);
   }
   const onKeyUp = (e) => {
     setExcution(false);
+    if (e.key == "Backspace")
+      setMoves(moves.substr(0, moves.length - 1));
+    else if (['D', 'L','R', 'U', ' '].includes(e.key.toUpperCase()))
+      setMoves(moves + e.key)
+  }
+  const handleRun = () => {
+    handleMoves(moves.toUpperCase())
   }
   return (
     <div className="App">
+      <Header/>
       <br />
       <SelectComponent>
         <Select
@@ -102,6 +125,7 @@ function App() {
           placeholder="Select Algorithm"
         />
       </SelectComponent>
+      <SelectComponent>
       <Select
         defaultValue={selectedheuristic}
         onChange={setSelectedheuristic}
@@ -109,9 +133,10 @@ function App() {
         isClearable
         placeholder="Select Heuristic Function"
       />
+      </SelectComponent>
       <Actions>
-        <Input type="text" onKeyDown={onKeyDown} onKeyUp={onKeyUp}/>
-        <button>Run</button>
+        <Input type="text" onChange={null}onKeyDown={onKeyDown} onKeyUp={onKeyUp} value={moves} error={invalidMoves} placeholder={invalidMoves ? "Invalid Moves" : "Moves to apply"}/>
+        <button onClick={handleRun}>Run</button>
       </Actions>
       <Actions>
         <button onClick={scramble}> Scramble Board </button>
@@ -124,6 +149,7 @@ function App() {
           <Board numbers={numbers} size={parseInt(Math.sqrt(numbers.length))} />
           : "Loading"
       }
+      <Footer/>
     </div>
   );
 }
