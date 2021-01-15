@@ -8,11 +8,16 @@ body {
     margin: 0 auto;
     text-align: center;
 }
+@media only screen and (max-width: 768px) {
+    .App {
+        width: 400px;
+    }
+}
 button {
-    min-width:100px;
-    width:30%;
+    min-width:20%;
+    width:20%;
     display: block;
-    height: 35px;
+    min-height: 35px;
     border: none;
     font-size: 16px;
     background-color: #1c7ed6;
@@ -20,6 +25,7 @@ button {
     transition:  all .3s ease-in-out;
     font-family: 'Lato', sans-serif;
     font-weight: 600;
+    padding: 10px 0;
 }
 
 button:hover {

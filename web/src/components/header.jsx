@@ -88,7 +88,7 @@ const Header = styled.div`
  h1 {
  font-family: 'Pacifico', cursive; 
  font-size:70px;
- margin: 20px 0;
+ margin: 10px 0;
  font-weight: bold;
   padding: 10px;
   animation: ${textAnimation} .6s linear  infinite alternate both;

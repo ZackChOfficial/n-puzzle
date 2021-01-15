@@ -4,15 +4,20 @@ import Cell from './cells'
 import {solutionSize4} from '../config'
 const Container = styled.div`
     border: 2px solid #808caf;
-    width: 600px;
-    height: 600px;
+    width: 550px;
+    height: 550px;
     position:relative;
-    margin: 20px auto;
+    margin: 0px auto;
     border-radius: 5px;
+    @media (max-width: 768px) {
+        width: 400px;
+        height: 400px;
+    }
 `
 
 export default function (props) {
     const [content, setContent] = useState([]);
+
     useEffect(() => {
         const newContent = [];
         for (let i = 0; i < props.size; i++) {
@@ -24,7 +29,7 @@ export default function (props) {
                     top: i * (100 / props.size),
                     left: j * (100 / props.size),
                     size: 100 / props.size,
-                    rightPlace: props.numbers[i * props.size + j] == solutionSize4[i * props.size + j] 
+                    rightPlace: props.numbers[i * props.size + j] == props.solution[i * props.size + j] 
                 });
             }
         }
@@ -41,7 +46,7 @@ export default function (props) {
                     top: i * (100 / props.size),
                     left: j * (100 / props.size),
                     size: 100 / props.size,
-                    rightPlace: props.numbers[i * props.size + j] == solutionSize4[i * props.size + j] 
+                    rightPlace: props.numbers[i * props.size + j] == props.solution[i * props.size + j] 
                 });
             }
         }
