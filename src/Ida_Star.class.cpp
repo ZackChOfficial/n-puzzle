@@ -15,22 +15,18 @@ void    Ida_Star::run()
 {
     int threshold;
     threshold = heuristic(root.state, goal.state, goal.size);
-    std::cout << threshold << "\n";
     while (1337)
     {
         threshold = dfs(root, 0, threshold);
-        std::cout << threshold << "\n";
         if (threshold == -1)
-        {
-            std::cout << "Solved\n";
             break;
-        }
         if (threshold == INT_MAX)
-        {
-            std::cout << "Unsolved\n";
             break;
-        }
     }
+    if (threshold == -1)
+        std::cout << "Solved\n";
+    else 
+        std::cout << "Unsolved\n";
 }
 
 int    Ida_Star::dfs(Node&  node, int g, int threshold)
@@ -41,7 +37,7 @@ int    Ida_Star::dfs(Node&  node, int g, int threshold)
         return f;
     if (node.compare(goal.state))
     {
-        std::cout << node.get_path() << std::endl;
+        solution = Node(node);
         return -1;
     }
     int min = INT_MAX;

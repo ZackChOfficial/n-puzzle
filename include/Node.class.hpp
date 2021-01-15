@@ -16,6 +16,7 @@ public:
     std::shared_ptr<Node>   parent;
     int                     gscore;
     int                     hscore;
+    int                     number_of_moves;
 
 public:
     Node();
