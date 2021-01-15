@@ -30,7 +30,7 @@ int main(int argc, char **argv)
         cout << "Solvable\n";
         if (argv[1] && argv[1][0] == '1')
         {
-            Ida_Star algo(board, Board::gen_solution(b.size), DDB_555::heuristic);
+            Ida_Star algo(board, Board::gen_solution(b.size), linear_conflict);
             algo.run();
         }
         else

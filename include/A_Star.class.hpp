@@ -20,6 +20,8 @@ struct CompareNode
 class A_Star
 {
 private:
+    static int                                                  total_selected;
+    static int                                                  max_states;
     std::priority_queue<Node, std::vector<Node>, CompareNode>   states;
     std::set<std::vector<int>>                                  visited;
     std::unordered_map<std::string, Node>                       in_queue;
@@ -30,4 +32,5 @@ private:
 public:
     A_Star(const std::vector<int> &initial, Board sol, int (*func)(std::vector<int> &state, const std::vector<int> &goal, const int size));
     void    run();
+    void    describe();
 };

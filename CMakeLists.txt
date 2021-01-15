@@ -14,10 +14,7 @@ add_executable(${PROJECT_NAME}
     src/heuristic_functions.cpp
     src/Node.class.cpp
 
-    src/disjoint_pattern_database/DDB_3P.cpp
-    src/disjoint_pattern_database/DDB_555.cpp
-    src/disjoint_pattern_database/DDB_663.cpp
-    src/disjoint_pattern_database/Disjoint_database.cpp
+  
     src/Node.class.cpp
     src/Ida_Star.class.cpp
 )

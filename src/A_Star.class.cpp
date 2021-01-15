@@ -4,6 +4,11 @@
 /**
  * A Star Functions
 */
+
+int                                                  A_Star::total_selected = 0;
+int                                                  A_Star::max_states = 0;
+int                                                  A_Star::number_of_moves = 0;
+
 A_Star::A_Star(const std::vector<int> &initial, Board sol, int (*func)(std::vector<int> &state, const std::vector<int> &goal, const int size))
 {
     Node::size = sqrt(initial.size());
@@ -30,17 +35,17 @@ void A_Star::run()
     std::vector<Node>                               neighbor;
     int                                             tentative_gScore;
     std::unordered_map<std::string, Node>::iterator exist;
+    int                                             gscore;
+    int                                             in_memory;
 
     in_queue[hash_vector(initial.state)] = initial;
     states.push(root);
     solved = false;
-    int i = 0;
-    int gscore;
+    in_memory = 1;
     while (!in_queue.empty() && !solved)
     {
-        i++;
+        A_Star::total_selected++;
         current = states.top();
-        // std::cout <<  "gscore: " << current.gscore  << "   hscore:  " << current.hscore << " fscore: " << current.gscore + current.hscore << "\n";
         gscore = current.gscore;
         if (current.compare(goal.state))
             solved = true;
@@ -50,6 +55,7 @@ void A_Star::run()
             in_queue.erase(hash_vector(current.state));
             neighbor = current.gen_next_states();
             states.pop();
+            in_memory--;
             for (auto &child : neighbor)
             {
                 if (visited.find(child.state) != visited.end())
@@ -67,13 +73,15 @@ void A_Star::run()
                     continue;
                 }
                 states.push(child);
+                in_memory++;
+                if (in_memory > max_states)
+                    max_states = in_memory;
                 in_queue.insert(std::make_pair(hash_vector(child.state), child));
             }
         }
     }
     if (solved)
     {
-        std::cout << "Solved\nNumber of Iteration: " << i << std::endl;
         std::cout << "Path:  " << current.get_path() << std::endl;
     }
     else
