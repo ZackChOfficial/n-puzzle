@@ -25,8 +25,6 @@ private:
     std::unordered_map<std::string, Node>                       in_queue;
     Node                                                        root;
     Node                                                        goal;
-
-private:
     int     (*heuristic)(std::vector<int> &state, const std::vector<int> &goal, const int size);
 
 public:

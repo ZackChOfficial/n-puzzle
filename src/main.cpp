@@ -8,6 +8,7 @@
 #include "Board.class.hpp"
 #include "heuristic_functions.hpp"
 #include "Disjoint_database.hpp"
+#include "Ida_Star.class.hpp"
 
 using namespace std;
 using namespace std::chrono;
@@ -18,13 +19,23 @@ int main(int argc, char **argv)
     DDB_555::load();
     vector<int> board = parse();
     Board b(board, (int)sqrt(board.size()));
-    A_Star algo(board, Board::gen_solution(b.size), linear_conflict);
+   
     // A_Star algo(board, Board::gen_solution(b.size), DDB_555::heuristic);
     // A_Star algo(board, Board::gen_solution(b.size), manhattan_distance);
     if (b.is_solvable())
     {
+        
         cout << "Solvable\n";
-        algo.run();
+        if (argv[1] && argv[1][0] == '1')
+        {
+            Ida_Star algo(board, Board::gen_solution(b.size), DDB_555::heuristic);
+            algo.run();
+        }
+        else
+        {
+            A_Star algo(board, Board::gen_solution(b.size), linear_conflict);
+            algo.run();
+        }
     }
     else
         cout << "Unsolvable\n";
