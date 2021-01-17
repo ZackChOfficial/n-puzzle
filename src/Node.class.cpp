@@ -6,6 +6,7 @@
 */
 
 int Node::size = 0;
+int Node::path_length = 0;
 
 Node::Node(std::vector<int> const &data)
     : parent(nullptr), gscore(99999), hscore(99999)
@@ -59,6 +60,7 @@ std::string Node::get_path() const
     if (parent)
     {
         path = parent->get_path();
+        path_length++;
         return path + " " + moves[move];
     }
     else

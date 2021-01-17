@@ -44,7 +44,7 @@ public:
 
     void create();
     void load();
-    static int heuristic(std::vector<int> &state, const std::vector<int> &goal, const int size);
+    int heuristic(std::vector<int> &state, const std::vector<int> &goal, const int size);
     unsigned long hash_state(const std::vector<int> &state, const std::vector<int> &target_pattern);
     unsigned long hash_dist(int dist);
 

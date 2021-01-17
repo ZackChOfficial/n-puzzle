@@ -1,8 +1,4 @@
-#include <iostream>
-#include <cstring>
-#include <cassert>
-#include <limits>
-#include <chrono>
+
 #include "parser.hpp"
 #include "A_Star.class.hpp"
 #include "Board.class.hpp"
@@ -11,7 +7,6 @@
 #include "Ida_Star.class.hpp"
 
 using namespace std;
-using namespace std::chrono;
 
 int main(int argc, char **argv)
 {
@@ -26,8 +21,6 @@ int main(int argc, char **argv)
     // A_Star algo(board, Board::gen_solution(b.size), manhattan_distance);
     if (b.is_solvable())
     {
-        
-        cout << "Solvable\n";
         if (argv[1] && argv[1][0] == '1')
         {
             Ida_Star algo(board, Board::gen_solution(b.size), linear_conflict);

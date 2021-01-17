@@ -3,12 +3,10 @@
 #include <string>
 #include <iostream>
 #include <memory>
-#include "Board.class.hpp"
+#include "Node.class.hpp"
 
 void    throwError(std::string text = "Invalid Input");
-
-
-template <typename T>
-std::vector<T> gen_next_states(T b);
+template<typename T>
+void    describe(Node&);
 
 #endif
