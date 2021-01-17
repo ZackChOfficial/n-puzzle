@@ -6,7 +6,7 @@
 #include <cmath>
 #include <iostream>
 #include <unordered_map>
-
+#include "utils.hpp"
 #include "Node.class.hpp"
 
 struct CompareNode
@@ -31,6 +31,7 @@ private:
 
 public:
     A_Star(const std::vector<int> &initial, Board sol, int (*func)(std::vector<int> &state, const std::vector<int> &goal, const int size));
-    void    run();
-    void    describe();
+    void            run();
+    template<typename T>
+    friend   void    describe(Node&);
 };

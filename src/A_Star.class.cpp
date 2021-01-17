@@ -73,16 +73,13 @@ void A_Star::run()
                 }
                 states.push(child);
                 in_memory++;
-                if (in_memory > max_states)
-                    max_states = in_memory;
+                A_Star::max_states = in_memory > A_Star::max_states ? in_memory : A_Star::max_states;
                 in_queue.insert(std::make_pair(hash_vector(child.state), child));
             }
         }
     }
     if (solved)
-    {
-        std::cout << "Path:  " << current.get_path() << std::endl;
-    }
+        describe<A_Star>(current);
     else
         std::cout << "Empty Stack\n";
 }

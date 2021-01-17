@@ -13,6 +13,7 @@ struct Node : public Board
 {
 public:
     static  int             size;
+    static int              path_length;
     std::shared_ptr<Node>   parent;
     int                     gscore;
     int                     hscore;

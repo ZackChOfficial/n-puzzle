@@ -103,3 +103,4 @@ int        linear_conflict(std::vector<int> &state, const std::vector<int> &goal
     }
     return hscore;
 }
+

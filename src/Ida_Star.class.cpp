@@ -1,6 +1,11 @@
 #include "Ida_Star.class.hpp"
 #include "utils.hpp"
 
+
+int                                                  Ida_Star::total_selected = 0;
+int                                                  Ida_Star::max_states = 0;
+int                                                  Ida_Star::in_memory = 0;
+
 Ida_Star::Ida_Star(const std::vector<int> &initial, Board sol, int (*func)(std::vector<int> &state, const std::vector<int> &goal, const int size))
 {
     Node::size = sqrt(initial.size());
@@ -24,7 +29,7 @@ void    Ida_Star::run()
             break;
     }
     if (threshold == -1)
-        std::cout << "Solved\n";
+        describe<Ida_Star>(solution);
     else 
         std::cout << "Unsolved\n";
 }
@@ -34,12 +39,19 @@ int    Ida_Star::dfs(Node&  node, int g, int threshold)
     int f = g + heuristic(node.state, goal.state, goal.size);
     std::vector<Node>                               neighbor;
     if (f > threshold)
+    {
+        Ida_Star::in_memory--;
         return f;
+    }
     if (node.compare(goal.state))
     {
         solution = Node(node);
+        Ida_Star::in_memory--;
         return -1;
     }
+    Ida_Star::in_memory++;
+    Ida_Star::max_states = Ida_Star::max_states > Ida_Star::in_memory ? Ida_Star::max_states : Ida_Star::in_memory;
+    Ida_Star::total_selected++;
     int min = INT_MAX;
     neighbor = node.gen_next_states();
     for (auto &child : neighbor)
@@ -47,10 +59,12 @@ int    Ida_Star::dfs(Node&  node, int g, int threshold)
         int temp = dfs(child, g+1, threshold);
         if (temp == -1)
         {
+            Ida_Star::in_memory--;
             return -1;
         }
         if (temp < min)
             min = temp;
     }
+    Ida_Star::in_memory--;
     return min;
 }
