@@ -50,6 +50,9 @@ int    Ida_Star::dfs(Node&  node, int g, int threshold)
         solution = node;
         return -1;
     }
+    Ida_Star::in_memory++;
+    Ida_Star::max_states = Ida_Star::max_states > Ida_Star::in_memory ? Ida_Star::max_states : Ida_Star::in_memory;
+    Ida_Star::total_selected++;
     int min = INT_MAX;
     neighbor = node.gen_next_states();
     for (auto &child : neighbor)
@@ -61,5 +64,6 @@ int    Ida_Star::dfs(Node&  node, int g, int threshold)
         if (temp < min)
             min = temp;
     }
+    Ida_Star::in_memory--;
     return min;
 }
