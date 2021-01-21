@@ -36,7 +36,7 @@ const Input = styled.input`
   border-width: 1px;
   padding:0 10px;
   font-size:16px;
-  color: "#808080";
+  color: ${props => props.error ? "#ff1d44" : "#808080"};
   &:hover {
     border-color: #b3b3b3;
   }
@@ -58,16 +58,17 @@ function App() {
   const [ArrowDown, keyS] = [useKeyPress("ArrowDown"), useKeyPress("s")]
   const [ArrowLeft, keyA] = [useKeyPress("ArrowLeft"), useKeyPress("a")]
   const [execution, setExcution] = useState(false);
-  const [moves, setMoves] = useState("");
-  const [state, setState] = useState("");
+  const moves = useRef(null);
   const [invalidMoves, setInvalidMoves] = useState(false);
+  const [invalidBoard, setInvalidBoard] = useState(false);
   const [size, setSize] = useState(0);
   const boards = useRef([solutionSize3, solutionSize4])
+  const state = useRef(null)
 
   useEffect(() => {
     setNumbers(boards.current[size])
-
   }, [size])
+
   const handleClick = useCallback((direction) => {
     const newState = Move(numbers, direction);
     setNumbers([...newState]);
@@ -85,7 +86,6 @@ function App() {
         await sleep(speed * 1000);
       }
     }
-    setMoves("")
     setExcution(false);
   }, [numbers])
 
@@ -104,24 +104,43 @@ function App() {
   const scramble = useCallback(() => {
     setNumbers(scrambleArray(numbers))
   }, [numbers])
+
   const reset = useCallback(() => {
     setNumbers(boards.current[size]);
   }, [size])
 
-  const onKeyDown = () => {
-    setExcution(true);
-    if (invalidMoves)
-      setInvalidMoves(false);
-  }
-  const onKeyUp = (e) => {
-    setExcution(false);
-    if (e.key == "Backspace")
-      setMoves(moves.substr(0, moves.length - 1));
-    else if (['D', 'L', 'R', 'U', ' '].includes(e.key.toUpperCase()))
-      setMoves(moves + e.key)
-  }
+
   const handleRun = () => {
-    handleMoves(moves.toUpperCase())
+    handleMoves(moves.current.value.toUpperCase())
+  }
+
+  const loadBoard = () => {
+    const num = state.current.value.trim().split(/ +/);
+    const sol = boards.current[size].slice().sort((a,b) => a-b);
+    if (num.length != sol.length)
+    {
+      setInvalidBoard(true);
+      return;
+    }
+    for (let i=0;i<num.length;i++)
+    {
+      if (!Number.isInteger(parseInt(num[i])))
+      {
+        setInvalidBoard(true);
+        return;
+      }
+      num[i] = parseInt(num[i]);
+    }
+    const arr = num.slice().sort((a,b) => a-b);
+    for (let i = 0; i < sol.length; i++)
+    {
+      if (arr[i] != sol[i])
+      {
+        setInvalidBoard(true);
+        return;
+      }
+    }
+    setNumbers(num);
   }
   return (
     <div className="App">
@@ -158,14 +177,19 @@ function App() {
         />
       </SelectComponent>
       <Actions>
-        <Input type="text" onChange={null} onKeyDown={onKeyDown} onKeyUp={onKeyUp} value={moves} error={invalidMoves} placeholder={invalidMoves ? "Invalid Moves" : "Moves to apply"} />
+        <Input type="text" onChange={null} onKeyDown={() => {
+           if (invalidMoves)
+              setInvalidMoves(false);
+        }}
+      ref={moves} error={invalidMoves} placeholder={invalidMoves ? "Invalid Moves" : "Moves to apply"} />
         <button onClick={handleRun}>Run</button>
       </Actions>
       <Actions>
-        <Input type="text" onChange={() => {
-          
-        }}  value={state} error={invalidMoves} placeholder={invalidMoves ? "Invalid State" : "Load State"} />
-        <button onClick={handleRun}>Load</button>
+        <Input type="text" onKeyDown={() => {
+          if (invalidBoard)
+            setInvalidBoard(false)
+          }} ref={state}  error={invalidBoard} placeholder={invalidBoard ? "Invalid State" : "Load State"} />
+        <button onClick={loadBoard}>Load</button>
       </Actions>
       <Actions>
         <button onClick={scramble}> Scramble Board </button>
@@ -177,7 +201,7 @@ function App() {
             defaultValue={size}
             onChange={(e) => {
               if (e)
-              setSize(e.value)
+                setSize(e.value)
             }}
             options={sizes.filter(s => s.value !== size)}
             placeholder="size"
