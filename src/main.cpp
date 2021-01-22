@@ -21,7 +21,7 @@ int main(int argc, char **argv)
     {
         if (argv[1] && argv[1][0] == '1')
         {
-            Ida_Star algo(board, Board::gen_solution(b.size), linear_conflict, Mode::E_Greedy);
+            Ida_Star algo(board, Board::gen_solution(b.size), linear_conflict, Mode::E_Uniform_Cost);
             algo.run();
         }
         else

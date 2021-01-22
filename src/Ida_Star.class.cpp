@@ -48,39 +48,31 @@ int    Ida_Star::dfs(Node&  node, int g, int threshold)
     std::vector<Node>                               neighbor;
     int                                             f;
     
-  
+    std::cout << "ONE\n";
     if (Ida_Star::mode == Mode::E_Normal)
         f = g + heuristic(node.state, goal.state, goal.size);
-    else if (mode == Mode::E_Greedy)
+    else if (Ida_Star::mode == Mode::E_Greedy)
         f = heuristic(node.state, goal.state, goal.size);
     else 
-        f = g;
+        f = g;   
     if (f > threshold)
-    {
-        Ida_Star::max_states = Ida_Star::max_states > g ? Ida_Star::max_states : g;
         return f;
-    }
     if (node.compare(goal.state))
     {
-        Ida_Star::max_states = Ida_Star::max_states > g ? Ida_Star::max_states : g;
         solution = node;
         return -1;
     }
-    Ida_Star::in_memory++;
-    Ida_Star::max_states = Ida_Star::max_states > Ida_Star::in_memory ? Ida_Star::max_states : Ida_Star::in_memory;
-    Ida_Star::total_selected++;
     int min = INT_MAX;
-    neighbor = node.gen_next_states();
-
+    std::cout << "HELL -1\n";
+    neighbor = node.gen_next_states(); 
+    std::cout << "HELL\n";
     for (auto &child : neighbor)
     {
-        Ida_Star::total_selected++;
         int temp = dfs(child, g+1, threshold);
         if (temp == -1)
             return -1;
         if (temp < min)
             min = temp;
     }
-    Ida_Star::in_memory--;
     return min;
 }

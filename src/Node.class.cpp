@@ -100,8 +100,15 @@ Node Node::create_new(E_Move move) const
 
 std::vector<Node> Node::gen_next_states() const
 {
-    std::vector<Node> new_states;
 
+    std::cout << "Hello\n";
+    std::vector<Node> new_states;
+    // if (new_states.empty())
+    // {
+    //     std::cout << "NULL\n";
+    // }
+    // std::cout << new_states.size() << std::endl;
+    std::cout << "ok\n";
     if (zero_position - size >= 0)
         new_states.push_back(create_new(UP));
     if (zero_position % size - 1 >= 0)
@@ -110,5 +117,6 @@ std::vector<Node> Node::gen_next_states() const
         new_states.push_back(create_new(RIGHT));
     if (zero_position + size < state.size())
         new_states.push_back(create_new(DOWN));
+    std::cout << "SOSO:  " << "\n";
     return new_states;
 }
