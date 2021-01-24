@@ -63,8 +63,6 @@ void A_Star::run()
                     continue;
                 child.gscore = gscore + (A_Star::mode == Mode::E_Greedy ? 0 : 1);
                 child.hscore = A_Star::mode == Mode::E_Uniform_Cost ? 0 : heuristic(child.state, goal.state, child.size);
-                std::cout << "g:  " << child.gscore  << "\n";
-                std::cout << "h:  " <<child.hscore  << "\n";
                 exist = in_queue.find(hash_vector(child.state));
                 if ( exist != in_queue.end())
                 {

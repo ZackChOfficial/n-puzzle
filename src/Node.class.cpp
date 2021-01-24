@@ -12,34 +12,12 @@ Node::Node(std::vector<int> const &data)
     : parent(nullptr), gscore(99999), hscore(99999)
 {
     state = data;
-
 }
 
 Node::Node()
     : parent(nullptr), gscore(99999), hscore(99999)
 {
     zero_position = 0;
-}
-
-int Node::print() const
-{
-    int x = 0;
-    if (parent)
-    {
-        x = parent->print();
-    }
-    x++;
-    std::cout << "Move:  " << move << "  " << &move << "\n";
-    for (int i = 0; i < (int)sqrt(state.size()); i++)
-    {
-        for (int j = 0; j < (int)sqrt(state.size()); j++)
-        {
-            printf("%2d  ", state[i * (int)sqrt(state.size()) + j]);
-        }
-        std::cout << std::endl;
-    }
-    std::cout << "\n\n";
-    return x;
 }
 
 bool Node::compare(std::vector<int> &rhs) const
@@ -100,15 +78,7 @@ Node Node::create_new(E_Move move) const
 
 std::vector<Node> Node::gen_next_states() const
 {
-
-    std::cout << "Hello\n";
     std::vector<Node> new_states;
-    // if (new_states.empty())
-    // {
-    //     std::cout << "NULL\n";
-    // }
-    // std::cout << new_states.size() << std::endl;
-    std::cout << "ok\n";
     if (zero_position - size >= 0)
         new_states.push_back(create_new(UP));
     if (zero_position % size - 1 >= 0)
@@ -117,6 +87,5 @@ std::vector<Node> Node::gen_next_states() const
         new_states.push_back(create_new(RIGHT));
     if (zero_position + size < state.size())
         new_states.push_back(create_new(DOWN));
-    std::cout << "SOSO:  " << "\n";
     return new_states;
 }

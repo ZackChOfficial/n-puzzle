@@ -34,21 +34,11 @@ std::set<DFS_Node> DDB_3P::make_entries(DFS_Node source)
             std::cout << "depth_count " << depth_count << ", ";
             std::cout << "jump to depth : " << maxdepth << "\n";
             depth_count = 0;
-            // if (maxdepth == 3)
-            //     break;
         }
         q.pop();
         depth_count++;
-
-        //  std::cout << "\ncurrent  :\n";
-        // current.print();
-        // if (visited.find(current) != visited.end())
-        //     std::cout << "exsists\n";
         visited.insert(current);
-        // std::cout << "S = " << visited.size() << "\n";
-
         auto children = current.gen_next_states();
-        // std::cout << "children : \n";
         for (auto &child : children)
             if (visited.find(child) == visited.end())
                 q.push(child);

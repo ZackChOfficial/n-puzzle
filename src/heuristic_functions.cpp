@@ -44,7 +44,8 @@ std::unordered_map<int,int>::iterator find_element(int key)
     return elem;
 }
 
-int        row_conflict(std::vector<int> &state, std::unordered_map<int,int>::iterator& elem, const int& index, const int& end, const int& size)
+int        row_conflict(std::vector<int> &state, std::unordered_map<int,int>::iterator& elem,
+                            const int& index, const int& end, const int& size)
 {
     std::unordered_map<int,int>::iterator   elem2;
     int                                     hscore;

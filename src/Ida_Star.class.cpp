@@ -45,7 +45,6 @@ int    Ida_Star::dfs(Node&  node, int g, int threshold)
     int                                             f;
     
     f = g + heuristic(node.state, goal.state, goal.size);
-  
     if (f > threshold)
         return f;
     if (node.compare(goal.state))
