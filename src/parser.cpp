@@ -112,5 +112,7 @@ std::vector<int> parse()
     }
     if (occu.size() != n * n)
         throwError();
+    else if (occu.size() > 100)
+        throwError("Sorry we can't handle this size.");
     return data;
 }
