@@ -24,11 +24,7 @@ Ida_Star::Ida_Star(const std::vector<int> &initial, Board sol, int (*func)(std::
 void    Ida_Star::run()
 {
     int threshold;
-
-    if (Ida_Star::mode == Mode::E_Uniform_Cost)
-        threshold = 0;
-    else
-        threshold = heuristic(root.state, goal.state, goal.size);
+    threshold = heuristic(root.state, goal.state, goal.size);
     while (1337)
     {
         threshold = dfs(root, 0, threshold);
@@ -48,13 +44,8 @@ int    Ida_Star::dfs(Node&  node, int g, int threshold)
     std::vector<Node>                               neighbor;
     int                                             f;
     
-    std::cout << "ONE\n";
-    if (Ida_Star::mode == Mode::E_Normal)
-        f = g + heuristic(node.state, goal.state, goal.size);
-    else if (Ida_Star::mode == Mode::E_Greedy)
-        f = heuristic(node.state, goal.state, goal.size);
-    else 
-        f = g;   
+    f = g + heuristic(node.state, goal.state, goal.size);
+  
     if (f > threshold)
         return f;
     if (node.compare(goal.state))
@@ -63,9 +54,7 @@ int    Ida_Star::dfs(Node&  node, int g, int threshold)
         return -1;
     }
     int min = INT_MAX;
-    std::cout << "HELL -1\n";
     neighbor = node.gen_next_states(); 
-    std::cout << "HELL\n";
     for (auto &child : neighbor)
     {
         int temp = dfs(child, g+1, threshold);
