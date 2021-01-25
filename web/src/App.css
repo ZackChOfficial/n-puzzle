@@ -1,0 +1,45 @@
+body {
+    background: #f1f2f5
+}
+
+.App {
+    box-sizing: border-box;
+    width: 600px;
+    margin: 0 auto;
+    text-align: center;
+}
+@media only screen and (max-width: 1220px) {
+    .App {
+        width: 400px;
+    }
+}
+button {
+    min-width:20%;
+    width:20%;
+    display: block;
+    min-height: 35px;
+    border: none;
+    font-size: 16px;
+    background-color: #1c7ed6;
+    color: #fff;
+    transition:  all .3s ease-in-out;
+    font-family: 'Lato', sans-serif;
+    font-weight: 600;
+    padding: 10px 0;
+}
+
+button:hover {
+    transition: all .2s ease-in-out;
+    background-color: #165896;
+    cursor: pointer;
+    box-shadow: 0 0 10 rgba(0,0,0,.1);
+}
+button:focus{
+    outline: none;
+}
+
+button:active{
+    transform: translateY(2px);
+}
+
+
