@@ -8,7 +8,7 @@ body {
     margin: 0 auto;
     text-align: center;
 }
-@media only screen and (max-width: 768px) {
+@media only screen and (max-width: 1220px) {
     .App {
         width: 400px;
     }

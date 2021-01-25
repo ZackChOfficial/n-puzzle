@@ -9,7 +9,7 @@ const Container = styled.div`
     position:relative;
     margin: 0px auto;
     border-radius: 5px;
-    @media (max-width: 768px) {
+    @media (max-width: 1220px) {
         width: 400px;
         height: 400px;
     }

@@ -11,7 +11,8 @@ import scrambleArray from './controller/scramble'
 import sleep from './utils/sleep'
 import Header from './components/header'
 import Footer from './components/footer'
-
+import Description from './components/description'
+import Github from './assets/github.png'
 
 export const sizes = [
   { value: 0, label: '3x3' },
@@ -21,6 +22,14 @@ export const sizes = [
 const SelectComponent = styled.div`
   margin: 15px 0;
   text-align:left;
+`
+
+const Img = styled.img`
+  cursor: pointer;
+  position: absolute;
+  right: 20px;
+  top:10px;
+  width: 40px;
 `
 
 const Actions = styled.div`
@@ -116,26 +125,21 @@ function App() {
 
   const loadBoard = () => {
     const num = state.current.value.trim().split(/ +/);
-    const sol = boards.current[size].slice().sort((a,b) => a-b);
-    if (num.length != sol.length)
-    {
+    const sol = boards.current[size].slice().sort((a, b) => a - b);
+    if (num.length != sol.length) {
       setInvalidBoard(true);
       return;
     }
-    for (let i=0;i<num.length;i++)
-    {
-      if (!Number.isInteger(parseInt(num[i])))
-      {
+    for (let i = 0; i < num.length; i++) {
+      if (!Number.isInteger(parseInt(num[i]))) {
         setInvalidBoard(true);
         return;
       }
       num[i] = parseInt(num[i]);
     }
-    const arr = num.slice().sort((a,b) => a-b);
-    for (let i = 0; i < sol.length; i++)
-    {
-      if (arr[i] != sol[i])
-      {
+    const arr = num.slice().sort((a, b) => a - b);
+    for (let i = 0; i < sol.length; i++) {
+      if (arr[i] != sol[i]) {
         setInvalidBoard(true);
         return;
       }
@@ -143,79 +147,83 @@ function App() {
     setNumbers(num);
   }
   return (
-    <div className="App">
-      <Header />
-      <br />
-      <SelectComponent>
-        <Select
-          styles={{ background: "black" }}
-
-          defaultValue={selectedAlgo}
-          onChange={
-            (e) => {
-              if (e)
-              setSelectedAlgo(e.value)
-            }
-          }
-          options={algorithms}
-          isClearable
-          placeholder="Select Algorithm"
-        />
-      </SelectComponent>
-      <SelectComponent>
-        <Select
-          defaultValue={selectedheuristic}
-          onChange={
-            (e) => {
-              if (e)
-                setSelectedheuristic(e.value)
-            }
-          }
-          options={heuristics}
-          isClearable
-          placeholder="Select Heuristic Function"
-        />
-      </SelectComponent>
-      <Actions>
-        <Input type="text" onChange={null} onKeyDown={() => {
-           if (invalidMoves)
-              setInvalidMoves(false);
-        }}
-      ref={moves} error={invalidMoves} placeholder={invalidMoves ? "Invalid Moves" : "Moves to apply"} />
-        <button onClick={handleRun}>Run</button>
-      </Actions>
-      <Actions>
-        <Input type="text" onKeyDown={() => {
-          if (invalidBoard)
-            setInvalidBoard(false)
-          }} ref={state}  error={invalidBoard} placeholder={invalidBoard ? "Invalid State" : "Load State"} />
-        <button onClick={loadBoard}>Load</button>
-      </Actions>
-      <Actions>
-        <button onClick={scramble}> Scramble Board </button>
-        <button onClick={() => handleMoves("D L L U U R R R D D")}> Solve </button>
-        <button onClick={reset}> Reset </button>
-
-        <div style={{ width: "20%", textAlign: "left" }}>
+    <>
+      <Img src={Github} onClick={() => { window.location.href = "https://github.com/ZackChOfficial/n-puzzle"; }} alt="Github link" />
+      <Description />
+      <div className="App">
+        <Header />
+        <br />
+        <SelectComponent>
           <Select
-            defaultValue={size}
-            onChange={(e) => {
-              if (e)
-                setSize(e.value)
-            }}
-            options={sizes.filter(s => s.value !== size)}
-            placeholder="size"
+            styles={{ background: "black" }}
+
+            defaultValue={selectedAlgo}
+            onChange={
+              (e) => {
+                if (e)
+                  setSelectedAlgo(e.value)
+              }
+            }
+            options={algorithms}
+            isClearable
+            placeholder="Select Algorithm"
           />
-        </div>
-      </Actions>
-      <br />
-      {
-        numbers.length > 0 ?
-          <Board numbers={numbers} size={parseInt(Math.sqrt(numbers.length))} solution={boards.current[size]}/>
-          : "Loading"
-      }
-      <Footer />
-    </div>
+        </SelectComponent>
+        <SelectComponent>
+          <Select
+            defaultValue={selectedheuristic}
+            onChange={
+              (e) => {
+                if (e)
+                  setSelectedheuristic(e.value)
+              }
+            }
+            options={heuristics}
+            isClearable
+            placeholder="Select Heuristic Function"
+          />
+        </SelectComponent>
+        <Actions>
+          <Input type="text" onChange={null} onKeyDown={() => {
+            if (invalidMoves)
+              setInvalidMoves(false);
+          }}
+            ref={moves} error={invalidMoves} placeholder={invalidMoves ? "Invalid Moves" : "Moves to apply"} />
+          <button onClick={handleRun}>Run</button>
+        </Actions>
+        <Actions>
+          <Input type="text" onKeyDown={() => {
+            if (invalidBoard)
+              setInvalidBoard(false)
+          }} ref={state} error={invalidBoard} placeholder={invalidBoard ? "Invalid State" : "Load State"} />
+          <button onClick={loadBoard}>Load</button>
+        </Actions>
+        <Actions>
+          <button onClick={scramble}> Scramble Board </button>
+          <button onClick={() => handleMoves("D L L U U R R R D D")}> Solve </button>
+          <button onClick={reset}> Reset </button>
+
+          <div style={{ width: "20%", textAlign: "left" }}>
+            <Select
+              defaultValue={size}
+              onChange={(e) => {
+                if (e)
+                  setSize(e.value)
+              }}
+              options={sizes.filter(s => s.value !== size)}
+              placeholder="size"
+            />
+          </div>
+        </Actions>
+        <br />
+        {
+          numbers.length > 0 ?
+            <Board numbers={numbers} size={parseInt(Math.sqrt(numbers.length))} solution={boards.current[size]} />
+            : "Loading"
+        }
+        <Footer />
+      </div>
+    </>
   );
 }
 

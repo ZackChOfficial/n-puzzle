@@ -15,5 +15,5 @@ text-decoration: none;
 color: #165896;
 `
 export default function () {
-    return <Footer>Made with <Heart>❤</Heart> by<br/> <Link href="#">Chatouane Zakaria</Link> & <Link href="#">Ayoub Aguert</Link></Footer>
+    return <Footer>Made with <Heart>❤</Heart> by<br/> <Link href="https://github.com/ZackChOfficial">Zakaria</Link> & <Link href="https://github.com/ayoubyt">Ayoub</Link></Footer>
 }

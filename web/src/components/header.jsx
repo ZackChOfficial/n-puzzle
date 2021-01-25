@@ -96,5 +96,5 @@ const Header = styled.div`
 `
 
 export default function () {
-    return <Header><h1>15-puzzle</h1></Header>
+    return <Header><h1>N-puzzle</h1></Header>
 }
