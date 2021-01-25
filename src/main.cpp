@@ -1,32 +1,36 @@
-#pragma GCC optimize("Ofast")
-#include "parser.hpp"
-#include "A_Star.class.hpp"
-#include "Board.class.hpp"
 #include <iostream>
 #include <cstring>
 #include <cassert>
+#include <limits>
+#include <chrono>
+#include "parser.hpp"
+#include "A_Star.class.hpp"
+#include "Board.class.hpp"
+#include "heuristic_functions.hpp"
+#include "Disjoint_database.hpp"
 
 using namespace std;
+using namespace std::chrono;
 
 int main(int argc, char **argv)
 {
-    vector<int> board = parse();
-    // algo = new A_Star(board, sol);
-    // algo->run();
 
-    Board b(board,(int)sqrt(board.size()));
-    if (argc > 1)
+//    DDB_663 db_663;
+
+//     db_663.create();
+    vector<int> board = parse();
+    Board b(board, (int)sqrt(board.size()));
+    A_Star algo(board, Board::gen_solution(b.size), linear_conflict);
+    // A_Star algo(board, Board::gen_solution(b.size), DDB_555::heuristic);
+    // A_Star algo(board, Board::gen_solution(b.size), manhattan_distance);
+    if (b.is_solvable())
     {
-        if (!strcmp("-s" ,argv[1]))
-            assert(b.is_solvable() == true);
-        else if (!strcmp("-u" ,argv[1]))
-            assert(b.is_solvable() == false);
+        cout << "Solvable\n";
+        algo.run();
     }
-    else {
-        if (b.is_solvable())
-            cout << "Solvable\n";
-        else
-            cout << "Unsolvable\n";
-    }
+    else
+        cout << "Unsolvable\n";
+
+
     return 0;
 }

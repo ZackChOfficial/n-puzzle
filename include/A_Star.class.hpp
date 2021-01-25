@@ -1,51 +1,35 @@
-#ifndef __A_STAR
-# define __A_STAR
+#pragma once
 #include <vector>
 #include <queue>
 #include <set>
 #include <algorithm>
 #include <cmath>
 #include <iostream>
+#include <unordered_map>
 
-
-struct Node {
-    std::vector<int>    state;
-    Node                *parent;
-    int                 hscore;
-    int                 gscore;
-
-public:
-    Node(std::vector<int> const &data);
-    std::vector<Node *> next_states();
-    void                manhattan_distance(std::vector<int> &goal);
-    void                linear_conflicts(std::vector<int> &goal);
-    void                hamming_distance(std::vector<int> &goal);
-    bool                compare(std::vector<int> &rhs);
-    
-private:
-    std::vector<int>    create_new(int index1, int index2);
-};
+#include "Node.class.hpp"
 
 struct CompareNode
 {
-    inline bool    operator()(const Node* lhs, const Node* rhs) const
+    inline bool operator()(const Node lhs, const Node rhs) const
     {
-        return lhs->hscore + lhs->gscore < rhs->hscore + lhs->gscore;
+        return lhs.hscore + lhs.gscore > rhs.hscore + rhs.gscore;
     }
 };
 
-class A_Star {
+class A_Star
+{
 private:
-    std::priority_queue<Node *,std::vector<Node*>, CompareNode> states;
+    std::priority_queue<Node, std::vector<Node>, CompareNode>   states;
     std::set<std::vector<int>>                                  visited;
-    std::set<std::vector<int>>                                  in_queue;
-    Node                                                        *root;
-    Node                                                        *goal;
+    std::unordered_map<std::string, Node>                       in_queue;
+    Node                                                        root;
+    Node                                                        goal;
+
+private:
+    int     (*heuristic)(std::vector<int> &state, const std::vector<int> &goal, const int size);
 
 public:
-    A_Star(std::vector<int> &initial, std::vector<int> &sol);
-    ~A_Star();
-    void                                                        run();
+    A_Star(const std::vector<int> &initial, Board sol, int (*func)(std::vector<int> &state, const std::vector<int> &goal, const int size));
+    void    run();
 };
-
-#endif

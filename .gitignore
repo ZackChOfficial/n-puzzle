@@ -34,3 +34,7 @@
 # custom
 build
 .vscode
+tmp.cpp
+test.cpp
+web/
+test

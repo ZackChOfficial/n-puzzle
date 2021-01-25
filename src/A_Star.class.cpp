@@ -1,160 +1,83 @@
 #include "A_Star.class.hpp"
-
-/**
- * Basic Node Functions
-*/
-Node::Node(std::vector<int> const &data)
-{
-    parent = nullptr;
-    gscore = INT32_MAX;
-    hscore = 0;
-    state.reserve(data.size());
-    copy(data.begin(), data.end(), back_inserter(state));
-}
-
-std::vector<Node *> Node::next_states()
-{
-    int             index;
-    int             size;
-    Node            *tmp;
-    std::vector<Node *>  new_states;
-
-
-    size = sqrt(state.size());
-    index = find(state.begin(), state.end(), 0) - state.begin();
-    if (index - size >= 0)
-    {
-        tmp = new Node(create_new(index, index - size));
-        new_states.push_back(tmp);
-    }
-    if (index - 1 >= 0)
-    {
-        tmp = new Node(create_new(index, index - 1));
-        new_states.push_back(tmp);
-    }
-    if (index + 1 < state.size())
-    {
-        tmp = new Node(create_new(index, index + 1));
-        new_states.push_back(tmp);
-    }
-    if (index + size < state.size())
-    {
-        tmp = new Node(create_new(index, index + size));
-        new_states.push_back(tmp);
-    }
-    return new_states;
-}
-
-std::vector<int> Node::create_new(int index1, int index2)
-{
-    std::vector<int> newState(state);
-    std::swap(newState[index1], newState[index2]);
-    return newState;
-}
-
-void        Node::manhattan_distance(std::vector<int> &goal)
-{
-    hscore = 0;
-    for (int i=0;i<goal.size(); i++)
-    {
-        for (int j=0;j < state.size(); j++)
-        {
-            if (goal[i] == state[j])
-            {
-                hscore += abs(i-j);
-            }
-        }
-    }
-    hscore *= -1;
-}
-
-void        Node::linear_conflicts(std::vector<int> &goal)
-{
-    // need to be implemented
-}
-
-void        Node::hamming_distance(std::vector<int> &goal)
-{
-    // need to be implemented
-}
-
-
-bool Node::compare(std::vector<int> &rhs)
-{
-    if (state.size() != rhs.size())
-        return false;
-    for (int i = 0; i < state.size(); i++)
-        if (state[i] != rhs[i])
-            return false;
-    return true;
-}
+#include "utils.hpp"
 
 /**
  * A Star Functions
 */
-A_Star::A_Star(std::vector<int> &initial, std::vector<int> &sol)
+A_Star::A_Star(const std::vector<int> &initial, Board sol, int (*func)(std::vector<int> &state, const std::vector<int> &goal, const int size))
 {
-    Node                *current;
-    bool                solved;
-    std::vector<Node *> neighbor;
+    bool solved;
 
-    root = new Node(initial);
-    root->gscore = 0;
-    goal = new Node(sol);
+    Node::size = sqrt(initial.size());
+    heuristic = func;
+    root = Node(initial);
+    root.gscore = 0;
+    root.zero_position =   find(initial.begin(), initial.end(), 0) - initial.begin();
+    goal = Node(sol.state);
 }
 
-
-void    A_Star::run()
+std::string hash_vector(const std::vector<int>& data)
 {
-    Node                *current;
-    bool                solved;
-    std::vector<Node *> neighbor;
-    
-    solved = false;
+    std::string hash = "";
+    for (auto x:data)
+        hash += std::to_string(x);
+    return hash;
+}
+
+void A_Star::run()
+{
+    Node                                            current;
+    Node                                            initial(root.state);
+    bool                                            solved;
+    std::vector<Node>                               neighbor;
+    int                                             tentative_gScore;
+    std::unordered_map<std::string, Node>::iterator exist;
+
+    in_queue[hash_vector(initial.state)] = initial;
     states.push(root);
-    in_queue.insert(root->state);
-    int i=0;
-    while (!states.empty() && !solved)
+    solved = false;
+    int i = 0;
+    int gscore;
+    while (!in_queue.empty() && !solved)
     {
         i++;
         current = states.top();
-        if (current->compare(goal->state))
+        // std::cout <<  "gscore: " << current.gscore  << "   hscore:  " << current.hscore << " fscore: " << current.gscore + current.hscore << "\n";
+        gscore = current.gscore;
+        if (current.compare(goal.state))
             solved = true;
-        else {
+        else
+        {
+            visited.insert(current.state);
+            in_queue.erase(hash_vector(current.state));
+            neighbor = current.gen_next_states();
             states.pop();
-            visited.insert(current->state);
-            in_queue.erase(current->state);
-            neighbor = current->next_states();
-            for (Node *state : neighbor)
+            for (auto &child : neighbor)
             {
-                if (visited.find(state->state) == visited.end() && in_queue.find(state->state) == in_queue.end())
+                if (visited.find(child.state) != visited.end())
+                    continue;
+                child.gscore = gscore + 1;
+                child.hscore = heuristic(child.state, goal.state, child.size);
+                exist = in_queue.find(hash_vector(child.state));
+                if ( exist != in_queue.end())
                 {
-                    state->parent = current;
-                    state->gscore = current->gscore - 1;
-                    states.push(state);
-                    in_queue.insert(state->state);
-                }
-                else {
-                    state->manhattan_distance(goal->state);
-                    if (state->gscore - state->hscore < current->gscore - state->hscore - 1)
+                    if (child.gscore < exist->second.gscore)
                     {
-                        state->gscore = current->gscore - 1;
-                        state->parent = current;
-                        if (visited.find(state->state) == visited.end())
-                            visited.erase(state->state);
-                        states.push(state);
-                        in_queue.insert(state->state);
+                        exist->second.gscore = child.gscore;
+                        exist->second.parent = child.parent;
                     }
+                    continue;
                 }
+                states.push(child);
+                in_queue.insert(std::make_pair(hash_vector(child.state), child));
             }
         }
     }
-    std::cout << i << std::endl; 
     if (solved)
     {
-        std::cout << "Solved\n";
+        std::cout << "Solved\nNumber of Iteration: " << i << std::endl;
+        std::cout << "Path:  " << current.get_path() << std::endl;
     }
-    else {
-        std::cout << "Solution not found\n";
-    }
+    else
+        std::cout << "Empty Stack\n";
 }
