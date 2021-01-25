@@ -1,3 +1,6 @@
+#include <unistd.h>
+#include <string.h>
+
 #include "parser.hpp"
 
 std::string ft_trim(std::string s)
@@ -50,8 +53,7 @@ int get_size(std::string s)
     {
         if (line[i][0] != '#' && !done && isdigit(line[i][0]))
             done = true;
-        else if ((line[i][0] != '#' && done) || (line[i][0] == '#' &&
-         !done) || (line[i][0] != '#' && !isdigit(line[i][0])))
+        else if ((line[i][0] != '#' && done) || (line[i][0] == '#' && !done) || (line[i][0] != '#' && !isdigit(line[i][0])))
             throwError();
     }
     n = stoi(s);
@@ -115,4 +117,97 @@ std::vector<int> parse()
     else if (occu.size() > 100)
         throwError("Sorry we can't handle this size.");
     return data;
+}
+
+static void print_help()
+{
+    std::cout << "Usage: ./n-puzzle <options> <input_file>\n"
+              << "whare flags are\n"
+              << "-a :\n"
+              << "  stands for 'algorithm' which takes a string argument\n"
+              << "  'a*' or 'a_star' to use A* algorithm\n"
+              << "  'ida*' or 'ida_star' to use interactive deepening A*\n";
+}
+
+Options cmd_args_parse(int argc, char **argv)
+{
+    Options options;
+
+    char flags_list[] = "a:h:m:";
+
+    std::string aval;
+    std::string hval;
+    std::string mval;
+
+    int c;
+
+    opterr = 0;
+
+    while ((c = getopt(argc, argv, flags_list)) != -1)
+    {
+        switch (c)
+        {
+        case 'a':
+            aval = optarg;
+            break;
+        case 'h':
+            hval = optarg;
+            break;
+        case 'm':
+            mval = optarg;
+            break;
+        case '?':
+            char *flag;
+            if (strchr(flags_list, optopt))
+                fprintf(stderr, "Option -%c requires an argument.\n", optopt);
+            else if (isprint(optopt))
+                fprintf(stderr, "Unknown option `-%c'.\n", optopt);
+            else
+                fprintf(stderr,
+                        "Unknown option character `\\x%x'.\n",
+                        optopt);
+            exit(1);
+        }
+    }
+
+    if (aval.length())
+    {
+        if (aval == "a*" || aval == "a_star")
+            options.algo = E_Algo::A_STAR;
+        else if (aval == "ida*" || aval == "ida_star")
+            options.algo = E_Algo::IDA_STAR;
+        else
+        {
+            std::cerr << "invalid argument for -a option\ntype './n-puzzle' for more info\n";
+            exit(1);
+        }
+    }
+    if (mval.length())
+    {
+        if (mval == "normal" || mval == "n")
+            options.method = E_Method::Normal;
+        else if (mval == "greedy" || mval == "g")
+            options.method = E_Method::Greedy;
+        else if (mval == "uniform" || mval == "u")
+            options.method = E_Method::Uniform_Cost;
+        else
+        {
+            std::cerr << "invalid argument for -m option\ntype './n-puzzle' for more info\n";
+            exit(1);
+        }
+    }
+    if (hval.length())
+    {
+        if (hval == "m+l")
+            options.heuristic = E_Heuristic::MANHATTAN_DISTANCE_PLUS_LNIEAR_CONFLICT;
+        else if (hval == "dpdb")
+            options.heuristic = E_Heuristic::DISJOINT_PATTERN_DATABASE;
+        else
+        {
+            std::cerr << "invalid argument for -h option\ntype './n-puzzle' for more info\n";
+            exit(1);
+        }
+    }
+
+    return options;
 }

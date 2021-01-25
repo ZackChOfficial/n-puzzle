@@ -7,9 +7,9 @@
 
 int                                                  A_Star::total_selected = 0;
 int                                                  A_Star::max_states = 0;
-Mode                                                 A_Star::mode = Mode::E_Normal;
+E_Method                                                 A_Star::mode = E_Method::Normal;
 
-A_Star::A_Star(const std::vector<int> &initial, Board sol, int (*func)(std::vector<int> &state, const std::vector<int> &goal, const int size), Mode running_mode)
+A_Star::A_Star(const std::vector<int> &initial, Board sol, int (*func)(std::vector<int> &state, const std::vector<int> &goal, const int size), E_Method running_mode)
 {
     Node::size = sqrt(initial.size());
     heuristic = func;
@@ -61,8 +61,8 @@ void A_Star::run()
             {
                 if (visited.find(child.state) != visited.end())
                     continue;
-                child.gscore = gscore + (A_Star::mode == Mode::E_Greedy ? 0 : 1);
-                child.hscore = A_Star::mode == Mode::E_Uniform_Cost ? 0 : heuristic(child.state, goal.state, child.size);
+                child.gscore = gscore + (A_Star::mode == E_Method::Greedy ? 0 : 1);
+                child.hscore = A_Star::mode == E_Method::Uniform_Cost ? 0 : heuristic(child.state, goal.state, child.size);
                 exist = in_queue.find(hash_vector(child.state));
                 if ( exist != in_queue.end())
                 {

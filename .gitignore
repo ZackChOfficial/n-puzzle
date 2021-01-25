@@ -33,6 +33,7 @@
 
 # custom
 build
+wasmbuild
 .vscode
 tmp.cpp
 test.cpp

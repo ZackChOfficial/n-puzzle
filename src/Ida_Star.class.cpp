@@ -8,9 +8,9 @@
 int                                                  Ida_Star::total_selected = 0;
 int                                                  Ida_Star::max_states = 0;
 int                                                  Ida_Star::in_memory = 0;
-Mode                                                 Ida_Star::mode = Mode::E_Normal;
+E_Method                                                 Ida_Star::mode = E_Method::Normal;
 
-Ida_Star::Ida_Star(const std::vector<int> &initial, Board sol, int (*func)(std::vector<int> &state, const std::vector<int> &goal, const int size), Mode running_mode)
+Ida_Star::Ida_Star(const std::vector<int> &initial, Board sol, int (*func)(std::vector<int> &state, const std::vector<int> &goal, const int size), E_Method running_mode)
 {
     Node::size = sqrt(initial.size());
     heuristic = func;
@@ -35,7 +35,7 @@ void    Ida_Star::run()
     }
     if (threshold == -1)
         describe<Ida_Star>(solution);
-    else 
+    else
         std::cout << "Unsolved\n";
 }
 
@@ -43,7 +43,7 @@ int    Ida_Star::dfs(Node&  node, int g, int threshold)
 {
     std::vector<Node>                               neighbor;
     int                                             f;
-    
+
     f = g + heuristic(node.state, goal.state, goal.size);
     if (f > threshold)
         return f;
@@ -53,7 +53,7 @@ int    Ida_Star::dfs(Node&  node, int g, int threshold)
         return -1;
     }
     int min = INT_MAX;
-    neighbor = node.gen_next_states(); 
+    neighbor = node.gen_next_states();
     for (auto &child : neighbor)
     {
         int temp = dfs(child, g+1, threshold);
