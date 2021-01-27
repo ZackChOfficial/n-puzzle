@@ -78,5 +78,5 @@ public:
 class DDB_555 : public DDB_3P
 {
 public:
-    DDB_555(bool load);
+    DDB_555(bool load = false);
 };

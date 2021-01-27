@@ -12,15 +12,9 @@
 
 int main(int argc, char **argv)
 {
-    if (argc == 1)
-    {
-        print_help();
-        return 0;
-    }
     Options opts = cmd_args_parse(argc, argv);
     std::vector<int> board = parse();
-    Board b(board, (int)sqrt(board.size()));
-    std::cout << n_puzzle(b, opts);
+    std::cout << n_puzzle(board, opts);
 
     // if (b.is_solvable())
     // {

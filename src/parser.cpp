@@ -2,6 +2,7 @@
 #include <string.h>
 
 #include "parser.hpp"
+#include "n-puzzle.hpp"
 
 std::string ft_trim(std::string s)
 {
@@ -149,7 +150,11 @@ Options cmd_args_parse(int argc, char **argv)
         case '?':
             char *flag;
             if (strchr(flags_list, optopt))
+            {
+                if (optopt == 'h')
+                    print_help();
                 fprintf(stderr, "Option -%c requires an argument.\n", optopt);
+            }
             else if (isprint(optopt))
                 fprintf(stderr, "Unknown option `-%c'.\n", optopt);
             else
@@ -168,7 +173,7 @@ Options cmd_args_parse(int argc, char **argv)
             options.algo = E_Algo::IDA_STAR;
         else
         {
-            std::cerr << "invalid argument for -a option\ntype './n-puzzle' for more info\n";
+            std::cerr << "invalid argument for -a option\ntype './n-puzzle -h' for more info\n";
             exit(1);
         }
     }
@@ -182,7 +187,7 @@ Options cmd_args_parse(int argc, char **argv)
             options.method = E_Method::Uniform_Cost;
         else
         {
-            std::cerr << "invalid argument for -m option\ntype './n-puzzle' for more info\n";
+            std::cerr << "invalid argument for -m option\ntype './n-puzzle -h' for more info\n";
             exit(1);
         }
     }
@@ -194,10 +199,9 @@ Options cmd_args_parse(int argc, char **argv)
             options.heuristic = E_Heuristic::DISJOINT_PATTERN_DATABASE;
         else
         {
-            std::cerr << "invalid argument for -h option\ntype './n-puzzle' for more info\n";
+            std::cerr << "invalid argument for -h option\ntype './n-puzzle -h' for more info\n";
             exit(1);
         }
     }
-
     return options;
 }

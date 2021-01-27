@@ -4,8 +4,10 @@
 #include "heuristic_functions.hpp"
 #include "Disjoint_database.hpp"
 
-std::string n_puzzle(Board &board, Options opts)
+std::string n_puzzle(std::vector<int> state, Options opts)
 {
+    Board board(state, (int)sqrt(state.size()));
+
     if (!board.is_solvable())
         return std::string("Unsolvable\n");
 
@@ -52,5 +54,6 @@ void print_help()
               << "  stands for (heuristic), wich is the function that gets the distance from sourcein a* or ida* algorithm\n"
               << "  amd it takes the folwing algorithm\n"
               << "  '-h m+l' wich stands for 'manhatan distance + linear conflict'\n"
-              << "  '-h dpdb' wich standss for disjoint pattern data base\n";
+              << "  '-h dpdb' wich standss for disjoint pattern data base\n"
+              << "  '-h' without argument, -h print a helper text to the console\n";
 }

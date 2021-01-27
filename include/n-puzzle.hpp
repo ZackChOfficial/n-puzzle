@@ -10,5 +10,5 @@ public:
     virtual std::string run(){return std::string();};
 };
 
-std::string n_puzzle(Board &board, Options opts);
+std::string n_puzzle(std::vector<int> state, Options opts);
 void print_help();

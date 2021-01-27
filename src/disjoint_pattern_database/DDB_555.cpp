@@ -1,6 +1,6 @@
 #include "Disjoint_database.hpp"
 
-DDB_555::DDB_555(bool load = false)
+DDB_555::DDB_555(bool load)
 {
     P1_DB_FILE_NAME = "DPDB_555_1.bin";
     P2_DB_FILE_NAME = "DPDB_555_2.bin";

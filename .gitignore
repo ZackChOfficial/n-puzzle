@@ -32,10 +32,10 @@
 *.app
 
 # custom
-build
+*build*
 wasmbuild
 .vscode
 tmp.cpp
 test.cpp
-web/
 test
+testing
