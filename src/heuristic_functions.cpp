@@ -1,4 +1,5 @@
 #include "heuristic_functions.hpp"
+#include "Disjoint_database.hpp"
 
 std::unordered_map<int, int>   get_indexs(const std::vector<int> &goal)
 {
@@ -6,7 +7,7 @@ std::unordered_map<int, int>   get_indexs(const std::vector<int> &goal)
 
     for (int i=0;i<goal.size(); i++)
         indexs.insert(std::make_pair(goal[i], i));
-    
+
     return indexs;
 }
 
@@ -58,7 +59,7 @@ int        row_conflict(std::vector<int> &state, std::unordered_map<int,int>::it
         elem2 = find_element(state[j]);
         if (elem2->second/size != elem->second/size) // continue if the neighbor element is not in the right row
             continue;
-        hscore += (elem->second > elem2->second) ? 1 : 0; // check if the current element must be moved after the neighbor element if yes, increment the number of conflict 
+        hscore += (elem->second > elem2->second) ? 1 : 0; // check if the current element must be moved after the neighbor element if yes, increment the number of conflict
     }
     return hscore;
 }
@@ -76,7 +77,7 @@ int        column_conflict(std::vector<int> &state, std::unordered_map<int,int>:
         elem2 = find_element(state[j]);
         if (get_column(elem->second, size) != get_column(elem2->second, size)) // continue if the correct neighbor position is not in the current column
             continue;
-        hscore += (elem->second > elem2->second) ? 1 : 0;// check if the current element must be moved after the neighbor element if yes, increment the number of conflict 
+        hscore += (elem->second > elem2->second) ? 1 : 0;// check if the current element must be moved after the neighbor element if yes, increment the number of conflict
     }
     return hscore;
 }
@@ -105,3 +106,7 @@ int        linear_conflict(std::vector<int> &state, const std::vector<int> &goal
     return hscore;
 }
 
+int        dpdb_555(std::vector<int> &state, const std::vector<int> &goal, const int size){
+    static DDB_555 db(true);
+    return db.heuristic(state);
+}

@@ -5,8 +5,8 @@
 #include <memory>
 #include "Node.class.hpp"
 
-void    throwError(std::string text = "Invalid Input");
-template<typename T>
-void    describe(Node&);
+void throwError(std::string text = "Invalid Input");
+template <typename T>
+std::string describe(Node &);
 
 #endif

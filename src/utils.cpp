@@ -9,14 +9,16 @@ void throwError(std::string text)
     exit(EXIT_FAILURE);
 }
 
-template<typename T>
-void    describe(Node& node)
+template <typename T>
+std::string describe(Node &node)
 {
-    std::cout << "* Total selected node:                " << T::total_selected << "\n";
-    std::cout << "* Max nodes in memory at same time:   " << T::max_states << "\n";
-    std::cout << "* Steps required:                    " << node.get_path() << "\n";
-    std::cout << "* Number of steps required:           " << Node::path_length << "\n";
+    std::string result;
+    result += "* Total selected node:                " + std::to_string(T::total_selected) + "\n";
+    result += "* Max nodes in memory at same time:   " + std::to_string(T::max_states) + "\n";
+    result += "* Steps required:                    " + node.get_path() + "\n";
+    result += "* Number of steps required:           " + std::to_string(Node::path_length) + "\n";
+    return result;
 }
 
-template void    describe<A_Star>(Node& node);
-template void    describe<Ida_Star>(Node& node);
+template std::string describe<A_Star>(Node &node);
+template std::string describe<Ida_Star>(Node &node);

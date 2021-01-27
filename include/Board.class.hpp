@@ -32,8 +32,8 @@ public:
     static Board gen_solution(int size);
 
 public:
-    std::pair<int, int> get_position_of_zero();
-    bool is_solvable();
+    std::pair<int, int> get_position_of_zero() const;
+    bool is_solvable() const;
     void print();
 
 

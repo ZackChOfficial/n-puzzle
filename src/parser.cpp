@@ -119,16 +119,6 @@ std::vector<int> parse()
     return data;
 }
 
-static void print_help()
-{
-    std::cout << "Usage: ./n-puzzle <options> <input_file>\n"
-              << "whare flags are\n"
-              << "-a :\n"
-              << "  stands for 'algorithm' which takes a string argument\n"
-              << "  'a*' or 'a_star' to use A* algorithm\n"
-              << "  'ida*' or 'ida_star' to use interactive deepening A*\n";
-}
-
 Options cmd_args_parse(int argc, char **argv)
 {
     Options options;

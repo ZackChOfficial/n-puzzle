@@ -171,7 +171,7 @@ unsigned long DDB_3P::hash_dist(int dist)
     return hash;
 }
 
-int DDB_3P::heuristic(std::vector<int> &state, const std::vector<int> &goal, const int size)
+int DDB_3P::heuristic(std::vector<int> &state)
 {
     unsigned long h1 = hash_state(state, m_p1_ord);
     unsigned long h2 = hash_state(state, m_p2_ord);

@@ -3,7 +3,6 @@
 #include <cmath>
 #include <algorithm>
 
-
 /*
 ** a printer helper function
 */
@@ -76,7 +75,7 @@ Board Board::gen_solution(int size)
  * and return the boolean result
  * */
 
-bool Board::is_solvable()
+bool Board::is_solvable() const
 {
     int index;
     int time;
@@ -84,20 +83,21 @@ bool Board::is_solvable()
     std::pair<int, int> zero_in_sol;
     std::pair<int, int> zero_in_board;
     Board solution = gen_solution(size);
+    Board current = *this;
 
     zero_in_sol = solution.get_position_of_zero();
-    zero_in_board = get_position_of_zero();
+    zero_in_board = current.get_position_of_zero();
     time = 0;
     diff = abs(zero_in_sol.first - zero_in_board.first) + abs(zero_in_sol.second - zero_in_board.second);
     for (int i = 0; i < solution.state.size(); i++)
     {
-        for (int j = i; j < state.size(); j++)
+        for (int j = i; j < current.state.size(); j++)
         {
-            if (state[j] == solution.state[i])
+            if (current.state[j] == solution.state[i])
             {
                 if (j != i)
                 {
-                    std::swap(state[j], state[i]);
+                    std::swap(current.state[j], current.state[i]);
                     time++;
                 }
             }
@@ -112,7 +112,7 @@ bool Board::is_solvable()
  * y:(pair.second) fo the row position
  * */
 
-std::pair<int, int> Board::get_position_of_zero()
+std::pair<int, int> Board::get_position_of_zero() const
 {
     int index;
     std::pair<int, int> ans;
@@ -135,5 +135,3 @@ std::pair<int, int> Board::get_position_of_zero()
 //     std::swap(newState[index1], newState[index2]);
 //     return newState;
 // }
-
-

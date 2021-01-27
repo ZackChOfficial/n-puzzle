@@ -44,7 +44,7 @@ public:
 
     void create();
     void load();
-    int heuristic(std::vector<int> &state, const std::vector<int> &goal, const int size);
+    int heuristic(std::vector<int> &state);
     unsigned long hash_state(const std::vector<int> &state, const std::vector<int> &target_pattern);
     unsigned long hash_dist(int dist);
 
@@ -78,5 +78,5 @@ public:
 class DDB_555 : public DDB_3P
 {
 public:
-    DDB_555();
+    DDB_555(bool load);
 };

@@ -19,6 +19,7 @@ add_executable(${PROJECT_NAME}
     src/disjoint_pattern_database/Disjoint_database.cpp
     src/Node.class.cpp
     src/Ida_Star.class.cpp
+    src/n-puzzle.cpp
 )
 
 target_include_directories(${PROJECT_NAME} PUBLIC include)

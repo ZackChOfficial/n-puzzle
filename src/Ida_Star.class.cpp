@@ -5,10 +5,10 @@
  * Ida Star Functions
 */
 
-int                                                  Ida_Star::total_selected = 0;
-int                                                  Ida_Star::max_states = 0;
-int                                                  Ida_Star::in_memory = 0;
-E_Method                                                 Ida_Star::mode = E_Method::Normal;
+int Ida_Star::total_selected = 0;
+int Ida_Star::max_states = 0;
+int Ida_Star::in_memory = 0;
+E_Method Ida_Star::mode = E_Method::Normal;
 
 Ida_Star::Ida_Star(const std::vector<int> &initial, Board sol, int (*func)(std::vector<int> &state, const std::vector<int> &goal, const int size), E_Method running_mode)
 {
@@ -16,13 +16,14 @@ Ida_Star::Ida_Star(const std::vector<int> &initial, Board sol, int (*func)(std::
     heuristic = func;
     root = Node(initial);
     root.gscore = 0;
-    root.zero_position =   find(initial.begin(), initial.end(), 0) - initial.begin();
+    root.zero_position = find(initial.begin(), initial.end(), 0) - initial.begin();
     goal = Node(sol.state);
     mode = running_mode;
 }
 
-void    Ida_Star::run()
+std::string Ida_Star::run()
 {
+    std::string result;
     int threshold;
     threshold = heuristic(root.state, goal.state, goal.size);
     while (1337)
@@ -34,15 +35,16 @@ void    Ida_Star::run()
             break;
     }
     if (threshold == -1)
-        describe<Ida_Star>(solution);
+        result += describe<Ida_Star>(solution);
     else
-        std::cout << "Unsolved\n";
+        result += "Unsolved\n";
+    return result;
 }
 
-int    Ida_Star::dfs(Node&  node, int g, int threshold)
+int Ida_Star::dfs(Node &node, int g, int threshold)
 {
-    std::vector<Node>                               neighbor;
-    int                                             f;
+    std::vector<Node> neighbor;
+    int f;
 
     f = g + heuristic(node.state, goal.state, goal.size);
     if (f > threshold)
@@ -56,7 +58,7 @@ int    Ida_Star::dfs(Node&  node, int g, int threshold)
     neighbor = node.gen_next_states();
     for (auto &child : neighbor)
     {
-        int temp = dfs(child, g+1, threshold);
+        int temp = dfs(child, g + 1, threshold);
         if (temp == -1)
             return -1;
         if (temp < min)

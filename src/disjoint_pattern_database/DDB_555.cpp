@@ -1,6 +1,6 @@
 #include "Disjoint_database.hpp"
 
-DDB_555::DDB_555() 
+DDB_555::DDB_555(bool load = false)
 {
     P1_DB_FILE_NAME = "DPDB_555_1.bin";
     P2_DB_FILE_NAME = "DPDB_555_2.bin";
@@ -27,4 +27,8 @@ DDB_555::DDB_555()
                               10, 9, 8, -1},
                              true);
     m_p3_ord = {11, 15, 10, 9, 8};
+
+    if (load){
+        this->load();
+    }
 }
