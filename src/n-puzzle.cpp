@@ -6,7 +6,8 @@
 
 std::string n_puzzle(std::vector<int> state, Options opts)
 {
-    Board board(state, (int)sqrt(state.size()));
+    std::cout << "solving...\n";
+     Board board(state, (int)sqrt(state.size()));
 
     if (!board.is_solvable())
         return std::string("Unsolvable\n");

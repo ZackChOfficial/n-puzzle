@@ -5,11 +5,6 @@
 
 using namespace emscripten;
 
-struct wasmOptions : public Options
-{
-
-};
-
 EMSCRIPTEN_BINDINGS(wasm_n_puzzle)
 {
     enum_<E_Algo>("E_Algo")

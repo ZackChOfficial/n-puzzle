@@ -32,7 +32,7 @@
 *.app
 
 # custom
-*build*
+*build/*
 wasmbuild
 .vscode
 tmp.cpp

@@ -1,7 +1,7 @@
 project (n-puzzle)
 cmake_minimum_required(VERSION 3.16)
 
-add_definitions(-std=c++17 -O3)
+SET( CMAKE_BUILD_TYPE Release)
 include_directories(../../include)
 
 set(SOURCES
@@ -27,4 +27,4 @@ add_executable(n-puzzle ${SOURCES})
 
 
 message(STATUS "Setting compilation target to WASM")
-set_target_properties(n-puzzle PROPERTIES LINK_FLAGS "--bind -s MODULARIZE")
+set_target_properties(n-puzzle PROPERTIES LINK_FLAGS "--bind --preload-file ../../../disjoint_pattern_databases -s ALLOW_MEMORY_GROWTH=1")
