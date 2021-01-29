@@ -142,6 +142,7 @@ void DDB_3P::load()
     load_db(DB_DIR + "/" + P1_DB_FILE_NAME, m_p1_db);
     load_db(DB_DIR + "/" + P2_DB_FILE_NAME, m_p2_db);
     load_db(DB_DIR + "/" + P3_DB_FILE_NAME, m_p3_db);
+    // std::cout << "shjadfjfhKAJSHDGFJKH AGSDUJFG AKHDFFKJH AGJKHFAK JDHGF\n";
 }
 
 /*
@@ -173,8 +174,12 @@ unsigned long DDB_3P::hash_dist(int dist)
 
 int DDB_3P::heuristic(std::vector<int> &state)
 {
+    static int i = 0;
     unsigned long h1 = hash_state(state, m_p1_ord);
     unsigned long h2 = hash_state(state, m_p2_ord);
     unsigned long h3 = hash_state(state, m_p3_ord);
+        std::cout << "haw  :" << m_p1_db[h1] + m_p2_db[h2] + m_p3_db[h3] << "\n";
+    if (i++ > 10)
+        exit(0);
     return m_p1_db[h1] + m_p2_db[h2] + m_p3_db[h3];
 }
