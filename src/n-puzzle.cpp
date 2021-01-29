@@ -6,8 +6,7 @@
 
 std::string n_puzzle(std::vector<int> state, Options opts)
 {
-    std::cout << "solving...\n";
-     Board board(state, (int)sqrt(state.size()));
+    Board board(state, (int)sqrt(state.size()));
 
     if (!board.is_solvable())
         return std::string("Unsolvable\n");
@@ -21,6 +20,11 @@ std::string n_puzzle(std::vector<int> state, Options opts)
         heuristic = linear_conflict;
         break;
     case E_Heuristic::DISJOINT_PATTERN_DATABASE:
+        if (board.size != 4)
+        {
+            std::cerr << "disjoint patter database option can be used only with bord of size 4 * 4\n";
+            exit(1);
+        }
         heuristic = dpdb_555;
         break;
     }
@@ -41,7 +45,7 @@ std::string n_puzzle(std::vector<int> state, Options opts)
 void print_help()
 {
     std::cout << "Usage: ./n-puzzle <options>\n"
-              << "whare options are\n"
+              << "where options are\n"
               << "-a :\n"
               << "  stands for (algorithm) which takes a string argument\n"
               << "  '-a a*' or 'a_star' to use A* algorithm\n"
