@@ -91,7 +91,8 @@ void DDB_3P::save_entries(std::string file_name, const std::set<DFS_Node> &data,
     }
     else
     {
-        std::cerr << "unable to write to file : " << file_name << "\n";
+        std::cerr << "ERROR : unable to write to file : " << file_name << "\n";
+        exit(EXIT_FAILURE);
     }
 }
 
@@ -134,7 +135,10 @@ void DDB_3P::load_db(const std::string &file_name, std::unordered_map<unsigned l
         delete[] raw_data;
     }
     else
-        std::cout << "Unable to open file " << file_name << "\n";
+    {
+        std::cout << "ERROR : Unable to open file " << file_name << "\n";
+        exit(EXIT_FAILURE);
+    }
 }
 
 void DDB_3P::load()
@@ -178,7 +182,7 @@ int DDB_3P::heuristic(std::vector<int> &state)
     unsigned long h1 = hash_state(state, m_p1_ord);
     unsigned long h2 = hash_state(state, m_p2_ord);
     unsigned long h3 = hash_state(state, m_p3_ord);
-        std::cout << "haw  :" << m_p1_db[h1] + m_p2_db[h2] + m_p3_db[h3] << "\n";
+    std::cout << "haw  :" << m_p1_db[h1] + m_p2_db[h2] + m_p3_db[h3] << "\n";
     if (i++ > 10)
         exit(0);
     return m_p1_db[h1] + m_p2_db[h2] + m_p3_db[h3];
