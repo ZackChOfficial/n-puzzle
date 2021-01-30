@@ -1,6 +1,6 @@
 #include "n-puzzle.hpp"
 #include "A_Star.class.hpp"
-#include "Ida_Star.class.hpp"
+#include "ida_star.class.hpp"
 #include "heuristic_functions.hpp"
 #include "Disjoint_database.hpp"
 

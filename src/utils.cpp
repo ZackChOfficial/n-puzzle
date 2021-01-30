@@ -1,5 +1,5 @@
 #include "A_Star.class.hpp"
-#include "Ida_Star.class.hpp"
+#include "ida_star.class.hpp"
 #include "utils.hpp"
 #include <iostream>
 
