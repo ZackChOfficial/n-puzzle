@@ -91,7 +91,8 @@ void DDB_3P::save_entries(std::string file_name, const std::set<DFS_Node> &data,
     }
     else
     {
-        std::cerr << "unable to write to file : " << file_name << "\n";
+        std::cerr << "ERROR : unable to write to file : " << file_name << "\n";
+        exit(EXIT_FAILURE);
     }
 }
 
@@ -108,33 +109,36 @@ void DDB_3P::create()
     // save_entries(P3_DB_FILE_NAME, p3_data, m_p3_ord);
 }
 
-void DDB_3P::load_db(const std::string &file_name, std::unordered_map<unsigned long, int> &pattern_db)
+void DDB_3P::load_db(const std::string &file_name, std::unordered_map<unsigned long long, int> &pattern_db)
 {
     std::ifstream file(file_name, std::ios::binary | std::ios::ate);
     std::streampos size;
-    unsigned long *raw_data;
+    unsigned long long *raw_data;
 
     if (file.is_open())
     {
         std::cout << "loading " << file_name << "\n";
         size = file.tellg();
-        raw_data = new unsigned long[size];
+        std::cout << "size : " << size << "\n";
+        raw_data = new unsigned long long[size];
         file.seekg(0, std::ios::beg);
         file.read((char *)raw_data, size);
         file.close();
         std::cout << "done !\n";
 
-        for (int i = 0; i < size / sizeof(unsigned long); i++)
+        for (int i = 0; i < size / sizeof(unsigned long long); i++)
         {
-            int dist = raw_data[i] / (unsigned long)std::pow(10, 2 * 8);
-            unsigned long state_hash = raw_data[i] - dist * (unsigned long)std::pow(10, 2 * 8);
-
+            int dist = raw_data[i] / (unsigned long long)std::pow(10, 2 * 8);
+            unsigned long long state_hash = raw_data[i] - dist * (unsigned long long)std::pow(10, 2 * 8);
             pattern_db[state_hash] = dist;
         }
         delete[] raw_data;
     }
     else
-        std::cout << "Unable to open file " << file_name << "\n";
+    {
+        std::cout << "ERROR : Unable to open file " << file_name << "\n";
+        exit(EXIT_FAILURE);
+    }
 }
 
 void DDB_3P::load()
@@ -142,6 +146,7 @@ void DDB_3P::load()
     load_db(DB_DIR + "/" + P1_DB_FILE_NAME, m_p1_db);
     load_db(DB_DIR + "/" + P2_DB_FILE_NAME, m_p2_db);
     load_db(DB_DIR + "/" + P3_DB_FILE_NAME, m_p3_db);
+    // std::cout << "shjadfjfhKAJSHDGFJKH AGSDUJFG AKHDFFKJH AGJKHFAK JDHGF\n";
 }
 
 /*

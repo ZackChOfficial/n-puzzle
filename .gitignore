@@ -39,3 +39,5 @@ tmp.cpp
 test.cpp
 test
 testing
+web/wasm/n-puzzle.js
+web/wasm/n-puzzle.wasm

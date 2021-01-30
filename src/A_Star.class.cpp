@@ -35,7 +35,6 @@ std::string A_Star::run()
     Node                                            initial(root.state);
     bool                                            solved;
     std::vector<Node>                               neighbor;
-    int                                             tentative_gScore;
     std::unordered_map<std::string, Node>::iterator exist;
     int                                             gscore;
     int                                             in_memory;
