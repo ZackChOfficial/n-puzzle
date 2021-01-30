@@ -192,7 +192,9 @@ Options cmd_args_parse(int argc, char **argv)
     }
     if (hval.length())
     {
-        if (hval == "m+l")
+        if (hval == "m")
+            options.heuristic = E_Heuristic::MANHATTAN_DISTANCE;
+        else if (hval == "m+l")
             options.heuristic = E_Heuristic::MANHATTAN_DISTANCE_PLUS_LNIEAR_CONFLICT;
         else if (hval == "dpdb")
             options.heuristic = E_Heuristic::DISJOINT_PATTERN_DATABASE;

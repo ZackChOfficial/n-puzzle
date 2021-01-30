@@ -15,6 +15,7 @@ enum class E_Method
 
 enum class E_Heuristic
 {
+    MANHATTAN_DISTANCE,
     MANHATTAN_DISTANCE_PLUS_LNIEAR_CONFLICT,
     DISJOINT_PATTERN_DATABASE
 };

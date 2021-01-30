@@ -16,6 +16,9 @@ std::string n_puzzle(std::vector<int> state, Options opts)
 
     switch (opts.heuristic)
     {
+    case E_Heuristic::MANHATTAN_DISTANCE:
+        heuristic = manhattan_distance;
+        break;
     case E_Heuristic::MANHATTAN_DISTANCE_PLUS_LNIEAR_CONFLICT:
         heuristic = linear_conflict;
         break;
@@ -58,6 +61,7 @@ void print_help()
               << "-h :\n"
               << "  stands for (heuristic), wich is the function that gets the distance from sourcein a* or ida* algorithm\n"
               << "  amd it takes the folwing algorithm\n"
+              << "  '-h m' wich stands for 'manhatan distance'\n"
               << "  '-h m+l' wich stands for 'manhatan distance + linear conflict'\n"
               << "  '-h dpdb' wich standss for disjoint pattern data base\n"
               << "  '-h' without argument, -h print a helper text to the console\n";

@@ -41,3 +41,4 @@ test
 testing
 web/wasm/n-puzzle.js
 web/wasm/n-puzzle.wasm
+web/wasm/n-puzzle.data

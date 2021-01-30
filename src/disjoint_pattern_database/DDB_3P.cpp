@@ -117,14 +117,13 @@ void DDB_3P::load_db(const std::string &file_name, std::unordered_map<unsigned l
 
     if (file.is_open())
     {
-        std::cout << "loading " << file_name << "\n";
+        // std::cout << "loading " << file_name << "\n";
         size = file.tellg();
-        std::cout << "size : " << size << "\n";
         raw_data = new unsigned long long[size];
         file.seekg(0, std::ios::beg);
         file.read((char *)raw_data, size);
         file.close();
-        std::cout << "done !\n";
+        // std::cout << "done !\n";
 
         for (int i = 0; i < size / sizeof(unsigned long long); i++)
         {

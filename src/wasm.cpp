@@ -17,6 +17,7 @@ EMSCRIPTEN_BINDINGS(wasm_n_puzzle)
         .value("Uniform_Cost", E_Method::Uniform_Cost);
 
     enum_<E_Heuristic>("E_Heuristic")
+        .value("MANHATTAN_DISTANCE", E_Heuristic::MANHATTAN_DISTANCE)
         .value("MANHATTAN_DISTANCE_PLUS_LNIEAR_CONFLICT", E_Heuristic::MANHATTAN_DISTANCE_PLUS_LNIEAR_CONFLICT)
         .value("DISJOINT_PATTERN_DATABASE", E_Heuristic::DISJOINT_PATTERN_DATABASE);
 
