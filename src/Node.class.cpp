@@ -24,7 +24,7 @@ bool Node::compare(std::vector<int> &rhs) const
 {
     if (state.size() != rhs.size())
         return false;
-    for (int i = 0; i < state.size(); i++)
+    for (size_t i = 0; i < state.size(); i++)
         if (state[i] != rhs[i])
             return false;
     return true;
@@ -85,7 +85,7 @@ std::vector<Node> Node::gen_next_states() const
         new_states.push_back(create_new(LEFT));
     if (zero_position % size + 1 < size)
         new_states.push_back(create_new(RIGHT));
-    if (zero_position + size < state.size())
+    if (zero_position + size < (int)state.size())
         new_states.push_back(create_new(DOWN));
     return new_states;
 }

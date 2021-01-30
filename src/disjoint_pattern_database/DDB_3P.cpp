@@ -109,27 +109,27 @@ void DDB_3P::create()
     // save_entries(P3_DB_FILE_NAME, p3_data, m_p3_ord);
 }
 
-void DDB_3P::load_db(const std::string &file_name, std::unordered_map<unsigned long, int> &pattern_db)
+void DDB_3P::load_db(const std::string &file_name, std::unordered_map<unsigned long long, int> &pattern_db)
 {
     std::ifstream file(file_name, std::ios::binary | std::ios::ate);
     std::streampos size;
-    unsigned long *raw_data;
+    unsigned long long *raw_data;
 
     if (file.is_open())
     {
         std::cout << "loading " << file_name << "\n";
         size = file.tellg();
-        raw_data = new unsigned long[size];
+        std::cout << "size : " << size << "\n";
+        raw_data = new unsigned long long[size];
         file.seekg(0, std::ios::beg);
         file.read((char *)raw_data, size);
         file.close();
         std::cout << "done !\n";
 
-        for (int i = 0; i < size / sizeof(unsigned long); i++)
+        for (int i = 0; i < size / sizeof(unsigned long long); i++)
         {
-            int dist = raw_data[i] / (unsigned long)std::pow(10, 2 * 8);
-            unsigned long state_hash = raw_data[i] - dist * (unsigned long)std::pow(10, 2 * 8);
-
+            int dist = raw_data[i] / (unsigned long long)std::pow(10, 2 * 8);
+            unsigned long long state_hash = raw_data[i] - dist * (unsigned long long)std::pow(10, 2 * 8);
             pattern_db[state_hash] = dist;
         }
         delete[] raw_data;
@@ -178,12 +178,8 @@ unsigned long DDB_3P::hash_dist(int dist)
 
 int DDB_3P::heuristic(std::vector<int> &state)
 {
-    static int i = 0;
     unsigned long h1 = hash_state(state, m_p1_ord);
     unsigned long h2 = hash_state(state, m_p2_ord);
     unsigned long h3 = hash_state(state, m_p3_ord);
-    std::cout << "haw  :" << m_p1_db[h1] + m_p2_db[h2] + m_p3_db[h3] << "\n";
-    if (i++ > 10)
-        exit(0);
     return m_p1_db[h1] + m_p2_db[h2] + m_p3_db[h3];
 }

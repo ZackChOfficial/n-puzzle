@@ -49,9 +49,9 @@ public:
     unsigned long hash_dist(int dist);
 
 public:
-    std::unordered_map<unsigned long, int> m_p1_db;
-    std::unordered_map<unsigned long, int> m_p2_db;
-    std::unordered_map<unsigned long, int> m_p3_db;
+    std::unordered_map<unsigned long long, int> m_p1_db;
+    std::unordered_map<unsigned long long, int> m_p2_db;
+    std::unordered_map<unsigned long long, int> m_p3_db;
 
     DFS_Node m_p1;
     DFS_Node m_p2;
@@ -66,7 +66,7 @@ public:
 
     std::set<DFS_Node> make_entries(DFS_Node source);
     void save_entries(std::string file_name, const std::set<DFS_Node> &data, const std::vector<int> &target_pattern);
-    void load_db(const std::string &file_name, std::unordered_map<unsigned long, int> &pattern_db);
+    void load_db(const std::string &file_name, std::unordered_map<unsigned long long, int> &pattern_db);
 };
 
 class DDB_663 : public DDB_3P

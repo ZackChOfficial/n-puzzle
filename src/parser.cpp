@@ -26,9 +26,9 @@ std::string ft_trim(std::string s)
 std::vector<std::string> str_split(std::string s)
 {
     std::vector<std::string> result;
-    int j;
+    size_t j;
 
-    for (int i = 0; i < s.length(); i++)
+    for (size_t i = 0; i < s.length(); i++)
     {
         if (s[i] != ' ')
         {
@@ -50,7 +50,7 @@ int get_size(std::string s)
 
     line = str_split(s);
     done = false;
-    for (int i = 0; i < line.size(); i++)
+    for (size_t i = 0; i < line.size(); i++)
     {
         if (line[i][0] != '#' && !done && isdigit(line[i][0]))
             done = true;
@@ -69,9 +69,9 @@ void get_line(std::vector<int> &data, std::string s, int n)
     int nbr;
 
     line = str_split(s);
-    if (line.size() != n)
+    if (line.size() != (size_t)n)
         throwError();
-    for (int i = 0; i < line.size(); i++)
+    for (size_t i = 0; i < line.size(); i++)
     {
         if (isdigit(line[i][0]))
         {
@@ -106,14 +106,14 @@ std::vector<int> parse()
                 get_line(data, s, n);
         }
     }
-    for (int i = 0; i < data.size(); i++)
+    for (size_t i = 0; i < data.size(); i++)
     {
         if (occu.find(data[i]) != occu.end())
             throwError();
         else
             occu.insert(data[i]);
     }
-    if (occu.size() != n * n)
+    if (occu.size() != size_t(n * n))
         throwError();
     else if (occu.size() > 100)
         throwError("Sorry we can't handle this size.");
@@ -148,7 +148,6 @@ Options cmd_args_parse(int argc, char **argv)
             mval = optarg;
             break;
         case '?':
-            char *flag;
             if (strchr(flags_list, optopt))
             {
                 if (optopt == 'h')

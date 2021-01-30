@@ -77,7 +77,6 @@ Board Board::gen_solution(int size)
 
 bool Board::is_solvable() const
 {
-    int index;
     int time;
     int diff;
     std::pair<int, int> zero_in_sol;
@@ -89,9 +88,9 @@ bool Board::is_solvable() const
     zero_in_board = current.get_position_of_zero();
     time = 0;
     diff = abs(zero_in_sol.first - zero_in_board.first) + abs(zero_in_sol.second - zero_in_board.second);
-    for (int i = 0; i < solution.state.size(); i++)
+    for (size_t i = 0; i < solution.state.size(); i++)
     {
-        for (int j = i; j < current.state.size(); j++)
+        for (size_t j = i; j < current.state.size(); j++)
         {
             if (current.state[j] == solution.state[i])
             {
@@ -118,7 +117,7 @@ std::pair<int, int> Board::get_position_of_zero() const
     std::pair<int, int> ans;
 
     index = 0;
-    for (int i = 0; i < state.size(); i++)
+    for (size_t i = 0; i < state.size(); i++)
         if (state[i] == 0)
         {
             index = i + 1;

@@ -5,20 +5,20 @@ std::unordered_map<int, int>   get_indexs(const std::vector<int> &goal)
 {
     std::unordered_map<int, int> indexs;
 
-    for (int i=0;i<goal.size(); i++)
+    for (int i=0;i<(int)goal.size(); i++)
         indexs.insert(std::make_pair(goal[i], i));
 
     return indexs;
 }
 
-int        manhattan_distance(std::vector<int> &state, const std::vector<int> &goal,const int size)
+int        manhattan_distance(std::vector<int> &state, const std::vector<int> &goal, const int size)
 {
     int hscore = 0;
     std::unordered_map<int,int>::iterator elem;
 
     if (solution_indexs.size() != goal.size())
         solution_indexs = get_indexs(goal);
-    for (int i=0;i < state.size(); i++)
+    for (int i=0;i < (int)state.size(); i++)
     {
         elem = solution_indexs.find(state[i]);
         if (elem == solution_indexs.end())
@@ -70,7 +70,7 @@ int        column_conflict(std::vector<int> &state, std::unordered_map<int,int>:
     int                                     hscore;
 
     hscore = 0;
-    for (int j = index + size; j < state.size(); j += size)
+    for (size_t j = index + size; j < state.size(); j += size)
     {
         if (state[j] == 0)
             continue;
@@ -91,7 +91,7 @@ int        linear_conflict(std::vector<int> &state, const std::vector<int> &goal
     hscore = 0;
     if (solution_indexs.size() != goal.size())
         solution_indexs = get_indexs(goal);
-    for (int i = 0; i < state.size(); i++)
+    for (int i = 0; i < (int)state.size(); i++)
     {
         elem = find_element(state[i]);
         hscore += abs(i-elem->second);
