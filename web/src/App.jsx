@@ -13,6 +13,7 @@ import Header from './components/header'
 import Footer from './components/footer'
 import Description from './components/description'
 import Github from './assets/github.png'
+import { useWorker } from "@koale/useworker";
 
 export const sizes = [
   { value: 0, label: '3x3' },
@@ -58,6 +59,24 @@ const Input = styled.input`
     color:  ${props => props.error ? "#ff1d44" : "#808080"};;
   }
 `
+
+const n_puzzle = () => {
+  Wasm().then(Module => {
+    // const b  = [8, 6, 0, 7, 2, 5, 1, 3, 4];
+    const b = [4, 10, 1, 2, 14, 6, 15, 9, 8, 0, 7, 13, 3, 12, 5, 11];
+    const bv = new Module.VectorInt();
+    for (const e of b)
+      bv.push_back(e);
+    const opts = new Module.Options();
+    // opts.heuristic = Module.E_Heuristic.DISJOINT_PATTERN_DATABASE;
+    new Promise((res, rej) => { res(Module.nPuzzle(bv, opts)) }).then(console.log).catch(console.log).finally(
+      r =>
+      {
+        console.log("Holla")
+      }
+    )
+  })
+}
 function App() {
   const [selectedAlgo, setSelectedAlgo] = useState('Ida*');
   const [selectedheuristic, setSelectedheuristic] = useState('Pattern databases 6-6-3');
@@ -73,6 +92,7 @@ function App() {
   const [size, setSize] = useState(0);
   const boards = useRef([solutionSize3, solutionSize4])
   const state = useRef(null)
+  const [npuzzle, { status: npuzzleStatus, kill: killNpuzzleWorker }] = useWorker(n_puzzle);
 
   useEffect(() => {
     setNumbers(boards.current[size])
@@ -82,22 +102,6 @@ function App() {
     const newState = Move(numbers, direction);
     setNumbers([...newState]);
   }, [numbers])
-
-    useEffect(() => {
-
-      var Module = {
-        onRuntimeInitialized: function() {
-          // const b  = [8, 6, 0, 7, 2, 5, 1, 3, 4];
-          const b  = [4, 10, 1, 2, 14, 6, 15, 9, 8, 0, 7, 13, 3, 12, 5, 11];
-          const bv = new Module.VectorInt();
-          for (const e of b)
-              bv.push_back(e);
-          const opts = new Module.Options();
-          opts.heuristic =  Module.E_Heuristic.DISJOINT_PATTERN_DATABASE;
-          console.log(Module.nPuzzle(bv, opts));
-        }
-      };
-    },[])
   const handleMoves = useCallback(async (moves) => {
     setExcution(true);
     const allStates = PlayMoves(numbers, moves.trim());
@@ -161,6 +165,12 @@ function App() {
     }
     setNumbers(num);
   }
+  
+  const solve = async () => {
+    console.log("Entered")
+    const result = await  npuzzle();
+    console.log("End.");
+  }
   return (
     <>
       <Img src={Github} onClick={() => { window.location.href = "https://github.com/ZackChOfficial/n-puzzle"; }} alt="Github link" />
@@ -215,7 +225,7 @@ function App() {
         </Actions>
         <Actions>
           <button onClick={scramble}> Scramble Board </button>
-          <button onClick={() => handleMoves("D L L U U R R R D D")}> Solve </button>
+          <button onClick={solve}> Solve </button>
           <button onClick={reset}> Reset </button>
 
           <div style={{ width: "20%", textAlign: "left" }}>

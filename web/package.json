@@ -7,8 +7,10 @@
     "lint": "prettier --check \"src/**/*.{js,jsx}\""
   },
   "dependencies": {
-    "react": "^17.0.0",
-    "react-dom": "^17.0.0",
+    "@koale/useworker": "^3.4.0",
+    "react": "^16.14.0",
+    "react-dom": "^16.14.0",
+    "react-hooks-worker": "^1.0.0",
     "react-select": "^3.1.1",
     "serve": "^11.3.2",
     "styled-components": "^5.2.1"
