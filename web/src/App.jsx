@@ -13,7 +13,7 @@ import Header from './components/header'
 import Footer from './components/footer'
 import Description from './components/description'
 import Github from './assets/github.png'
-import { useWorker } from "@koale/useworker";
+
 
 export const sizes = [
   { value: 0, label: '3x3' },
@@ -60,26 +60,15 @@ const Input = styled.input`
   }
 `
 
-const n_puzzle = () => {
-  Wasm().then(Module => {
-    // const b  = [8, 6, 0, 7, 2, 5, 1, 3, 4];
-    const b = [4, 10, 1, 2, 14, 6, 15, 9, 8, 0, 7, 13, 3, 12, 5, 11];
-    const bv = new Module.VectorInt();
-    for (const e of b)
-      bv.push_back(e);
-    const opts = new Module.Options();
-    // opts.heuristic = Module.E_Heuristic.DISJOINT_PATTERN_DATABASE;
-    new Promise((res, rej) => { res(Module.nPuzzle(bv, opts)) }).then(console.log).catch(console.log).finally(
-      r =>
-      {
-        console.log("Holla")
-      }
-    )
-  })
-}
+const worker = new Worker('./n-puzzle.worker.js', { type: "module" });
+worker.addEventListener("message", event => {
+  console.log(event.data);
+});
+
+
 function App() {
-  const [selectedAlgo, setSelectedAlgo] = useState('Ida*');
-  const [selectedheuristic, setSelectedheuristic] = useState('Pattern databases 6-6-3');
+  const [selectedAlgo, setSelectedAlgo] = useState('A_STAR');
+  const [selectedheuristic, setSelectedheuristic] = useState('DISJOINT_PATTERN_DATABASE');
   const [numbers, setNumbers] = useState([]);
   const [ArrowUp, keyW] = [useKeyPress("ArrowUp"), useKeyPress("w")];
   const [ArrowRight, keyD] = [useKeyPress("ArrowRight"), useKeyPress("d")]
@@ -92,7 +81,7 @@ function App() {
   const [size, setSize] = useState(0);
   const boards = useRef([solutionSize3, solutionSize4])
   const state = useRef(null)
-  const [npuzzle, { status: npuzzleStatus, kill: killNpuzzleWorker }] = useWorker(n_puzzle);
+  const [res, setRes] = useState(0)
 
   useEffect(() => {
     setNumbers(boards.current[size])
@@ -137,7 +126,7 @@ function App() {
     setNumbers(boards.current[size]);
   }, [size])
 
-
+  
   const handleRun = () => {
     handleMoves(moves.current.value.toUpperCase())
   }
@@ -167,12 +156,11 @@ function App() {
   }
   
   const solve = async () => {
-    console.log("Entered")
-    const result = await  npuzzle();
-    console.log("End.");
+    worker.postMessage({numbers, selectedAlgo, selectedheuristic})
   }
   return (
     <>
+    <div> result {res} </div>
       <Img src={Github} onClick={() => { window.location.href = "https://github.com/ZackChOfficial/n-puzzle"; }} alt="Github link" />
       <Description />
       <div className="App">

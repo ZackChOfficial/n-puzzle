@@ -1,13 +1,13 @@
 export const  algorithms = [
-    { value: 'A*', label: 'A*' },
-    { value: 'Ida*', label: 'Ida*' },
+    { value: 'A_STAR', label: 'A*' },
+    { value: 'IDA_STAR', label: 'Ida*' },
 ]
 
 
 export const heuristics = [
-    { value: 'Manhattan distance', label: 'Manhattan distance' },
-    { value: 'Linear conflict', label: 'Linear conflict' },
-    { value: 'Pattern databases 6-6-3', label: 'Pattern databases 6-6-3' },
+    { value: 'MANHATTAN_DISTANCE', label: 'Manhattan distance' },
+    { value: 'MANHATTAN_DISTANCE_PLUS_LNIEAR_CONFLICT', label: 'Linear conflict' },
+    { value: 'DISJOINT_PATTERN_DATABASE', label: 'Pattern databases 5-5-5' },
 ]
 
 
