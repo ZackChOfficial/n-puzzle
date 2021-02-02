@@ -28,7 +28,7 @@ std::string hash_vector(const std::vector<int>& data)
     return hash;
 }
 
-std::string A_Star::run()
+std::string A_Star::run(Options opts)
 {
     std::string result;
     Node                                            current;
@@ -81,7 +81,7 @@ std::string A_Star::run()
         }
     }
     if (solved)
-        result += describe<A_Star>(current);
+        result += describe<A_Star>(current, opts);
     else
         result += "Empty Stack\n";
     return result;

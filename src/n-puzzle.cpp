@@ -1,6 +1,6 @@
 #include "n-puzzle.hpp"
 #include "A_Star.class.hpp"
-#include "ida_star.class.hpp"
+#include "Ida_Star.class.hpp"
 #include "heuristic_functions.hpp"
 #include "Disjoint_database.hpp"
 
@@ -42,7 +42,7 @@ std::string n_puzzle(std::vector<int> state, Options opts)
         break;
     }
 
-    return algo->run();
+    return algo->run(opts);
 }
 
 void print_help()
@@ -64,5 +64,7 @@ void print_help()
               << "  '-h m' wich stands for 'manhatan distance'\n"
               << "  '-h m+l' wich stands for 'manhatan distance + linear conflict'\n"
               << "  '-h dpdb' wich standss for disjoint pattern data base\n"
-              << "  '-h' without argument, -h print a helper text to the console\n";
+              << "  '-h' without argument, -h print a helper text to the console\n"
+              << "-s :\n"
+              << "  print only the steps to solution and nothing else.\n";
 }

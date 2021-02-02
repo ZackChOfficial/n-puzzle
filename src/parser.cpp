@@ -124,7 +124,7 @@ Options cmd_args_parse(int argc, char **argv)
 {
     Options options;
 
-    char flags_list[] = "a:h:m:";
+    char flags_list[] = "a:h:m:s";
 
     std::string aval;
     std::string hval;
@@ -147,11 +147,17 @@ Options cmd_args_parse(int argc, char **argv)
         case 'm':
             mval = optarg;
             break;
+        case 's':
+            options.only_steps = true;
+            break;
         case '?':
             if (strchr(flags_list, optopt))
             {
                 if (optopt == 'h')
+                {
                     print_help();
+                    exit(EXIT_SUCCESS);
+                }
                 fprintf(stderr, "Option -%c requires an argument.\n", optopt);
             }
             else if (isprint(optopt))

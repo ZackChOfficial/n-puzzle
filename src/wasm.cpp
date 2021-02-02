@@ -25,7 +25,8 @@ EMSCRIPTEN_BINDINGS(wasm_n_puzzle)
         .constructor<>()
         .property("algo", &Options::getAlgo, &Options::setAlgo)
         .property("method", &Options::getMethod, &Options::setMethod)
-        .property("heuristic", &Options::getHeuristic, &Options::setHeuristic);
+        .property("heuristic", &Options::getHeuristic, &Options::setHeuristic)
+        .property("onlySteps", &Options::getOnlySteps, &Options::setOnlySteps);
 
     function("nPuzzle", &n_puzzle);
     register_vector<int>("VectorInt");
