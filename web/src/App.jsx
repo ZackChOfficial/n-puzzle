@@ -63,6 +63,7 @@ const worker = new Worker('./n-puzzle.worker.js', { type: "module" });
 
 
 function App() {
+
   const [selectedAlgo, setSelectedAlgo] = useState('');
   const [selectedheuristic, setSelectedheuristic] = useState('');
   const [numbers, setNumbers] = useState([]);
@@ -86,11 +87,12 @@ function App() {
 
   useEffect(() => {
     worker.addEventListener("message", event => {
-      console.log(event.data);
-      setLoading(false)
+      if (event.data !== -1)
+      {
+        handleMoves(event.data);
+      }
     });
     return worker.removeEventListener("message", event => {
-      console.log(event.data);
       setLoading(false)
     });
   }, [])
@@ -112,9 +114,12 @@ function App() {
     const newState = Move(numbers, direction);
     setNumbers([...newState]);
   }, [numbers])
-  const handleMoves = useCallback(async (moves) => {
+
+  const handleMoves = async (moves) => {
     setExcution(true);
     const allStates = PlayMoves(numbers, moves.trim());
+    setLoading(false);
+    console.log(allStates)
     if (typeof (allStates[0]) == "string")
       setInvalidMoves(true);
     else {
@@ -125,13 +130,13 @@ function App() {
       }
     }
     setExcution(false);
-  }, [numbers])
+  };
 
 
 
-  const scramble = useCallback(() => {
+  const scramble = () => {
     setNumbers(scrambleArray(numbers))
-  }, [numbers])
+  }
 
   const reset = useCallback(() => {
     setNumbers(boards.current[size]);
@@ -166,12 +171,13 @@ function App() {
     setNumbers(num);
   }
 
-  const solve = async () => {
+  const solve = () => {
     if (!selectedheuristic || !selectedAlgo)
-      setError(true);
+    setError(true);
     else {
       setLoading(true);
-      await worker.postMessage({ numbers, selectedAlgo, selectedheuristic })
+      console.log("Holla:" , numbers)
+      worker.postMessage({ numbers, selectedAlgo, selectedheuristic })
     }
   }
   return (

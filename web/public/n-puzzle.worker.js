@@ -17,14 +17,13 @@ addEventListener("message", event => {
       "MANHATTAN_DISTANCE_PLUS_LNIEAR_CONFLICT": Module.E_Heuristic.MANHATTAN_DISTANCE_PLUS_LNIEAR_CONFLICT,
       "DISJOINT_PATTERN_DATABASE": Module.E_Heuristic.DISJOINT_PATTERN_DATABASE
     }
-
-    console.log(numbers, algo, heuristic)
     const bv = new Module.VectorInt();
     for (const e of numbers)
     bv.push_back(e);
     const opts = new Module.Options();
     opts.heuristic = heuristics[heuristic];
     opts.algo = algos[algo]
+    opts.onlySteps = true;
     postMessage((Module.nPuzzle(bv, opts)));
   })
 });
