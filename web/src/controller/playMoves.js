@@ -8,6 +8,7 @@ function invalidMove(move) {
         move != 'U' &&  move != 'L' &&  move != 'R';
 }
 export default function playMoves(state, moves) {
+    console.log("IGOT: ", state, moves)
     const movesToPlay = moves.split(/ +/)
     const allStates = []
     let current = [...state]
