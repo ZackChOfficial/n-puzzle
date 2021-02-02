@@ -13,7 +13,7 @@ import Header from './components/header'
 import Footer from './components/footer'
 import Description from './components/description'
 import Github from './assets/github.png'
-import {sizes} from './config'
+import { sizes } from './config'
 
 const SelectComponent = styled.div`
   margin: 15px 0;
@@ -55,10 +55,11 @@ const Input = styled.input`
   }
 `
 
+const Error = styled.div`
+color: red;
+`
 const worker = new Worker('./n-puzzle.worker.js', { type: "module" });
-worker.addEventListener("message", event => {
-  console.log(event.data);
-});
+
 
 
 function App() {
@@ -76,10 +77,36 @@ function App() {
   const [size, setSize] = useState(0);
   const boards = useRef([solutionSize3, solutionSize4])
   const state = useRef(null)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(false)
 
   useEffect(() => {
     setNumbers(boards.current[size])
   }, [size])
+
+  useEffect(() => {
+    worker.addEventListener("message", event => {
+      console.log(event.data);
+      setLoading(false)
+    });
+    return worker.removeEventListener("message", event => {
+      console.log(event.data);
+      setLoading(false)
+    });
+  }, [])
+
+  useEffect(() => {
+    if (!execution)
+      if (ArrowUp || keyW)
+        handleClick("D");
+      else if (ArrowDown || keyS)
+        handleClick("U");
+      else if (ArrowRight || keyD)
+        handleClick("L");
+      else if (ArrowLeft || keyA)
+        handleClick("R");
+  }, [ArrowUp, ArrowDown, ArrowLeft, ArrowRight, keyW, keyD, keyS, keyA])
+
 
   const handleClick = useCallback((direction) => {
     const newState = Move(numbers, direction);
@@ -100,17 +127,7 @@ function App() {
     setExcution(false);
   }, [numbers])
 
-  useEffect(() => {
-    if (!execution)
-      if (ArrowUp || keyW)
-        handleClick("D");
-      else if (ArrowDown || keyS)
-        handleClick("U");
-      else if (ArrowRight || keyD)
-        handleClick("L");
-      else if (ArrowLeft || keyA)
-        handleClick("R");
-  }, [ArrowUp, ArrowDown, ArrowLeft, ArrowRight, keyW, keyD, keyS, keyA])
+
 
   const scramble = useCallback(() => {
     setNumbers(scrambleArray(numbers))
@@ -120,7 +137,7 @@ function App() {
     setNumbers(boards.current[size]);
   }, [size])
 
-  
+
   const handleRun = () => {
     handleMoves(moves.current.value.toUpperCase())
   }
@@ -148,9 +165,14 @@ function App() {
     }
     setNumbers(num);
   }
-  
+
   const solve = async () => {
-    worker.postMessage({numbers, selectedAlgo, selectedheuristic})
+    if (!selectedheuristic || !selectedAlgo)
+      setError(true);
+    else {
+      setLoading(true);
+      await worker.postMessage({ numbers, selectedAlgo, selectedheuristic })
+    }
   }
   return (
     <>
@@ -159,12 +181,16 @@ function App() {
       <div className="App">
         <Header />
         <br />
+        {error ? <Error> You must choose algorithm and heuristic function first </Error> : ""}
         <SelectComponent>
           <Select
+            s
             onChange={
               (e) => {
-                if (e)
+                if (e) {
                   setSelectedAlgo(e.value)
+                  setError(false);
+                }
               }
             }
             options={algorithms}
@@ -174,13 +200,16 @@ function App() {
         </SelectComponent>
         <SelectComponent>
           <Select
+            SelectComponent
             onChange={
               (e) => {
-                if (e)
+                if (e) {
                   setSelectedheuristic(e.value)
+                  setError(false);
+                }
               }
             }
-            options={size == 1 ? heuristics :heuristics.filter(h => h.value != "DISJOINT_PATTERN_DATABASE") }
+            options={size == 1 ? heuristics.filter(h => h.value != "MANHATTAN_DISTANCE") : heuristics.filter(h => h.value != "DISJOINT_PATTERN_DATABASE")}
             isClearable
             placeholder="Select Heuristic Function"
           />
@@ -210,11 +239,11 @@ function App() {
               defaultValue={0}
 
               onChange={(e) => {
-                if (e)
-                {
+                if (e) {
                   setSize(e.value)
                   setInvalidMoves(false);
                   setInvalidBoard(false);
+                  setSelectedAlgo("A_STAR")
                   moves.current.value = "";
                   state.current.value = "";
                 }
@@ -227,7 +256,7 @@ function App() {
         <br />
         {
           numbers.length > 0 ?
-            <Board numbers={numbers} size={parseInt(Math.sqrt(numbers.length))} solution={boards.current[size]} />
+            <Board numbers={numbers} size={parseInt(Math.sqrt(numbers.length))} solution={boards.current[size]} loading={loading} />
             : "Loading"
         }
         <Footer />

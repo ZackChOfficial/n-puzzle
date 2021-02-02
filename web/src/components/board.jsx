@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import Cell from './cells'
-import {solutionSize4} from '../config'
+import Loading from './loading'
+
+
 const Container = styled.div`
     border: 2px solid #808caf;
     width: 550px;
@@ -52,9 +54,11 @@ export default function (props) {
         }
         setContent(newContent);
     }, [props.numbers])
+
     return <Container id="board">
         {
             content.map(cell => <Cell id={cell.key} key={cell.key} left={cell.left} top={cell.top} size={cell.size} number={cell.key}  rightPlace={cell.rightPlace}/>)
         }
+        {props.loading ? <Loading/> : ""}
     </Container>
 }
