@@ -1,4 +1,4 @@
-#include "ida_star.class.hpp"
+#include "Ida_Star.class.hpp"
 #include "utils.hpp"
 
 /**
@@ -21,7 +21,7 @@ Ida_Star::Ida_Star(const std::vector<int> &initial, Board sol, int (*func)(std::
     mode = running_mode;
 }
 
-std::string Ida_Star::run()
+std::string Ida_Star::run(Options opts)
 {
     std::string result;
     int threshold;
@@ -35,7 +35,7 @@ std::string Ida_Star::run()
             break;
     }
     if (threshold == -1)
-        result += describe<Ida_Star>(solution);
+        result += describe<Ida_Star>(solution, opts);
     else
         result += "Unsolved\n";
     return result;

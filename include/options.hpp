@@ -25,10 +25,13 @@ struct Options
     E_Algo algo;
     E_Method method;
     E_Heuristic heuristic;
+    bool only_steps;
 
     Options() : algo(E_Algo::A_STAR),
                 method(E_Method::Normal),
-                heuristic(E_Heuristic::MANHATTAN_DISTANCE_PLUS_LNIEAR_CONFLICT){};
+                heuristic(E_Heuristic::MANHATTAN_DISTANCE_PLUS_LNIEAR_CONFLICT),
+                only_steps(false)
+                {};
 
     E_Algo getAlgo() const
     {
@@ -56,5 +59,15 @@ struct Options
     void setHeuristic(E_Heuristic heuristic)
     {
         this->heuristic = heuristic;
+    }
+
+    bool getOnlySteps() const
+    {
+        return this->only_steps;
+    }
+
+    void setOnlySteps(bool only_steps)
+    {
+        this->only_steps = only_steps;
     }
 };
