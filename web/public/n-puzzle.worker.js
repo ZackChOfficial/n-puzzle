@@ -1,11 +1,16 @@
 import Wasm from './wasm/build/n-puzzle'
 
 addEventListener("message", event => {
-  console.log(event.data)
+  // protect cross-site scripting attacks
+  if (event.origin !== "http://localhost:8080" && (event.srcElement && event.srcElement.origin !== "http://localhost:8080" ))
+    return;
   const {numbers, selectedAlgo: algo, selectedheuristic : heuristic} = event.data;
-  // Do stuff with the message
+  if (!numbers || !algo || !heuristic)
+  {
+    postMessage(-1);
+    return ;
+  }
   Wasm().then(Module => {
-    // const b  = [8, 6, 0, 7, 2, 5, 1, 3, 4];
     const algos = { "A_STAR": Module.E_Algo.A_STAR, "IDA_STAR": Module.E_Algo.IDA_STAR }
     const heuristics = {
       "MANHATTAN_DISTANCE": Module.E_Heuristic.MANHATTAN_DISTANCE,
@@ -13,11 +18,11 @@ addEventListener("message", event => {
       "DISJOINT_PATTERN_DATABASE": Module.E_Heuristic.DISJOINT_PATTERN_DATABASE
     }
 
+    console.log(numbers, algo, heuristic)
     const bv = new Module.VectorInt();
     for (const e of numbers)
     bv.push_back(e);
     const opts = new Module.Options();
-    console.log(numbers, heuristics[heuristic], algos[algo]);
     opts.heuristic = heuristics[heuristic];
     opts.algo = algos[algo]
     postMessage((Module.nPuzzle(bv, opts)));

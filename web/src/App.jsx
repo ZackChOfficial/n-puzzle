@@ -13,12 +13,7 @@ import Header from './components/header'
 import Footer from './components/footer'
 import Description from './components/description'
 import Github from './assets/github.png'
-
-
-export const sizes = [
-  { value: 0, label: '3x3' },
-  { value: 1, label: '4x4' },
-]
+import {sizes} from './config'
 
 const SelectComponent = styled.div`
   margin: 15px 0;
@@ -67,8 +62,8 @@ worker.addEventListener("message", event => {
 
 
 function App() {
-  const [selectedAlgo, setSelectedAlgo] = useState('A_STAR');
-  const [selectedheuristic, setSelectedheuristic] = useState('DISJOINT_PATTERN_DATABASE');
+  const [selectedAlgo, setSelectedAlgo] = useState('');
+  const [selectedheuristic, setSelectedheuristic] = useState('');
   const [numbers, setNumbers] = useState([]);
   const [ArrowUp, keyW] = [useKeyPress("ArrowUp"), useKeyPress("w")];
   const [ArrowRight, keyD] = [useKeyPress("ArrowRight"), useKeyPress("d")]
@@ -81,7 +76,6 @@ function App() {
   const [size, setSize] = useState(0);
   const boards = useRef([solutionSize3, solutionSize4])
   const state = useRef(null)
-  const [res, setRes] = useState(0)
 
   useEffect(() => {
     setNumbers(boards.current[size])
@@ -109,13 +103,13 @@ function App() {
   useEffect(() => {
     if (!execution)
       if (ArrowUp || keyW)
-        handleClick("U");
-      else if (ArrowDown || keyS)
         handleClick("D");
+      else if (ArrowDown || keyS)
+        handleClick("U");
       else if (ArrowRight || keyD)
-        handleClick("R");
-      else if (ArrowLeft || keyA)
         handleClick("L");
+      else if (ArrowLeft || keyA)
+        handleClick("R");
   }, [ArrowUp, ArrowDown, ArrowLeft, ArrowRight, keyW, keyD, keyS, keyA])
 
   const scramble = useCallback(() => {
@@ -160,7 +154,6 @@ function App() {
   }
   return (
     <>
-    <div> result {res} </div>
       <Img src={Github} onClick={() => { window.location.href = "https://github.com/ZackChOfficial/n-puzzle"; }} alt="Github link" />
       <Description />
       <div className="App">
@@ -168,9 +161,6 @@ function App() {
         <br />
         <SelectComponent>
           <Select
-            styles={{ background: "black" }}
-
-            defaultValue={selectedAlgo}
             onChange={
               (e) => {
                 if (e)
@@ -184,14 +174,13 @@ function App() {
         </SelectComponent>
         <SelectComponent>
           <Select
-            defaultValue={selectedheuristic}
             onChange={
               (e) => {
                 if (e)
                   setSelectedheuristic(e.value)
               }
             }
-            options={heuristics}
+            options={size == 1 ? heuristics :heuristics.filter(h => h.value != "DISJOINT_PATTERN_DATABASE") }
             isClearable
             placeholder="Select Heuristic Function"
           />
@@ -218,10 +207,17 @@ function App() {
 
           <div style={{ width: "20%", textAlign: "left" }}>
             <Select
-              defaultValue={size}
+              defaultValue={0}
+
               onChange={(e) => {
                 if (e)
+                {
                   setSize(e.value)
+                  setInvalidMoves(false);
+                  setInvalidBoard(false);
+                  moves.current.value = "";
+                  state.current.value = "";
+                }
               }}
               options={sizes.filter(s => s.value !== size)}
               placeholder="size"

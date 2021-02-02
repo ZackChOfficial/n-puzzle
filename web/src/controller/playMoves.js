@@ -8,7 +8,7 @@ function invalidMove(move) {
         move != 'U' &&  move != 'L' &&  move != 'R';
 }
 export default function playMoves(state, moves) {
-    const movesToPlay = moves.split(/ +/);
+    const movesToPlay = moves.split(/ +/)
     const allStates = []
     let current = [...state]
     for (let i = 0; i < movesToPlay.length; i++) {

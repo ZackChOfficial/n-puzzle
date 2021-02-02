@@ -11,19 +11,19 @@ export default  function move(state, direction) {
         }
     }
     switch (direction) {
-        case "D":
+        case "U":
             if (zero - size >= 0)
                 swap(newState, zero, zero - size);
             break;
-        case "L":
+        case "R":
             if ((zero + 1)%size != 0)
                 swap(newState, zero, zero + 1);
             break;
-        case "U":
+        case "D":
             if (zero + size < newState.length)
                 swap(newState, zero, zero + size);
             break;
-        case "R":
+        case "L":
             if ((zero)%size  != 0)
                 swap(newState, zero, zero - 1);
             break;
