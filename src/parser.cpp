@@ -154,7 +154,10 @@ Options cmd_args_parse(int argc, char **argv)
             if (strchr(flags_list, optopt))
             {
                 if (optopt == 'h')
+                {
                     print_help();
+                    exit(EXIT_SUCCESS);
+                }
                 fprintf(stderr, "Option -%c requires an argument.\n", optopt);
             }
             else if (isprint(optopt))

@@ -66,5 +66,5 @@ void print_help()
               << "  '-h dpdb' wich standss for disjoint pattern data base\n"
               << "  '-h' without argument, -h print a helper text to the console\n"
               << "-s :\n"
-              << "print only the steps to solution and nothing else.\n";
+              << "  print only the steps to solution and nothing else.\n";
 }
