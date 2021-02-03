@@ -58,9 +58,7 @@ const Input = styled.input`
 const Error = styled.div`
 color: red;
 `
-const worker = new Worker('./n-puzzle.worker.js', { type: "module" });
-
-
+const worker = new Worker('./n-puzzle.worker.js', {type: 'module'});
 
 function App() {
 
@@ -78,23 +76,28 @@ function App() {
   const [size, setSize] = useState(0);
   const boards = useRef([solutionSize3, solutionSize4])
   const state = useRef(null)
+  const run = useRef(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(false)
+  const [isChrome, setIsChrome] = useState(true);
 
   useEffect(() => {
     setNumbers(boards.current[size])
   }, [size])
 
   useEffect(() => {
+    setIsChrome(!!window.chrome && (!!window.chrome.webstore || !!window.chrome.runtime));
     worker.addEventListener("message", event => {
-      if (event.data !== -1)
-      {
-        handleMoves(event.data);
+      if (event.data !== -1) {
+        moves.current.value = event.data;
+        setInvalidMoves(false);
+        setLoading(false);
+        run.current.click();
       }
+      else
+        setError(true);
     });
-    return worker.removeEventListener("message", event => {
-      setLoading(false)
-    });
+    return worker.removeEventListener("message", event => { });
   }, [])
 
   useEffect(() => {
@@ -118,8 +121,7 @@ function App() {
   const handleMoves = async (moves) => {
     setExcution(true);
     const allStates = PlayMoves(numbers, moves.trim());
-    setLoading(false);
-    console.log(allStates)
+
     if (typeof (allStates[0]) == "string")
       setInvalidMoves(true);
     else {
@@ -132,8 +134,6 @@ function App() {
     setExcution(false);
   };
 
-
-
   const scramble = () => {
     setNumbers(scrambleArray(numbers))
   }
@@ -141,7 +141,6 @@ function App() {
   const reset = useCallback(() => {
     setNumbers(boards.current[size]);
   }, [size])
-
 
   const handleRun = () => {
     handleMoves(moves.current.value.toUpperCase())
@@ -173,13 +172,18 @@ function App() {
 
   const solve = () => {
     if (!selectedheuristic || !selectedAlgo)
-    setError(true);
+      setError(true);
     else {
       setLoading(true);
-      console.log("Holla:" , numbers)
+      let origin = "";
+      for (const i of numbers)
+        origin += i + " "
+      state.current.value = origin;
       worker.postMessage({ numbers, selectedAlgo, selectedheuristic })
     }
   }
+  if (!isChrome)
+    return <h1 align="center"> You Must use Chrome </h1>
   return (
     <>
       <Img src={Github} onClick={() => { window.location.href = "https://github.com/ZackChOfficial/n-puzzle"; }} alt="Github link" />
@@ -226,7 +230,7 @@ function App() {
               setInvalidMoves(false);
           }}
             ref={moves} error={invalidMoves} placeholder={invalidMoves ? "Invalid Moves" : "Moves to apply"} />
-          <button onClick={handleRun}>Run</button>
+          <button onClick={handleRun} ref={run}>Run</button>
         </Actions>
         <Actions>
           <Input type="text" onKeyDown={() => {

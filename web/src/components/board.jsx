@@ -3,7 +3,6 @@ import styled from 'styled-components'
 import Cell from './cells'
 import Loading from './loading'
 
-
 const Container = styled.div`
     border: 2px solid #808caf;
     width: 550px;

@@ -1,9 +1,16 @@
-import Wasm from './wasm/build/n-puzzle'
+import Wasm from '../wasm/build/n-puzzle'
 
-addEventListener("message", event => {
+const origin = "https://n-puzzle-project.netlify.app"
+
+export default (() => {
+self.addEventListener("message", event => {
+  console.log("Hello")
   // protect cross-site scripting attacks
-  if (event.origin !== "http://localhost:8080" && (event.srcElement && event.srcElement.origin !== "http://localhost:8080" ))
-    return;
+  if (event.origin !== origin && (event.srcElement && event.srcElement.origin !== origin))
+  {
+    postMessage(-1);
+    return; 
+  }
   const {numbers, selectedAlgo: algo, selectedheuristic : heuristic} = event.data;
   if (!numbers || !algo || !heuristic)
   {
@@ -27,3 +34,5 @@ addEventListener("message", event => {
     postMessage((Module.nPuzzle(bv, opts)));
   })
 });
+})();
+

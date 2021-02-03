@@ -1,1 +1,1 @@
-make -C build && mv build/n-puzzle.data ..
+make -C build && cp build/n-puzzle.data ..

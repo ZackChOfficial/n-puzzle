@@ -1,14 +1,10 @@
 import move from './move'
 
-
-
-
 function invalidMove(move) {
     return  move != 'D' && 
         move != 'U' &&  move != 'L' &&  move != 'R';
 }
 export default function playMoves(state, moves) {
-    console.log("IGOT: ", state, moves)
     const movesToPlay = moves.split(/ +/)
     const allStates = []
     let current = [...state]
