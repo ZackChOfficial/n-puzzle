@@ -26,9 +26,14 @@ std::string Ida_Star::run(Options opts)
     std::string result;
     int threshold;
     threshold = heuristic(root.state, goal.state, goal.size);
+    int nodes;
+
     while (1337)
     {
-        threshold = dfs(root, 0, threshold);
+        nodes = 0;
+        threshold = dfs(root, 0, threshold, nodes);
+        Ida_Star::total_selected += nodes;
+        Ida_Star::max_states = nodes > Ida_Star::max_states ? nodes : Ida_Star::max_states;
         if (threshold == -1)
             break;
         if (threshold == INT_MAX)
@@ -41,17 +46,19 @@ std::string Ida_Star::run(Options opts)
     return result;
 }
 
-int Ida_Star::dfs(Node &node, int g, int threshold)
+int Ida_Star::dfs(Node &node, int g, int threshold, int &nodes)
 {
     std::vector<Node> neighbor;
     int f;
 
+    nodes = nodes > g ? nodes : g;
     f = g + heuristic(node.state, goal.state, goal.size);
     if (g > Ida_Star::max_states)
         Ida_Star::max_states = g;
-    Ida_Star::total_selected += 1;
+    
     if (f > threshold)
         return f;
+    
     if (node.compare(goal.state))
     {
         solution = node;
@@ -61,7 +68,7 @@ int Ida_Star::dfs(Node &node, int g, int threshold)
     neighbor = node.gen_next_states();
     for (auto &child : neighbor)
     {
-        int temp = dfs(child, g + 1, threshold);
+        int temp = dfs(child, g + 1, threshold, nodes);
         if (temp == -1)
             return -1;
         if (temp < min)

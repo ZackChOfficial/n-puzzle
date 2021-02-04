@@ -41,8 +41,8 @@ std::string A_Star::run(Options opts)
 
     in_queue[hash_vector(initial.state)] = initial;
     states.push(root);
+    A_Star::total_selected++;
     solved = false;
-    in_memory = 1;
     while (!in_queue.empty() && !solved)
     {
         A_Star::total_selected++;
@@ -56,7 +56,6 @@ std::string A_Star::run(Options opts)
             in_queue.erase(hash_vector(current.state));
             neighbor = current.gen_next_states();
             states.pop();
-            in_memory--;
             for (auto &child : neighbor)
             {
                 if (visited.find(child.state) != visited.end())
@@ -74,8 +73,8 @@ std::string A_Star::run(Options opts)
                     continue;
                 }
                 states.push(child);
-                in_memory++;
-                A_Star::max_states = in_memory > A_Star::max_states ? in_memory : A_Star::max_states;
+                A_Star::total_selected++;
+                A_Star::max_states = in_queue.size() > A_Star::max_states ? in_queue.size() : A_Star::max_states;
                 in_queue.insert(std::make_pair(hash_vector(child.state), child));
             }
         }
