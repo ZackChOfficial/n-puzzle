@@ -25,20 +25,20 @@ the project includes a web interface to experiment and play with, you can visit 
 
 > theoretically the program can solve any bord size (n-puzzle), but in practice it will be to slow for board bigger or equal to 5*5.
 
-## reuirements
+## Reuirements
 > cmake, g++ or clang++
 
 all those programs must be added to your path
 
-## instalation
+## Instalation
 ```bash
 git clone https://github.com/ZackChOfficial/n-puzzle.git
 cd n-puzzle
 ./utils/configure.sh && ./utils/build.sh
 ```
 
-### running web interface localy
-#### requirements :
+### Running web interface localy
+#### Requirements :
 > node, npm, emscripten
 
 ```bash
@@ -67,7 +67,7 @@ Type :
 ./buils/n-puzzle -h # form more info about usage
 ```
 
-## contributors
+## Contributors
 * [Zakaria Chatouane](https://github.com/ZackChOfficial)
 * [Ayoub Aguert](https://github.com/ayoubyt/)
 
