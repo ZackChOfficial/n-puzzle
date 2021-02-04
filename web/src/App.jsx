@@ -159,7 +159,9 @@ function App() {
   };
 
   const scramble = () => {
-    setNumbers(scrambleArray(numbers))
+    setNumbers(scrambleArray(numbers));
+    moves.current.value = "";
+    state.current.value = "";
   }
 
   const reset = useCallback(() => {
