@@ -93,6 +93,7 @@ function App() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(false)
   const [solved, setSolved] = useState(true);
+  const [sizeDisabled, setSizeDisabled] = useState(false)
 
   useEffect(() => {
     setNumbers(boards.current[size])
@@ -145,7 +146,7 @@ function App() {
   const handleMoves = async (moves) => {
     setExcution(true);
     const allStates = PlayMoves(numbers, moves.trim());
-
+    setSizeDisabled(true);
     if (typeof (allStates[0]) == "string")
       setInvalidMoves(true);
     else {
@@ -156,6 +157,7 @@ function App() {
       }
     }
     setExcution(false);
+    setSizeDisabled(false);
   };
 
   const scramble = () => {
@@ -283,6 +285,7 @@ function App() {
                   state.current.value = "";
                 }
               }}
+              isDisabled={sizeDisabled}
               options={sizes.filter(s => s.value !== size)}
               placeholder="size"
             />
