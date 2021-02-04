@@ -3,8 +3,8 @@ import styled, { keyframes } from 'styled-components'
 
 
 const textAnimation = keyframes`
-    0% {
-        background:  linear-gradient(90deg, rgba(63,94,251,1) 0%, rgba(252,70,107,1) 100%);
+     0%{
+         background-position:0% 50%;
         background-clip: text;
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
@@ -12,9 +12,9 @@ const textAnimation = keyframes`
         -moz-text-fill-color: transparent;
         -o-background-clip: text;
         -o-text-fill-color: transparent;
-    }
-    10% {
-        background:  linear-gradient(100deg, rgba(63,94,251,1) 0%, rgba(252,70,107,1) 100%);
+        }
+    50%{
+        background-position:100% 50%;
         background-clip: text;
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
@@ -22,9 +22,9 @@ const textAnimation = keyframes`
         -moz-text-fill-color: transparent;
         -o-background-clip: text;
         -o-text-fill-color: transparent;
-    }
-    18% {
-        background:  linear-gradient(110deg, rgba(63,94,251,1) 0%, rgba(252,70,107,1) 100%);
+        }
+    100%{
+        background-position:0% 50%;
         background-clip: text;
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
@@ -32,66 +32,25 @@ const textAnimation = keyframes`
         -moz-text-fill-color: transparent;
         -o-background-clip: text;
         -o-text-fill-color: transparent;
-    }
-    25% {
-        background:  linear-gradient(120deg, rgba(63,94,251,1) 0%, rgba(252,70,107,1) 100%);
-        background-clip: text;
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        -moz-background-clip: text;
-        -moz-text-fill-color: transparent;
-        -o-background-clip: text;
-        -o-text-fill-color: transparent;
-    }
-    35% {
-        background:  linear-gradient(140deg, rgba(63,94,251,1) 0%, rgba(252,70,107,1) 100%);
-        background-clip: text;
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        -moz-background-clip: text;
-        -moz-text-fill-color: transparent;
-        -o-background-clip: text;
-        -o-text-fill-color: transparent;
-    }
-    50% {
-        background:  linear-gradient(150deg, rgba(252,70,107,1) 0%,  rgba(63,94,251,1) 100%);
-        background-clip: text;
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        -moz-background-clip: text;
-        -moz-text-fill-color: transparent;
-        -o-background-clip: text;
-        -o-text-fill-color: transparent;
-    }
-    70% {
-        background:  linear-gradient(165deg, rgba(252,70,107,1) 0%,  rgba(63,94,251,1) 100%);
-        background-clip: text;
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        -moz-background-clip: text;
-        -moz-text-fill-color: transparent;
-        -o-background-clip: text;
-        -o-text-fill-color: transparent;
-    }
-    100% {
-        background:  linear-gradient(180deg, rgba(252,70,107,1) 0%,  rgba(63,94,251,1) 100%);
-        background-clip: text;
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        -moz-background-clip: text;
-        -moz-text-fill-color: transparent;
-        -o-background-clip: text;
-        -o-text-fill-color: transparent;
-    }
+        }
 `
 const Header = styled.div`
  h1 {
- font-family: 'Pacifico', cursive; 
- font-size:70px;
- margin: 10px 0;
- font-weight: bold;
-  padding: 10px;
-  animation: ${textAnimation} .6s linear  infinite alternate both;
+    font-family: 'Pacifico', cursive; 
+    font-size:70px;
+    margin: 10px 0;
+    font-weight: bold;
+    padding: 10px;
+    animation: ${textAnimation} .6s linear  infinite alternate both;
+    background: linear-gradient(42deg, #1abc9c, #8e44ad, #2980b9, #34495e, #ea4c88, #16a085, #8e44ad, #f1c40f, #29c5ff, #e74c3c);
+    background-size: 2000% 2000%;
+    -webkit-animation: ${textAnimation} 12s ease infinite;
+    -moz-animation: ${textAnimation} 12s ease infinite;
+    -o-animation: ${textAnimation} 12s ease infinite;
+    animation: ${textAnimation} 12s ease infinite; 
+    -webkit-text-fill-color: transparent;
+    -moz-text-fill-color: transparent;
+    -o-text-fill-color: transparent;
  }
 `
 

@@ -30,4 +30,4 @@ add_executable(n-puzzle ${SOURCES})
 
 
 message(STATUS "Setting compilation target to WASM")
-set_target_properties(n-puzzle PROPERTIES LINK_FLAGS "--bind -s MODULARIZE=1 -o n-puzzle.mjs -s MALLOC=emmalloc  -s WASM=1  -s EXPORT_ES6=1  --preload-file ../../../../disjoint_pattern_databases@/disjoint_pattern_databases -s ALLOW_MEMORY_GROWTH=1 -s ASSERTIONS=1 -s EXIT_RUNTIME=1")
+set_target_properties(n-puzzle PROPERTIES LINK_FLAGS "--bind -s ASSERTIONS=1 -o n-puzzle.js  -s WASM=1   --preload-file ../../../../disjoint_pattern_databases@/disjoint_pattern_databases -s ALLOW_MEMORY_GROWTH=1 -s EXIT_RUNTIME=1")

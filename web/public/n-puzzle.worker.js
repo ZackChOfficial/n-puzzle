@@ -1,23 +1,19 @@
-import Wasm from '../wasm/build/n-puzzle'
+var Module = {};
 
-const origin = "https://n-puzzle-project.netlify.app"
-
-export default (() => {
-self.addEventListener("message", event => {
-  console.log("Hello")
-  // protect cross-site scripting attacks
-  if (event.origin !== origin && (event.srcElement && event.srcElement.origin !== origin))
-  {
-    postMessage(-1);
-    return; 
-  }
-  const {numbers, selectedAlgo: algo, selectedheuristic : heuristic} = event.data;
-  if (!numbers || !algo || !heuristic)
-  {
-    postMessage(-1);
-    return ;
-  }
-  Wasm().then(Module => {
+Module.onRuntimeInitialized = () => {
+    self.addEventListener("message", event => {
+    // protect cross-site scripting attacks
+    if (event.origin !== self.location.origin && (event.srcElement && event.srcElement.origin !== self.location.origin))
+    {
+      postMessage(-1);
+      return; 
+    }
+    const {numbers, selectedAlgo: algo, selectedheuristic : heuristic} = event.data;
+    if (!numbers || !algo || !heuristic)
+    {
+      postMessage(-1);
+      return ;
+    }
     const algos = { "A_STAR": Module.E_Algo.A_STAR, "IDA_STAR": Module.E_Algo.IDA_STAR }
     const heuristics = {
       "MANHATTAN_DISTANCE": Module.E_Heuristic.MANHATTAN_DISTANCE,
@@ -32,7 +28,8 @@ self.addEventListener("message", event => {
     opts.algo = algos[algo]
     opts.onlySteps = true;
     postMessage((Module.nPuzzle(bv, opts)));
-  })
-});
-})();
+  });
+  console.log("Web Worker loaded")
+}
 
+self.importScripts('./wasm/build/n-puzzle.js');

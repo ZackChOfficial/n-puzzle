@@ -58,7 +58,7 @@ const Input = styled.input`
 const Error = styled.div`
 color: red;
 `
-const worker = new Worker('./n-puzzle.worker.js', {type: 'module'});
+const worker = new Worker('./n-puzzle.worker.js');
 
 function App() {
 
@@ -79,14 +79,12 @@ function App() {
   const run = useRef(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(false)
-  const [isChrome, setIsChrome] = useState(true);
 
   useEffect(() => {
     setNumbers(boards.current[size])
   }, [size])
 
   useEffect(() => {
-    setIsChrome(!!window.chrome && (!!window.chrome.webstore || !!window.chrome.runtime));
     worker.addEventListener("message", event => {
       if (event.data !== -1) {
         moves.current.value = event.data;
@@ -182,8 +180,6 @@ function App() {
       worker.postMessage({ numbers, selectedAlgo, selectedheuristic })
     }
   }
-  if (!isChrome)
-    return <h1 align="center"> You Must use Chrome </h1>
   return (
     <>
       <Img src={Github} onClick={() => { window.location.href = "https://github.com/ZackChOfficial/n-puzzle"; }} alt="Github link" />
