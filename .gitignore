@@ -45,3 +45,4 @@ web/wasm/n-puzzle.data
 web/public/wasm/n-puzzle.js
 web/public/wasm/n-puzzle.wasm
 web/public/wasm/n-puzzle.data
+*.DS_Store*
