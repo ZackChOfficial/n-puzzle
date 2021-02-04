@@ -26,5 +26,5 @@ const Descr = styled.div`
 
 export default function Description() 
 {
-    return <Descr>N Puzzle is a sliding blocks game that takes place on a k * k grid with ((k * k) - 1) tiles each numbered from 1 to N. <br/> Your task is to reposition the tiles to their proper order.</Descr>
+    return <Descr>N Puzzle is a sliding blocks game that takes place on a k * k grid with ((k * k) - 1) tiles each numbered from 1 to N. <br/> Your task is to reposition the tiles to their proper order.<br/> Note: First run will be a bit slower that usual.</Descr>
 }

@@ -13,7 +13,7 @@ import Header from './components/header'
 import Footer from './components/footer'
 import Description from './components/description'
 import Github from './assets/github.png'
-import {sizes} from './config'
+import { sizes } from './config'
 
 const SelectComponent = styled.div`
   margin: 15px 0;
@@ -55,13 +55,13 @@ const Input = styled.input`
   }
 `
 
-const worker = new Worker('./n-puzzle.worker.js', { type: "module" });
-worker.addEventListener("message", event => {
-  console.log(event.data);
-});
-
+const Error = styled.div`
+color: red;
+`
+const worker = new Worker('./n-puzzle.worker.js', {type: 'module'});
 
 function App() {
+
   const [selectedAlgo, setSelectedAlgo] = useState('');
   const [selectedheuristic, setSelectedheuristic] = useState('');
   const [numbers, setNumbers] = useState([]);
@@ -76,29 +76,29 @@ function App() {
   const [size, setSize] = useState(0);
   const boards = useRef([solutionSize3, solutionSize4])
   const state = useRef(null)
+  const run = useRef(null)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(false)
+  const [isChrome, setIsChrome] = useState(true);
 
   useEffect(() => {
     setNumbers(boards.current[size])
   }, [size])
 
-  const handleClick = useCallback((direction) => {
-    const newState = Move(numbers, direction);
-    setNumbers([...newState]);
-  }, [numbers])
-  const handleMoves = useCallback(async (moves) => {
-    setExcution(true);
-    const allStates = PlayMoves(numbers, moves.trim());
-    if (typeof (allStates[0]) == "string")
-      setInvalidMoves(true);
-    else {
-      await sleep(speed * 1000);
-      for (let i = 0; i < allStates.length; i++) {
-        setNumbers([...allStates[i]])
-        await sleep(speed * 1000);
+  useEffect(() => {
+    setIsChrome(!!window.chrome && (!!window.chrome.webstore || !!window.chrome.runtime));
+    worker.addEventListener("message", event => {
+      if (event.data !== -1) {
+        moves.current.value = event.data;
+        setInvalidMoves(false);
+        setLoading(false);
+        run.current.click();
       }
-    }
-    setExcution(false);
-  }, [numbers])
+      else
+        setError(true);
+    });
+    return worker.removeEventListener("message", event => { });
+  }, [])
 
   useEffect(() => {
     if (!execution)
@@ -112,15 +112,36 @@ function App() {
         handleClick("R");
   }, [ArrowUp, ArrowDown, ArrowLeft, ArrowRight, keyW, keyD, keyS, keyA])
 
-  const scramble = useCallback(() => {
-    setNumbers(scrambleArray(numbers))
+
+  const handleClick = useCallback((direction) => {
+    const newState = Move(numbers, direction);
+    setNumbers([...newState]);
   }, [numbers])
+
+  const handleMoves = async (moves) => {
+    setExcution(true);
+    const allStates = PlayMoves(numbers, moves.trim());
+
+    if (typeof (allStates[0]) == "string")
+      setInvalidMoves(true);
+    else {
+      await sleep(speed * 1000);
+      for (let i = 0; i < allStates.length; i++) {
+        setNumbers([...allStates[i]])
+        await sleep(speed * 1000);
+      }
+    }
+    setExcution(false);
+  };
+
+  const scramble = () => {
+    setNumbers(scrambleArray(numbers))
+  }
 
   const reset = useCallback(() => {
     setNumbers(boards.current[size]);
   }, [size])
 
-  
   const handleRun = () => {
     handleMoves(moves.current.value.toUpperCase())
   }
@@ -148,10 +169,21 @@ function App() {
     }
     setNumbers(num);
   }
-  
-  const solve = async () => {
-    worker.postMessage({numbers, selectedAlgo, selectedheuristic})
+
+  const solve = () => {
+    if (!selectedheuristic || !selectedAlgo)
+      setError(true);
+    else {
+      setLoading(true);
+      let origin = "";
+      for (const i of numbers)
+        origin += i + " "
+      state.current.value = origin;
+      worker.postMessage({ numbers, selectedAlgo, selectedheuristic })
+    }
   }
+  if (!isChrome)
+    return <h1 align="center"> You Must use Chrome </h1>
   return (
     <>
       <Img src={Github} onClick={() => { window.location.href = "https://github.com/ZackChOfficial/n-puzzle"; }} alt="Github link" />
@@ -159,12 +191,16 @@ function App() {
       <div className="App">
         <Header />
         <br />
+        {error ? <Error> You must choose algorithm and heuristic function first </Error> : ""}
         <SelectComponent>
           <Select
+            s
             onChange={
               (e) => {
-                if (e)
+                if (e) {
                   setSelectedAlgo(e.value)
+                  setError(false);
+                }
               }
             }
             options={algorithms}
@@ -174,13 +210,16 @@ function App() {
         </SelectComponent>
         <SelectComponent>
           <Select
+            SelectComponent
             onChange={
               (e) => {
-                if (e)
+                if (e) {
                   setSelectedheuristic(e.value)
+                  setError(false);
+                }
               }
             }
-            options={size == 1 ? heuristics :heuristics.filter(h => h.value != "DISJOINT_PATTERN_DATABASE") }
+            options={size == 1 ? heuristics.filter(h => h.value != "MANHATTAN_DISTANCE") : heuristics.filter(h => h.value != "DISJOINT_PATTERN_DATABASE")}
             isClearable
             placeholder="Select Heuristic Function"
           />
@@ -191,7 +230,7 @@ function App() {
               setInvalidMoves(false);
           }}
             ref={moves} error={invalidMoves} placeholder={invalidMoves ? "Invalid Moves" : "Moves to apply"} />
-          <button onClick={handleRun}>Run</button>
+          <button onClick={handleRun} ref={run}>Run</button>
         </Actions>
         <Actions>
           <Input type="text" onKeyDown={() => {
@@ -210,11 +249,11 @@ function App() {
               defaultValue={0}
 
               onChange={(e) => {
-                if (e)
-                {
+                if (e) {
                   setSize(e.value)
                   setInvalidMoves(false);
                   setInvalidBoard(false);
+                  setSelectedAlgo("A_STAR")
                   moves.current.value = "";
                   state.current.value = "";
                 }
@@ -227,7 +266,7 @@ function App() {
         <br />
         {
           numbers.length > 0 ?
-            <Board numbers={numbers} size={parseInt(Math.sqrt(numbers.length))} solution={boards.current[size]} />
+            <Board numbers={numbers} size={parseInt(Math.sqrt(numbers.length))} solution={boards.current[size]} loading={loading} />
             : "Loading"
         }
         <Footer />

@@ -1,9 +1,7 @@
 #pragma once
-
 #include <iostream>
 #include <string>
 #include <climits>
-
 #include "n-puzzle.hpp"
 #include "Node.class.hpp"
 #include "utils.hpp"
@@ -24,7 +22,7 @@ private:
 
 public:
     Ida_Star(const std::vector<int> &initial, Board sol, int (*func)(std::vector<int> &state, const std::vector<int> &goal, const int size), E_Method running_mode);
-    std::string run();
+    std::string run(Options opts);
     template <typename T>
-    friend std::string describe(Node &);
+    friend std::string describe(Node &, Options);
 };

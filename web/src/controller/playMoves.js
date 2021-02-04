@@ -1,8 +1,5 @@
 import move from './move'
 
-
-
-
 function invalidMove(move) {
     return  move != 'D' && 
         move != 'U' &&  move != 'L' &&  move != 'R';
