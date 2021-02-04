@@ -54,7 +54,20 @@ const Input = styled.input`
     color:  ${props => props.error ? "#ff1d44" : "#808080"};;
   }
 `
+const SolveButton = styled.button`
+  background-color: ${props => props.solved ? "#f5f5f5" : "#1c7ed6"};
+  border: 1px solid ${props => props.solved ? "#d9d9d9" : "#1c7ed6"};
+  color: ${props => props.solved ? "#00000040" : "#fff"};
+  cursor:  ${props => props.solved ? "not-allowed" : "pointer"};
 
+  &:hover {
+    background-color: ${props => props.solved ? "#f5f5f5" : "#165896"};
+    border: 1px solid ${props => props.solved ? "#d9d9d9" : "#165896"};
+    color: ${props => props.solved ? "#00000040" : "#fff"};
+    cursor:  ${props => props.solved ? "not-allowed" : "pointer"};
+  }
+
+`
 const Error = styled.div`
 color: red;
 `
@@ -79,11 +92,12 @@ function App() {
   const run = useRef(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(false)
+  const [solved, setSolved] = useState(true);
 
   useEffect(() => {
     setNumbers(boards.current[size])
   }, [size])
-
+  
   useEffect(() => {
     worker.addEventListener("message", event => {
       if (event.data !== -1) {
@@ -110,6 +124,18 @@ function App() {
         handleClick("R");
   }, [ArrowUp, ArrowDown, ArrowLeft, ArrowRight, keyW, keyD, keyS, keyA])
 
+  useEffect(() => {
+    let tmp = true;
+    for (let i in numbers)
+    {
+      if (numbers[i] != boards.current[size][i])
+      {
+        tmp = false;
+        break;
+      }
+    }
+    setSolved(tmp)
+  }, [numbers]);
 
   const handleClick = useCallback((direction) => {
     const newState = Move(numbers, direction);
@@ -178,6 +204,7 @@ function App() {
         origin += i + " "
       state.current.value = origin;
       worker.postMessage({ numbers, selectedAlgo, selectedheuristic })
+      setInvalidBoard(false);
     }
   }
   return (
@@ -237,7 +264,7 @@ function App() {
         </Actions>
         <Actions>
           <button onClick={scramble}> Scramble Board </button>
-          <button onClick={solve}> Solve </button>
+          <SolveButton onClick={solve}  disabled={solved} solved={solved}>  Solve </SolveButton>
           <button onClick={reset}> Reset </button>
 
           <div style={{ width: "20%", textAlign: "left" }}>

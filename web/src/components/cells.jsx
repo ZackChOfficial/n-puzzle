@@ -1,7 +1,6 @@
 import React, {useEffect} from 'react'
 import styled from 'styled-components'
 
-
 const Container = styled.div`
     background: ${props => props.rightPlace ? "#9fc9be": "#d0d4e0"};
     text-align: center;
@@ -30,5 +29,6 @@ const Number = styled.h1`
     z-index:0;
 `
 export default function Cell(props) {
+    
     return <Container top={props.top} left={props.left} size={props.size} id={props.id} rightPlace={props.rightPlace}><Number>{props.number}</Number></Container>
 }
