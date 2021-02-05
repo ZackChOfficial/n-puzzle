@@ -28,16 +28,22 @@ std::vector<std::string> str_split(std::string s)
     std::vector<std::string> result;
     size_t j;
 
-    for (size_t i = 0; i < s.length(); i++)
-    {
-        if (s[i] != ' ')
+    try {
+        for (size_t i = 0; i < s.length(); i++)
         {
-            for (j = i; j < s.length(); j++)
-                if (s[j] == ' ')
-                    break;
-            result.push_back(s.substr(i, j - i));
-            i = j;
+            if (s[i] != ' ')
+            {
+                for (j = i; j < s.length(); j++)
+                    if (s[j] == ' ')
+                        break;
+                result.push_back(s.substr(i, j - i));
+                i = j;
+            }
         }
+    }
+    catch(...)
+    {
+        throwError();
     }
     return result;
 }
@@ -48,18 +54,25 @@ int get_size(std::string s)
     std::vector<std::string> line;
     bool done;
 
-    line = str_split(s);
-    done = false;
-    for (size_t i = 0; i < line.size(); i++)
+    try 
     {
-        if (line[i][0] != '#' && !done && isdigit(line[i][0]))
-            done = true;
-        else if ((line[i][0] != '#' && done) || (line[i][0] == '#' && !done) || (line[i][0] != '#' && !isdigit(line[i][0])))
+        line = str_split(s);
+        done = false;
+        for (size_t i = 0; i < line.size(); i++)
+        {
+            if (line[i][0] != '#' && !done && isdigit(line[i][0]))
+                done = true;
+            else if ((line[i][0] != '#' && done) || (line[i][0] == '#' && !done) || (line[i][0] != '#' && !isdigit(line[i][0])))
+                throwError();
+        }
+        n = stoi(s);
+        if (n < 3)
             throwError();
     }
-    n = stoi(s);
-    if (n < 1)
+    catch(...)
+    {
         throwError();
+    }
     return n;
 }
 
@@ -68,20 +81,26 @@ void get_line(std::vector<int> &data, std::string s, int n)
     std::vector<std::string> line;
     int nbr;
 
-    line = str_split(s);
-    if (line.size() != (size_t)n)
-        throwError();
-    for (size_t i = 0; i < line.size(); i++)
-    {
-        if (isdigit(line[i][0]))
-        {
-            nbr = stoi(line[i]);
-            if (nbr < 0 || nbr >= n * n)
-                throwError();
-            data.push_back(nbr);
-        }
-        else
+    try {
+        line = str_split(s);
+        if (line.size() != (size_t)n)
             throwError();
+        for (size_t i = 0; i < line.size(); i++)
+        {
+            if (isdigit(line[i][0]))
+            {
+                nbr = stoi(line[i]);
+                if (nbr < 0 || nbr >= n * n)
+                    throwError();
+                data.push_back(nbr);
+            }
+            else
+                throwError();
+        }
+    }
+    catch(...)
+    {
+        throwError();
     }
 }
 
@@ -92,31 +111,38 @@ std::vector<int> parse()
     int n;
     std::set<int> occu;
 
-    n = -1;
-    while (std::getline(std::cin, s))
-    {
-        s = ft_trim(s);
-        if (s.length() > 0 && s[0] != '#')
+
+    try {
+        n = -1;
+        while (std::getline(std::cin, s))
         {
-            if (n == -1)
+            s = ft_trim(s);
+            if (s.length() > 0 && s[0] != '#')
             {
-                n = get_size(s);
+                if (n == -1)
+                {
+                    n = get_size(s);
+                }
+                else
+                    get_line(data, s, n);
             }
-            else
-                get_line(data, s, n);
         }
-    }
-    for (size_t i = 0; i < data.size(); i++)
-    {
-        if (occu.find(data[i]) != occu.end())
+        for (size_t i = 0; i < data.size(); i++)
+        {
+            if (occu.find(data[i]) != occu.end())
+                throwError();
+            else
+                occu.insert(data[i]);
+        }
+        if (occu.size() != size_t(n * n))
             throwError();
-        else
-            occu.insert(data[i]);
+        else if (occu.size() > 100)
+            throwError("Sorry we can't handle this size.");
     }
-    if (occu.size() != size_t(n * n))
+    catch(...)
+    {
         throwError();
-    else if (occu.size() > 100)
-        throwError("Sorry we can't handle this size.");
+    }
     return data;
 }
 
