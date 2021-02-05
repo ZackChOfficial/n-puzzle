@@ -78,13 +78,6 @@ std::string A_Star::run(Options opts)
                 in_queue.insert(std::make_pair(hash_vector(child.state), child));
             }
         }
-        // std::cout << i << std::endl;
-    }
-    if (solved)
-    {
-        std::cout << "Solved\nNumber of Iteration: " << i << std::endl;
-        std::cout << "Path:  " << current->get_path() << std::endl;
-        // current->print();
     }
     if (solved)
         result += describe<A_Star>(current, opts);
