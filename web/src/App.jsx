@@ -54,7 +54,7 @@ const Input = styled.input`
     color:  ${props => props.error ? "#ff1d44" : "#808080"};;
   }
 `
-const SolveButton = styled.button`
+const Button = styled.button`
   background-color: ${props => props.solved ? "#f5f5f5" : "#1c7ed6"};
   border: 1px solid ${props => props.solved ? "#d9d9d9" : "#1c7ed6"};
   color: ${props => props.solved ? "#00000040" : "#fff"};
@@ -93,6 +93,7 @@ function App() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(false)
   const [solved, setSolved] = useState(true);
+  const [solving, setSolving] = useState(false);
   const [sizeDisabled, setSizeDisabled] = useState(false)
 
   useEffect(() => {
@@ -158,10 +159,13 @@ function App() {
     }
     setExcution(false);
     setSizeDisabled(false);
+    setSolving(false);
   };
 
   const scramble = () => {
     setNumbers(scrambleArray(numbers));
+    setInvalidMoves(false);
+    setInvalidBoard(false);
     moves.current.value = "";
     state.current.value = "";
   }
@@ -207,6 +211,7 @@ function App() {
       for (const i of numbers)
         origin += i + " "
       state.current.value = origin;
+      setSolving(true);
       worker.postMessage({ numbers, selectedAlgo, selectedheuristic })
       setInvalidBoard(false);
     }
@@ -231,12 +236,14 @@ function App() {
               }
             }
             options={algorithms}
+            isDisabled={solving}
             isClearable
             placeholder="Select Algorithm"
           />
         </SelectComponent>
         <SelectComponent>
           <Select
+            isDisabled={solving}
             SelectComponent
             onChange={
               (e) => {
@@ -252,24 +259,24 @@ function App() {
           />
         </SelectComponent>
         <Actions>
-          <Input type="text" onChange={null} onKeyDown={() => {
+          <Input type="text" onChange={null} disabled={solving} onKeyDown={() => {
             if (invalidMoves)
               setInvalidMoves(false);
           }}
             ref={moves} error={invalidMoves} placeholder={invalidMoves ? "Invalid Moves" : "Moves to apply"} />
-          <button onClick={handleRun} ref={run}>Run</button>
+          <Button onClick={handleRun} ref={run} solved={solving}>Run</Button>
         </Actions>
         <Actions>
-          <Input type="text" onKeyDown={() => {
+          <Input type="text" disabled={solving} onKeyDown={() => {
             if (invalidBoard)
               setInvalidBoard(false)
           }} ref={state} error={invalidBoard} placeholder={invalidBoard ? "Invalid State" : "Load State"} />
-          <button onClick={loadBoard}>Load</button>
+          <Button onClick={loadBoard} disabled={solving} solved={solving}>Load</Button>
         </Actions>
         <Actions>
-          <button onClick={scramble}> Scramble Board </button>
-          <SolveButton onClick={solve}  disabled={solved} solved={solved}>  Solve </SolveButton>
-          <button onClick={reset}> Reset </button>
+          <Button onClick={scramble} disabled={solving} solved={solving}> Scramble Board </Button>
+          <Button onClick={solve}  disabled={solved || solving} solved={solved || solving}>  Solve </Button>
+          <Button onClick={reset} disabled={solving} solved={solving}> Reset </Button>
 
           <div style={{ width: "20%", textAlign: "left" }}>
             <Select
