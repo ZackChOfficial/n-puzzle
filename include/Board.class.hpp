@@ -1,23 +1,42 @@
 #pragma once
 
 #include <vector>
+#include <memory>
+#include <string>
 
 class Board
 {
 public:
-    std::vector<int>    body;
-    std::pair<int,int>  get_position_of_zero();
-    int                     size;
+    enum E_Move{
+        UP,
+        RIGHT,
+        DOWN,
+        LEFT
+    };
+    std::vector<int> state;
+    int              size;
+    E_Move           move;
+    int              zero_position;
+
 public:
-    Board(std::vector<int> body): body(body)
+    Board()
     {
     }
-    Board(std::vector<int> body, int    size) : body(body), size(size)
+    Board(const std::vector<int> &state) : state(state), size(state.size())
+    {
+    }
+    Board(const std::vector<int> &state,const int &size) : state(state), size(size)
     {
     }
 
+    static Board gen_solution(int size);
+
 public:
-    bool                    is_solvable();
-    static Board            gen_solution(int size);
-    void                    print();
+    std::pair<int, int> get_position_of_zero() const;
+    bool is_solvable() const;
+    void print();
+
+
+public:
+    std::vector<Board> gen_next_states();
 };

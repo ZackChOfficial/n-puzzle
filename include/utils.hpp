@@ -2,8 +2,13 @@
 #define __UTILS_H
 #include <string>
 #include <iostream>
+#include <memory>
 
-void    throwError(std::string text = "Invalid Input");
+#include "Node.class.hpp"
+#include "options.hpp"
 
+void throwError(std::string text = "Invalid Input");
+template <typename T>
+std::string describe(Node &, Options opts);
 
 #endif

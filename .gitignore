@@ -32,6 +32,17 @@
 *.app
 
 # custom
-build
+*build/*
+wasmbuild
 .vscode
 tmp.cpp
+test.cpp
+test
+testing
+web/wasm/n-puzzle.js
+web/wasm/n-puzzle.wasm
+web/wasm/n-puzzle.data
+web/public/wasm/n-puzzle.js
+web/public/wasm/n-puzzle.wasm
+web/public/wasm/n-puzzle.data
+*.DS_Store*
