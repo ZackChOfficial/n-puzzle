@@ -99,14 +99,14 @@ void DDB_3P::save_entries(std::string file_name, const std::set<DFS_Node> &data,
 void DDB_3P::create()
 {
     std::set<DFS_Node> p1_data = make_entries(m_p1);
-    // std::set<DFS_Node> p2_data = make_entries(m_p2);
-    // std::set<DFS_Node> p3_data = make_entries(m_p3);
+    std::set<DFS_Node> p2_data = make_entries(m_p2);
+    std::set<DFS_Node> p3_data = make_entries(m_p3);
 
     // fs::create_directory(DB_DIR);
 
     save_entries(P1_DB_FILE_NAME, p1_data, m_p1_ord);
-    // save_entries(P2_DB_FILE_NAME, p2_data, m_p2_ord);
-    // save_entries(P3_DB_FILE_NAME, p3_data, m_p3_ord);
+    save_entries(P2_DB_FILE_NAME, p2_data, m_p2_ord);
+    save_entries(P3_DB_FILE_NAME, p3_data, m_p3_ord);
 }
 
 void DDB_3P::load_db(const std::string &file_name, std::unordered_map<unsigned long long, int> &pattern_db)
@@ -145,7 +145,6 @@ void DDB_3P::load()
     load_db(DB_DIR + "/" + P1_DB_FILE_NAME, m_p1_db);
     load_db(DB_DIR + "/" + P2_DB_FILE_NAME, m_p2_db);
     load_db(DB_DIR + "/" + P3_DB_FILE_NAME, m_p3_db);
-    // std::cout << "shjadfjfhKAJSHDGFJKH AGSDUJFG AKHDFFKJH AGJKHFAK JDHGF\n";
 }
 
 /*
