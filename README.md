@@ -23,9 +23,9 @@ the project includes a web interface to experiment and play with, you can visit 
     * disjoint pattern database
 * web api to visualize and experiment with the program.
 
-> theoretically the program can solve any bord size (n-puzzle), but in practice it will be to slow for board bigger or equal to 5*5.
+> theoretically the program can solve any bord size (n-puzzle), but in practice it will be to slow for boards bigger or equal to 5*5.
 
-## Reuirements
+## Requirements
 > cmake, g++ or clang++
 
 all those programs must be added to your path
