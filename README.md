@@ -64,7 +64,7 @@ example :
 
 Type :
 ```bash
-./buils/n-puzzle -h # form more info about usage
+./buils/n-puzzle -h # for more info about usage
 ```
 
 ## Contributors
